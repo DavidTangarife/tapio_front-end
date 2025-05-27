@@ -1,0 +1,39 @@
+.welcome-container {
+  border-radius: var(--border-radius);
+  padding: 20px;
+  background-color: var(--color-primary);
+}
+.welcome-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 30px;
+}
+.welcome-msg {
+  text-align: center;
+  font-family: var(--font-bodycopy);
+  font-size: 1rem;
+  font-weight: var(--font-weight-light);
+}
+.welcome-msg.bold {
+ font-weight: var(--font-weight-bold);
+ margin-bottom: 10px;
+}
+.welcome-connect-emails-btn {
+  background-image: var(--color-grad-green-dark-mode);
+  font-family: var(--font-stylised);
+  font-size: var(--button-font-size);
+  color: var(--color-font-dark);
+  font-weight: var(--font-weight-bold);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: var(--button-padding);
+  width: 150px;
+  height: 40px;
+  display: block;
+  margin: 20px auto;
+}
+.welcome-connect-emails-btn:hover {
+  background: #8bdc22;
+  transition: ease-in-out 0.5s;
+  cursor: pointer;
+}

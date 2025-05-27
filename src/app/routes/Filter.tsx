@@ -16,6 +16,7 @@ const Senders: SenderData[] = [
   const Filter = () => {
   
   const [senderState, setSenderState] = useState(Senders);
+  const [filter, setFilter] = useState<"all" | "allowed" | "blocked">("all")
 
   const handleToggle = (SenderId: number) => 
     setSenderState(senderState.map(sender => {
@@ -26,13 +27,22 @@ const Senders: SenderData[] = [
       }
     })
   );
+
+  const filterSender= (senderStatus: string) => {
+    const applyFilter = senderState.filter(sender => {
+      if (senderStatus === "all") return true;
+      if (senderStatus === "allowed") return sender.allowed
+      if (senderStatus === "blocked") return !sender.allowed
+    });
+    setFilter(applyFilter);
+  }
   
   return (
     <>
       <h1>Email Filter</h1>
-      <button >All</button>
-      <button >Allowed</button>
-      <button >Blocked</button>
+      <button onClick={() => filterSender("all")} >All</button>
+      <button onClick={() => filterSender("allowed")}>Allowed</button>
+      <button onClick={() => filterSender("blocked")}>Blocked</button>
       
       <div>
         <ul>
