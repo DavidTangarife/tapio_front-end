@@ -1,0 +1,57 @@
+.header-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+}
+.logo {
+  font-size: 4rem;
+}
+.tgl-btn-container {
+  max-width: 200px;
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  border-radius: var(--border-radius);
+  background-color: var(--color-primary);
+}
+.tgl-btn {
+  height: 40px;
+  width: 80px;
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-stylised);
+  font-size: var(--button-font-size);
+  font-family: var(--font-stylised);
+  padding: var(--button-padding);
+  line-height: 0;
+  border: none;
+  border-radius: var(--border-radius);
+}
+.board-tgl-btn {
+  background-color: var(--color-primary);
+}
+.inbox-tgl-btn {
+  background-image: var(--color-grad-green-dark-mode);
+  color: var(--color-font-dark);
+}
+.user-btn {
+  width: 55px;
+  height: 55px;
+  background-color: var(--color-grey);
+  border-radius: 50%;
+  padding: var( --button-padding);
+  font-size: var(--button-font-size);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-font-dark);
+  border: none;
+}
+.board-tgl-btn:hover {
+  cursor: pointer;
+  border: var(--border-green-dark-mode);
+}
+.user-btn:hover {
+  cursor: pointer;
+  background-color: var(--color-font-offwhite);
+  transition: ease-in-out 0.3s;
+}
