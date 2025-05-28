@@ -1,12 +1,12 @@
 import { useState } from "react";
 import Header from "../../components/ui/Header";
-import Welcome from "../../components/ui/Welcome"
+import Welcome from "../../components/ui/Welcome";
 import EmailSection from "../../components/ui/EmailSection";
-import "./Home.css"
+import "./Home.css";
 
 const Home = () => {
   const [showEmailSection, setShowEmailSection] = useState(false);
-  
+
   const handleConnectEmails = () => {
     setShowEmailSection(true);
   };
@@ -15,10 +15,11 @@ const Home = () => {
     <main>
       <Header />
       {!showEmailSection ? (
-        <Welcome onConnectEmails={handleConnectEmails}/>
-      ) : (<EmailSection title="UNREAD" />)
-      }
+        <Welcome onConnectEmails={handleConnectEmails} />
+      ) : (
+        <EmailSection title="UNREAD" />
+      )}
     </main>
-  )
-}
+  );
+};
 export default Home;
