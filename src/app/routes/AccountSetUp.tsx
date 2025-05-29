@@ -35,14 +35,33 @@ const SetupForm = () => {
     />
   ])
 
-  const onNext = (e: FormEvent) => {
-    e.preventDefault();
-    if (!isLastStep) return next()
-    console.log("Data to submit:", formData)
-    //Fetch request to API to store data
-    return navigate('/home')
-    }
+  // const handleSubmit = async () => {
+  //   try {
+  //     const response = await fetch ("http://localhost:3000/calltoprojectcontroller?", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(formData),
+  //   });
+  //   if (!response.ok) {
+  //     throw new Error("Failed to submit data");
+  //   }
+  //   console.log("Data successfully submitted");
+  //   navigate("/home");
+  // } catch (err) {
+  //   console.error("Error submitting data:", err);
+  // }
 
+  const onNext = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!isLastStep) {
+      next();
+    } else {
+      navigate("/home");
+      // await handleSubmit();
+    }
+  }
 
   return (
     <>
@@ -54,5 +73,6 @@ const SetupForm = () => {
       </form>
     </>
   )
-}
+  }
+
 export default SetupForm;
