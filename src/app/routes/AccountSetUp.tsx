@@ -35,31 +35,37 @@ const SetupForm = () => {
     />
   ])
 
-  // const handleSubmit = async () => {
-  //   try {
-  //     const response = await fetch ("http://localhost:3000/calltoprojectcontroller?", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(formData),
-  //   });
-  //   if (!response.ok) {
-  //     throw new Error("Failed to submit data");
-  //   }
-  //   console.log("Data successfully submitted");
-  //   navigate("/home");
-  // } catch (err) {
-  //   console.error("Error submitting data:", err);
-  // }
-
+  const handleSubmit = async () => {
+    try {
+      const payload = {
+        name: formData.projectName,
+        startDate: new Date(formData.searchDate).toISOString(),
+        userId: '682fb45267b8dbc61daf3ff5',
+      };
+      const response = await fetch ("http://localhost:3000/api/projects", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to submit data");
+    }
+    console.log("Data successfully submitted");
+    navigate("/home");
+  } catch (err) {
+    console.error("Error submitting data:", err);
+  }
+  }
   const onNext = async (e: FormEvent) => {
     e.preventDefault();
     if (!isLastStep) {
       next();
     } else {
-      navigate("/home");
-      // await handleSubmit();
+      
+      handleSubmit();
+      
     }
   }
 
