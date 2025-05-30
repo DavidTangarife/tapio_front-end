@@ -11,7 +11,7 @@ const router = createBrowserRouter([
     loader: async () => {
       const response = await fetch("http://localhost:3000/getemails", {
         headers: {
-          'Access-Control-Allow-Origin': '127.0.0.1'
+          'Access-Control-Allow-Origin': '*'
         }
       });
       console.log(response.status);
