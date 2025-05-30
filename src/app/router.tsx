@@ -9,11 +9,7 @@ import TestEmails from "./routes/TestEmails";
 const router = createBrowserRouter([
   {
     loader: async () => {
-      const response = await fetch("http://localhost:3000/getemails", {
-        headers: {
-          'Access-Control-Allow-Origin': '*'
-        }
-      });
+      const response = await fetch("http://localhost:3000/getemails");
       console.log(response.status);
       return response.json();
     }, path: "/emails", Component: TestEmails
