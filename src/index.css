@@ -3,28 +3,27 @@
   background-color: #181818;
   color: #f5f5f5;
   --font-stylised: "Darker Grotesque", sans-serif;
-  --font-bodycopy: "Inter", sans-serif; 
-  --font-weight-light: 300; 
+  --font-bodycopy: "Inter", sans-serif;
+  --font-weight-light: 300;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
   --font-size-regular: 1rem;
   --font-size-medium: 1.2rem;
   --font-size-title: 1.4rem;
-  --color-grad-green-dark-mode: linear-gradient(#86DD14, #21950C);
-  --color-green-dark-mode: #86DD14;
-  --color-primary: #1F1F1F;
-  --color-dark-mode-hover: #2D2D2D;
+  --color-grad-green-dark-mode: linear-gradient(#86dd14, #21950c);
+  --color-green-dark-mode: #86dd14;
+  --color-primary: #1f1f1f;
+  --color-dark-mode-hover: #2d2d2d;
   --color-font-dark: #181818;
   --color-font-offwhite: #dfdfdf;
   --color-grey: #828282;
   --border-grey-dark-mode: 1px solid var(--color-grey);
-  --border-green-dark-mode: 1px solid #86DD14;
+  --border-green-dark-mode: 1px solid #86dd14;
   --border-radius: 10px;
   --button-font-size: 1.2rem;
   --button-padding: 0;
- 
-  
+
   color-scheme: light dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -37,4 +36,26 @@ body {
   min-height: 100vh;
 }
 
+/* ======================================== */
+/* Kanban Board Css Temporary */
+/* ======================================== */
 
+.kanban {
+  display: flex;
+  gap: 24px;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.opportunities {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.opportunity {
+  border: 2px solid;
+  border-radius: 8px;
+  padding: 12px;
+  background-color: #fff;
+}
