@@ -35,27 +35,3 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
-
-/* ======================================== */
-/* Kanban Board Css Temporary */
-/* ======================================== */
-
-.kanban {
-  display: flex;
-  gap: 24px;
-  padding: 20px;
-  overflow-x: auto;
-}
-
-.opportunities {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.opportunity {
-  border: 2px solid;
-  border-radius: 8px;
-  padding: 12px;
-  background-color: #fff;
-}

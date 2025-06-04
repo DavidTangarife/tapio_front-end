@@ -1,21 +1,36 @@
-import { OpportunityProps } from "../../types/types";
+import "./Opportunity.css";
+import { Opportunity_type } from "../../types/types";
+import { useDraggable } from "@dnd-kit/core";
 
 export default function Opportunity({
-  id,
+  oppor_id,
   company,
   color,
   image,
-}: OpportunityProps) {
+}: Opportunity_type) {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: oppor_id,
+  });
+
+  const observe_drag = transform
+    ? { transform: `translate(${transform.x}px, ${transform.y}px)` }
+    : undefined;
   return (
-    <div>
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      className="opportunityContainer"
+      data-testid="opportunity"
+      style={observe_drag}
+    >
       <div
-        key={id}
-        data-testid="opportunity"
-        className="opportunity"
+        key={oppor_id}
+        className="opportunityInner"
         style={{ backgroundColor: color }}
       >
+        <h3 className="companyText">{company}</h3>
         <img src={image} />
-        <h3>{company}</h3>
       </div>
     </div>
   );
