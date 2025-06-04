@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router";
 
 import Landing from "./routes/Landing";
 import SetupForm from "./routes/AccountSetUp";
-import Home from "./routes/Home";
+// import Home from "./routes/Home";
 import TestEmails from "./routes/TestEmails";
 import Kanban from "./routes/Kanban";
 // import Filter from "./routes/Filter"
@@ -10,16 +10,16 @@ import Kanban from "./routes/Kanban";
 const router = createBrowserRouter([
   {
     loader: async () => {
-      const response = await fetch("http://localhost:3000/getemails");
+      const response = await fetch("http://localhost:3000/api/getemails");
       console.log(response.status);
       return response.json();
     },
-    path: "/emails",
+    path: "/projects/:projectId",
     Component: TestEmails,
   },
   { path: "/", Component: Landing },
   { path: "/setup", Component: SetupForm },
-  { path: "/home", Component: Home },
+  // { path: "", Component: Home },
   { path: "/kanban", Component: Kanban },
   // { path: '/filter', Component: Filter}
 ]);
