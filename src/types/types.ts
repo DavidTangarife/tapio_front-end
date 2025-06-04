@@ -1,13 +1,15 @@
-export type OpportunityProps = {
-  id: string;
+export type Opportunity_type = {
+  oppor_id: string;
   company: string;
   color: string;
   image: string;
+  board: string;
 };
 
-export type BoardProps = {
+export type Board_Type = {
+  board_id: string;
   title: string;
-  opportunities: OpportunityProps[];
+  opportunities: Opportunity_type[];
 };
 
 export type EmailItemProps = {

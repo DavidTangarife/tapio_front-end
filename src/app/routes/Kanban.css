@@ -1,0 +1,8 @@
+.page {
+  padding: 1rem;
+}
+
+.boardWrapper {
+  display: flex;
+  gap: 2rem;
+}
