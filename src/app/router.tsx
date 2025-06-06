@@ -5,6 +5,7 @@ import SetupForm from "./routes/AccountSetUp";
 import Home from "./routes/Home";
 import TestEmails from "./routes/TestEmails";
 import Kanban from "./routes/Kanban";
+import ViewEmail from "./routes/ViewEmail";
 // import Filter from "./routes/Filter"
 
 const router = createBrowserRouter([
@@ -21,6 +22,7 @@ const router = createBrowserRouter([
   { path: "/setup", Component: SetupForm },
   { path: "/home", Component: Home },
   { path: "/kanban", Component: Kanban },
+  { path: "/email/:emailid", Component: ViewEmail }
   // { path: '/filter', Component: Filter}
 ]);
 

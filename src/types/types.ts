@@ -16,3 +16,10 @@ export type EmailItemProps = {
   from: string;
   subject: string;
 };
+
+export interface ViewEmailActionButtonProps {
+  icon: React.ElementType;
+  text: string;
+  onClick?: () => void;
+  iconSx?: object;
+}

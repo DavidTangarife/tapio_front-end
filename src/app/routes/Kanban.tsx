@@ -2,12 +2,14 @@ import { useState } from "react";
 import "./Kanban.css";
 import type { Board_Type, Opportunity_type } from "../../types/types";
 import Board from "../../components/ui/Board";
+import Header from "../../components/ui/Header"
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 
 const Boards: Board_Type[] = [
   { board_id: "APPLIED", title: "Applied", opportunities: [] },
   { board_id: "INTERVIEWING", title: "Interviewing", opportunities: [] },
   { board_id: "FUCKERS", title: "Fuckers", opportunities: [] },
+  { board_id: "OTHER", title: "Other", opportunities: [] }
 ];
 
 const mock_Opportunities: Opportunity_type[] = [
@@ -44,7 +46,21 @@ const mock_Opportunities: Opportunity_type[] = [
     company: "Crown Casino",
     color: "gold",
     image: "logo5.png",
-    board: "FUCKERS",
+    board: "OTHER",
+  },
+  {
+    oppor_id: "6",
+    company: "CBA",
+    color: "gold",
+    image: "logo6.png",
+    board: "OTHER",
+  },
+  {
+    oppor_id: "7",
+    company: "CBA",
+    color: "gold",
+    image: "logo6.png",
+    board: "OTHER",
   },
 ];
 
@@ -67,7 +83,10 @@ export default function Kanban() {
   }
 
   return (
-    <div className="page">
+   <>
+   <div className="page">
+      <div className="header-wrapper"><Header /></div>
+    
       <div className="boardWrapper">
         <DndContext onDragEnd={handleDragEnd}>
           {Boards.map((board) => {
@@ -85,6 +104,8 @@ export default function Kanban() {
         </DndContext>
       </div>
     </div>
+
+    </>
   );
 }
 

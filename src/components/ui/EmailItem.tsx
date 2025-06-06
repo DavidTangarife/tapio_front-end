@@ -1,4 +1,5 @@
 import "./EmailItem.css"
+import { Link } from "react-router-dom";
 
 interface EmailItemProps {
   sender: string;
@@ -7,11 +8,14 @@ interface EmailItemProps {
   read?: boolean;
   body: string;
   date: string;
+  //id: string //use for navigation to emailid
+
 }
 const EmailItem = (props: EmailItemProps) => {
   return (
     <>
-    <div className="email-item-flex">
+    <Link to={'/email/:emailid'} //{props.id}
+      className="email-item-flex">
           <div className="tap-in-wrapper"><div className="tap-in-dot"></div></div>
           <div className="email-content-date-flex">
             <div className="email-content">
@@ -27,7 +31,7 @@ const EmailItem = (props: EmailItemProps) => {
             </div>
             <p className="email-date">{props.date}</p>
           </div>
-        </div>
+        </Link>
     </>
   )
 }
