@@ -17,7 +17,6 @@ export default function Kanban() {
           `http://localhost:3000/api/status?projectId=${_id}`
         );
         const data = await res.json();
-        console.log("✅ Boards data from API:", data);
         setBoards(data);
       } catch (err) {
         console.error(`Failed to fetch boards for project ${_id}:`, err);
