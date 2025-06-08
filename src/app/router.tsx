@@ -21,8 +21,19 @@ const router = createBrowserRouter([
   { path: "/", Component: Landing },
   { path: "/setup", Component: SetupForm },
   { path: "/home", Component: Home },
-  { path: "/kanban", Component: Kanban },
-  { path: "/email/:emailid", Component: ViewEmail }
+
+  { path: "/email/:emailid", Component: ViewEmail },
+  {
+    loader: async ({ params }) => {
+      const projectId = params.projectId;
+      if (!projectId) {
+        throw new Error("Missing project ID in route params");
+      }
+      return { _id: projectId };
+    },
+    path: "/kanban/:projectId",
+    Component: Kanban,
+  },
   // { path: '/filter', Component: Filter}
 ]);
 
