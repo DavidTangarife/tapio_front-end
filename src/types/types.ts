@@ -1,18 +1,33 @@
-export type Opportunity_type = {
-  oppor_id: string;
-  company: string;
+export type Opportunity = {
+  _id: string;
+  title: string;
+  company: {
+    faviconUrl: string;
+    name: string;
+  };
   color: string;
-  image: string;
-  board: string;
+  status_Id: string;
 };
 
-export type Board_Type = {
-  board_id: string;
+export type Board = {
+  _id: string;
   title: string;
-  opportunities: Opportunity_type[];
+  color: string;
+  project_Id: string;
+};
+
+// In case we are going to handle multiple Projects
+export type Project = {
+  _id: string;
+  name: string;
+  user_ID: string;
 };
 
 export type EmailItemProps = {
   from: string;
   subject: string;
 };
+
+// POST /opportunities → Create new opportunity
+
+// PATCH /opportunities/:id → Update opportunity (e.g., when moved to another board)

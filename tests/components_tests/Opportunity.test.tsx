@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Opportunity from "../../src/components/ui/Opportunity";
+import Opportunity from "../../src/components/ui/Opportunity_Card";
 
 describe("Opportunity", () => {
   const mockprops = {
