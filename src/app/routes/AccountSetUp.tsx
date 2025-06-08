@@ -41,36 +41,41 @@ const SetupForm = () => {
       const payload1 = {
         name: formData.projectName,
         startDate: new Date(formData.searchDate).toISOString(),
-        userId: '682fb45267b8dbc61daf3ff5',
       };
-      const res1 = await fetch ("http://localhost:3000/api/projects", {
+      const res1 = await fetch("http://localhost:3000/api/projects", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(payload1),
     });
     if (!res1.ok) {
       throw new Error("Failed to submit project data");
     }
+    
     // send user fullName and userId to update user's name in database
     const payload2 = {
-      userId: '682fb45267b8dbc61daf3ff5',
       fullName: formData.fullName
     };
     const res2 = await fetch("http://localhost:3000/api/update-name", {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify(payload2),
     });
 
     if (!res2.ok) {
       throw new Error("Failed to submit user data");
     }
+    const data = await res1.json();
+    const projectId = data._id;
+    
+    
     console.log("Data successfully submitted");
-    navigate("/home");
+    navigate(`/projects/${projectId}/home`);
   } catch (err) {
     console.error("Error submitting data:", err);
   }
