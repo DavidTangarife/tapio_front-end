@@ -80,3 +80,6 @@
   cursor: pointer;
   border: var(--border-green-dark-mode);
 }
+.add-to-board-container {
+  position: relative;
+}

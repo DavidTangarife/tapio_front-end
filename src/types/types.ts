@@ -31,9 +31,14 @@ export type EmailItemProps = {
 export interface ViewEmailActionButtonProps {
   icon: React.ElementType;
   text: string;
+  value: string;
   onClick?: () => void;
   iconSx?: object;
 }
 // POST /opportunities → Create new opportunity
 
 // PATCH /opportunities/:id → Update opportunity (e.g., when moved to another board)
+
+export interface AddToBoardModalProps {
+  closeModal: () => void;
+}

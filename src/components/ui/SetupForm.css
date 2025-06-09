@@ -1,0 +1,41 @@
+.setup-form-title {
+    text-align: center;
+    font-family: var(--font-stylised);
+    font-size: 3rem;
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+.setup-usr-input {
+    margin: 0 auto;
+    max-width: 500px;
+    border: none;
+    background-color: #181818;
+    height: 50px;
+    padding: 30px 20px;
+    font-family: var(--font-bodycopy);
+    font-weight: 600;
+    font-size: 2rem;
+    text-align: center;
+    border-bottom: 1px dotted var(--color-green-dark-mode);
+    caret-color: var(--color-green-dark-mode);
+}
+.setup-usr-input:focus {
+    outline: none;
+}
+.setup-usr-input::selection {
+    background-color: rgba(33, 149, 12, 0.2);
+}
+.setup-form input::-webkit-input-placeholder {
+    font-weight: 200;
+}
+
+@media (max-width: 480px) {
+    .setup-form-title {
+        font-size: 2.4em;
+    }
+    .setup-usr-input {
+        max-width: 300px;
+        font-size: 1.8rem;
+    }
+   
+}
