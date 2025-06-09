@@ -2,6 +2,7 @@ import Button from "./Button";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom"
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -33,14 +34,6 @@ const Header = () => {
 
   const userInitials = getInitials(fullName || "U");
 
-  const handleInboxClick = () => {
-    navigate("/home");
-  };
-
-  const handleBoardClick = () => {
-    navigate("/kanban");
-  };
-
   const toggleMenu = () => {
     setMenuOpen(prev => !prev);
   };
@@ -62,8 +55,8 @@ return (
     <section className="header-container">
       <h1 className="logo">Tapio</h1>
       <div className="tgl-btn-container">
-        <button className="tgl-btn inbox-tgl-btn" onClick={handleInboxClick}>Inbox</button>
-        <button className="tgl-btn board-tgl-btn" onClick={handleBoardClick}>Board</button>
+        <Link to={"/home"} className="tgl-btn inbox-tgl-btn">Inbox</Link>
+        <Link to={"/kanban"} className="tgl-btn board-tgl-btn">Board</Link>
       </div>
       <div className="user-menu">
         <button className="user-btn" onClick={toggleMenu}>

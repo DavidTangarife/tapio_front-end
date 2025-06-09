@@ -88,6 +88,7 @@ const EmailSection = (props: EmailSectionProps) => {
             emails.map((email: email) => (
               <EmailItem
                 key={email.id}
+                //id={email.id}
                 sender={email.sender}
                 subject={email.subject}
                 senderAddress={email.senderAddress}

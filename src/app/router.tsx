@@ -5,6 +5,7 @@ import SetupForm from "./routes/AccountSetUp";
 import Home from "./routes/Home";
 import TestEmails from "./routes/TestEmails";
 import Kanban from "./routes/Kanban";
+import ViewEmail from "./routes/ViewEmail";
 // import Filter from "./routes/Filter"
 
 const router = createBrowserRouter([
@@ -22,7 +23,19 @@ const router = createBrowserRouter([
   { path: "/", Component: Landing },
   { path: "/setup", Component: SetupForm },
   { path: "/projects/:projectId/home", Component: Home },
-  { path: "/kanban", Component: Kanban },
+
+  { path: "/email/:emailid", Component: ViewEmail },
+  {
+    loader: async ({ params }) => {
+      const projectId = params.projectId;
+      if (!projectId) {
+        throw new Error("Missing project ID in route params");
+      }
+      return { _id: projectId };
+    },
+    path: "/kanban/:projectId",
+    Component: Kanban,
+  },
   // { path: '/filter', Component: Filter}
 ]);
 

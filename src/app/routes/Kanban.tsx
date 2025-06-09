@@ -1,55 +1,30 @@
-import { useState } from "react";
+import { useLoaderData } from "react-router-dom";
+import { useEffect, useState } from "react";
 import "./Kanban.css";
-import type { Board_Type, Opportunity_type } from "../../types/types";
-import Board from "../../components/ui/Board";
+import Header from "../../components/ui/Header";
+import type { Board as Bt, Opportunity as Ot } from "../../types/types";
+import Board_Card from "../../components/ui/Board";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 
-const Boards: Board_Type[] = [
-  { board_id: "APPLIED", title: "Applied", opportunities: [] },
-  { board_id: "INTERVIEWING", title: "Interviewing", opportunities: [] },
-  { board_id: "FUCKERS", title: "Fuckers", opportunities: [] },
-];
-
-const mock_Opportunities: Opportunity_type[] = [
-  {
-    oppor_id: "1",
-    company: "Seek",
-    color: "navy",
-    image: "logo.png",
-    board: "APPLIED",
-  },
-  {
-    oppor_id: "2",
-    company: "Indeed",
-    color: "blue",
-    image: "logo2.png",
-    board: "APPLIED",
-  },
-  {
-    oppor_id: "3",
-    company: "Domain",
-    color: "green",
-    image: "logo3.png",
-    board: "APPLIED",
-  },
-  {
-    oppor_id: "4",
-    company: "REA",
-    color: "red",
-    image: "logo4.png",
-    board: "INTERVIEWING",
-  },
-  {
-    oppor_id: "5",
-    company: "Crown Casino",
-    color: "gold",
-    image: "logo5.png",
-    board: "FUCKERS",
-  },
-];
-
 export default function Kanban() {
-  const [Oppor, setOppor] = useState<Opportunity_type[]>(mock_Opportunities);
+  const { _id } = useLoaderData() as { _id: string }; // Because we are using Type script I need to specify what im return form my loader
+  const [boards, setBoards] = useState<Bt[]>([]);
+
+  useEffect(() => {
+    async function fetchBoards() {
+      try {
+        const res = await fetch(
+          `http://localhost:3000/api/status?projectId=${_id}`
+        );
+        const data = await res.json();
+        setBoards(data);
+      } catch (err) {
+        console.error(`Failed to fetch boards for project ${_id}:`, err);
+      }
+    }
+
+    fetchBoards();
+  }, [_id]);
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -57,44 +32,34 @@ export default function Kanban() {
     if (!over) return;
 
     const OpporID = active.id as string; // We gotta manually typecast this two as there ir no way Dragevent can tell
-    const newBoard = over.id as Opportunity_type["board"]; // We gotta manually typecast this two as there ir no way Dragevent can tell
-
-    setOppor(() =>
-      Oppor.map((op) =>
-        op.oppor_id === OpporID ? { ...op, board: newBoard } : op
-      )
-    );
+    const newBoard = over.id as Ot["board_id"]; // We gotta manually typecast this two as there ir no way Dragevent can tell
   }
 
+  // Ideally: Optimistically update local state here or trigger a Zustand action
+
+  // Send update to backend
+  //   fetch(`/api/opportunities/${opportunityId}`, {
+  //     method: "PATCH",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ board_id: newBoardId }),
+  //   }).catch((err) => console.error("Failed to move opportunity", err));
+  // }
+
   return (
-    <div className="page">
-      <div className="boardWrapper">
-        <DndContext onDragEnd={handleDragEnd}>
-          {Boards.map((board) => {
-            return (
-              <Board
-                key={board.board_id}
-                board_id={board.board_id}
-                title={board.title}
-                opportunities={Oppor.filter(
-                  (op) => op.board === board.board_id
-                )}
-              />
-            );
-          })}
-        </DndContext>
+    <>
+      <div className="page">
+        <div className="header-wrapper">
+          <Header />
+        </div>
+
+        <div className="boardWrapper">
+          <DndContext onDragEnd={handleDragEnd}>
+            {boards.map((board) => {
+              return <Board_Card key={board._id} {...board} />;
+            })}
+          </DndContext>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
-
-// in production thi is not the best solution
-//  opportunities={mock_Opportunities.filter(
-//                 (mock_oppor) => mock_oppor.board === board.id
-//               )}
-
-// As we would be rendering every task eveyr column when it changes which is not a good perfromance
-// instead ideally, you would go to the baord component and fetch the data inside that component, and only fetch the data
-// for that specific column
-
-//

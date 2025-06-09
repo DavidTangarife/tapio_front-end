@@ -1,0 +1,24 @@
+aside {
+    position: absolute;
+    bottom: 110%;
+    right: -50%;
+    z-index: 100;
+    border: 1px solid #fff;
+    max-width: 300px;
+    background-color: var(--color-primary);
+    padding: 20px;
+    border-radius: var(--border-radius);
+}
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+form {
+    display: flex;
+    flex-direction: column;
+}
