@@ -1,11 +1,16 @@
 
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import "./ViewEmail.css"
 import Button from "../../components/ui/Button"
 import ViewEmailActionButton from "../../components/ui/ViewEmailActionButton"
+import AddToBoardModal from "../../components/ui/AddToBoardModal";
 import { ViewKanbanOutlined, TouchAppOutlined, Reply, DeleteOutlined } from '@mui/icons-material';
 
 const ViewEmail = () => {
+    const [openModal, setOpenModal] = useState(false);
+     const modalData = "";
+
     return (
         <>
         <main>
@@ -42,33 +47,45 @@ const ViewEmail = () => {
               <ViewEmailActionButton 
                 icon={Reply}
                 text="Reply"
+                value={modalData}
                 //onClick={handleReply}
               />
               <ViewEmailActionButton 
                 icon={Reply}
                 text="Forward"
+                value={modalData}
                 iconSx={{ transform: 'scaleX(-1)' }}
                 //onClick={handleForward}
               />
               <ViewEmailActionButton 
                 icon={TouchAppOutlined}
                 text="Tap up"
+                value={modalData}
                 //onClick{handleTapUp}
               />
-              <ViewEmailActionButton 
+              <div className="add-to-board-container">
+                <ViewEmailActionButton 
                 icon={ViewKanbanOutlined}
                 text="Add to Board"
-                //onClick{handleAddToBoard}
+                value={modalData}
+                onClick={() => setOpenModal(true)}
               />
+              {openModal && <AddToBoardModal closeModal={() => setOpenModal(false)}/>}
+              </div>
               <ViewEmailActionButton 
                 icon={DeleteOutlined}
                 text="Delete"
-                //onClick{handleDelete}
+                value={modalData}
+                //onClick={handleDelete}
               />
+              
             </div>
+             
           </section>
         </main>
+       
         </>
     )
 };
+
 export default ViewEmail;

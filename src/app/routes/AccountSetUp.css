@@ -1,0 +1,74 @@
+.form-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.logo {
+    text-align: center;
+    margin-top: 0;
+}
+.setup-form {
+    max-width: 600px;
+    margin-top: 5rem;
+}
+.setupform.animate {
+    animation: slidein 0.5s 1;
+}
+.setupform.animate-back {
+    animation: slideback 0.5s 1;
+}
+.setup-step-count {
+    text-align: center;
+    font-family: var(--font-stylised);
+    font-size: var( --font-size-title);
+}
+.setup-btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 120px;
+    
+}
+.setup-btn {
+    margin-top: 40px;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    font-family: var(--font-stylised);
+    font-size: var(--font-size-title);
+    color: var(--font-color-offwhite);
+    font-weight: var(--font-weight-bold);
+    background-color: var(--color-primary);
+    border: 1px solid var(--color-font-dark)
+}
+.setup-btn:hover {
+    border: var(--border-green-dark-mode);
+    cursor: pointer;
+}
+.setup-btn.setup-btn-final {
+   background-image: var(--color-grad-green-dark-mode);
+   color: var(--color-font-dark);
+}
+.setup-btn.setup-btn-final:hover {
+    background: #21950c;
+    border: none;
+}
+
+@media (max-width: 480px) {
+    .form-container {
+        justify-content: center;
+    }
+}
+@keyframes slidein {
+  from {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1
+  }
+}

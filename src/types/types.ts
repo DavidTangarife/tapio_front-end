@@ -20,6 +20,11 @@ export type EmailItemProps = {
 export interface ViewEmailActionButtonProps {
   icon: React.ElementType;
   text: string;
+  value: string;
   onClick?: () => void;
   iconSx?: object;
+}
+
+export interface AddToBoardModalProps {
+  closeModal: () => void;
 }

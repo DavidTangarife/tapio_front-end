@@ -1,6 +1,7 @@
 import { FormInput } from "../../components/ui/SetupForm";
 import { useSetupForm } from "../../hooks/useSetupForm";
 import { useFormData } from "../../hooks/useFormData"
+import "./AccountSetUp.css"
 
 import { useNavigate } from "react-router-dom"
 import type { FormEvent } from "react"
@@ -87,12 +88,25 @@ const SetupForm = () => {
 
   return (
     <>
-      <form onSubmit={ onNext }>
-        <p>{ currentStep + 1} / { steps.length }</p>
+    <section className="form-container">
+      <h1 className="logo">Tapio</h1>
+      <form className="setup-form "onSubmit={ onNext }>
+        <p className="setup-step-count">{ currentStep + 1} / { steps.length }</p>
         { step }
-        { !isFirstStep && <button type="button" onClick={ back }>Back</button> }
-        <button type="submit">{ isLastStep ? "Let's go" : "Next"}</button>
+        
+        <div className="setup-btn-container">
+          { !isFirstStep && (
+            <button className="setup-btn" type="button" onClick={ back }>Back
+            </button>
+        )}
+          <button 
+            type="submit" 
+            className={isLastStep ? "setup-btn setup-btn-final" : "setup-btn"}>
+            { isLastStep ? "Let's go" : "Next"}
+          </button>
+        </div>
       </form>
+    </section>
     </>
   )
   }
