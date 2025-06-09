@@ -21,7 +21,6 @@ const router = createBrowserRouter([
   { path: "/", Component: Landing },
   { path: "/setup", Component: SetupForm },
   { path: "/home", Component: Home },
-
   { path: "/email/:emailid", Component: ViewEmail },
   {
     loader: async ({ params }) => {
