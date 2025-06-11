@@ -18,9 +18,7 @@ const SetupForm = () => {
         });
         if (!res.ok) {
           throw new Error("Faile to fetch user");
-        }
-        const data: { userId: string } = await res.json();
-        setUserId(data.userId);
+        }  
       } catch (err) {
         console.error("User fetch error:", err);
         // maybe we shoud sent them somewhere if they cannot log in
