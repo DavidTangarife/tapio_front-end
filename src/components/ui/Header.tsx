@@ -1,13 +1,13 @@
 import Button from "./Button";
 import "./Header.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [fullName, setFullName] = useState("");
   const navigate = useNavigate();
-  const projectId = '684130616f5ae022ae245568';
+  const {projectId} = useParams();
 
   useEffect(() => {
     const fetchUser = async () => {
