@@ -1,12 +1,16 @@
 import "./AddToBoardModal.css"
 import { AddToBoardModalProps } from "../../types/types";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 
 
 const AddToBoardModal = ({closeModal}: AddToBoardModalProps) => {
   const modalInputRef = useRef<HTMLFormElement | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+  // const [statuses, setStatuses] = useState([]);
+  // const { emailId } = useParams();
+  // const { projectId } = useSession(); 
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (modalInputRef.current) {
@@ -16,6 +20,7 @@ const AddToBoardModal = ({closeModal}: AddToBoardModalProps) => {
       modalInputRef.current.reset();
       setIsSubmitted(true);
       //Call the API here
+      
     }
   }
 

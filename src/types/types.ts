@@ -12,7 +12,7 @@ export type Opportunity = {
 export type Board = {
   _id: string;
   title: string;
-  color: string;
+  opportunities: Opportunity[];
   project_Id: string;
 };
 
