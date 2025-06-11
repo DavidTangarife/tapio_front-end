@@ -23,8 +23,7 @@ const router = createBrowserRouter([
   { path: "/", Component: Landing },
   { path: "/setup", Component: SetupForm },
   { path: "/projects/:projectId/home", Component: Home },
-
-  { path: "/email/:emailid", Component: ViewEmail },
+  { path: "/:projectId/email/:emailId", Component: ViewEmail },
   {
     loader: async ({ params }) => {
       const projectId = params.projectId;
