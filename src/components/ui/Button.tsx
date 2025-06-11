@@ -6,7 +6,9 @@ type ButtonProps = {
 
 const Button = (props: ButtonProps) => {
   return (
-    <button className={ props.className } 
+    <button 
+            type="button"
+            className={ props.className } 
             onClick={props.onClick}>
             { props.buttonText }
     </button>

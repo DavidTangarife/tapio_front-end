@@ -2,14 +2,13 @@ import { FormInput } from "../../components/ui/SetupForm";
 import { useSetupForm } from "../../hooks/useSetupForm";
 import { useFormData } from "../../hooks/useFormData";
 import "./AccountSetUp.css";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import type { FormEvent } from "react";
 
 const SetupForm = () => {
   const navigate = useNavigate();
   const { formData, updateFormData } = useFormData();
-  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -64,41 +63,45 @@ const SetupForm = () => {
       const payload1 = {
         name: formData.projectName,
         startDate: new Date(formData.searchDate).toISOString(),
-        userId: userId,
       };
       const res1 = await fetch("http://localhost:3000/api/projects", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload1),
-      });
-      if (!res1.ok) {
-        throw new Error("Failed to submit project data");
-      }
-      // send user fullName and userId to update user's name in database
-      const payload2 = {
-        userId: userId,
-        fullName: formData.fullName,
-      };
-      const res2 = await fetch("http://localhost:3000/api/update-name", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload2),
-      });
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(payload1),
+    });
+    if (!res1.ok) {
+      throw new Error("Failed to submit project data");
+    }
+    
+    // send user fullName and userId to update user's name in database
+    const payload2 = {
+      fullName: formData.fullName
+    };
+    const res2 = await fetch("http://localhost:3000/api/update-name", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(payload2),
+    });
 
       if (!res2.ok) {
         throw new Error("Failed to submit user data");
       }
+       const data = await res1.json();
+      const projectId = data._id;
       console.log("Data successfully submitted");
-      navigate("/home");
+      navigate(`/projects/${projectId}/home`);
     } catch (err) {
       console.error("Error submitting data:", err);
     }
   };
+
+  
   const onNext = async (e: FormEvent) => {
     e.preventDefault();
     if (!isLastStep) {

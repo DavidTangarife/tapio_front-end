@@ -10,17 +10,20 @@ import ViewEmail from "./routes/ViewEmail";
 
 const router = createBrowserRouter([
   {
-    loader: async () => {
-      const response = await fetch("http://localhost:3000/getemails");
-      console.log(response.status);
-      return response.json();
+    loader: async ({ params }) => {
+      const response = await fetch(`http://localhost:3000/api/projects/${params.projectId}/emails`, {
+        credentials: "include",
+      });
+      const data = await response.json();  // parse JSON body (the emails array)
+      return data;
     },
-    path: "/emails",
+    path: "/projects/:projectId/emails",
     Component: TestEmails,
   },
   { path: "/", Component: Landing },
   { path: "/setup", Component: SetupForm },
-  { path: "/home", Component: Home },
+  { path: "/projects/:projectId/home", Component: Home },
+
   { path: "/email/:emailid", Component: ViewEmail },
   {
     loader: async ({ params }) => {
