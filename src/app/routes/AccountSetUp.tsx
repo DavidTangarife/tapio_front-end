@@ -1,114 +1,141 @@
 import { FormInput } from "../../components/ui/SetupForm";
 import { useSetupForm } from "../../hooks/useSetupForm";
-import { useFormData } from "../../hooks/useFormData"
-import "./AccountSetUp.css"
-
-import { useNavigate } from "react-router-dom"
-import type { FormEvent } from "react"
-
+import { useFormData } from "../../hooks/useFormData";
+import "./AccountSetUp.css";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { FormEvent } from "react";
 
 const SetupForm = () => {
   const navigate = useNavigate();
   const { formData, updateFormData } = useFormData();
+  const [userId, setUserId] = useState<string>("");
 
-  const { steps, currentStep, isFirstStep, back, next, step, isLastStep } = useSetupForm([
-    <FormInput
-      label="What's your full name?"
-      type="text"
-      name="fullName"
-      value={formData.fullName}
-      onChange={updateFormData}
-    />,
-    <FormInput
-      label="Enter a Project Name"
-      type="text"
-      name="projectName"
-      value={formData.projectName}
-      onChange={updateFormData}
-      placeholder="E.g. My Job Hunt"
-    />,
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/meprofile", {
+          credentials: "include",
+        });
+        if (!res.ok) {
+          throw new Error("Faile to fetch user");
+        }
+        const data: { userId: string } = await res.json();
+        setUserId(data.userId);
+      } catch (err) {
+        console.error("User fetch error:", err);
+        // maybe we shoud sent them somewhere if they cannot log in
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  const { steps, currentStep, isFirstStep, back, next, step, isLastStep } =
+    useSetupForm([
       <FormInput
-      label="When did you start your search?"
-      type="date"
-      name="searchDate"
-      value={formData.searchDate}
-      onChange={updateFormData}
-    />
-  ])
+        label="What's your full name?"
+        type="text"
+        name="fullName"
+        value={formData.fullName}
+        onChange={updateFormData}
+      />,
+      <FormInput
+        label="Enter a Project Name"
+        type="text"
+        name="projectName"
+        value={formData.projectName}
+        onChange={updateFormData}
+        placeholder="E.g. My Job Hunt"
+      />,
+      <FormInput
+        label="When did you start your search?"
+        type="date"
+        name="searchDate"
+        value={formData.searchDate}
+        onChange={updateFormData}
+      />,
+    ]);
 
   const handleSubmit = async () => {
     try {
-      // send project name and start date to create a new project for the user 
+      // send project name and start date to create a new project for the user
+      console.log("Sending data...");
       const payload1 = {
         name: formData.projectName,
         startDate: new Date(formData.searchDate).toISOString(),
-        userId: '682fb45267b8dbc61daf3ff5',
+        userId: userId,
       };
-      const res1 = await fetch ("http://localhost:3000/api/projects", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload1),
-    });
-    if (!res1.ok) {
-      throw new Error("Failed to submit project data");
-    }
-    // send user fullName and userId to update user's name in database
-    const payload2 = {
-      userId: '682fb45267b8dbc61daf3ff5',
-      fullName: formData.fullName
-    };
-    const res2 = await fetch("http://localhost:3000/api/update-name", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload2),
-    });
+      const res1 = await fetch("http://localhost:3000/api/projects", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload1),
+      });
+      if (!res1.ok) {
+        throw new Error("Failed to submit project data");
+      }
+      // send user fullName and userId to update user's name in database
+      const payload2 = {
+        userId: userId,
+        fullName: formData.fullName,
+      };
+      const res2 = await fetch("http://localhost:3000/api/update-name", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload2),
+      });
 
-    if (!res2.ok) {
-      throw new Error("Failed to submit user data");
+      if (!res2.ok) {
+        throw new Error("Failed to submit user data");
+      }
+      console.log("Data successfully submitted");
+      navigate("/home");
+    } catch (err) {
+      console.error("Error submitting data:", err);
     }
-    console.log("Data successfully submitted");
-    navigate("/home");
-  } catch (err) {
-    console.error("Error submitting data:", err);
-  }
-
-  }
+  };
   const onNext = async (e: FormEvent) => {
     e.preventDefault();
     if (!isLastStep) {
       next();
     } else {
+      console.log("submmitting final form");
       handleSubmit();
     }
-  }
+  };
 
   return (
     <>
-    <section className="form-container">
-      <h1 className="logo">Tapio</h1>
-      <form className="setup-form "onSubmit={ onNext }>
-        <p className="setup-step-count">{ currentStep + 1} / { steps.length }</p>
-        { step }
-        
-        <div className="setup-btn-container">
-          { !isFirstStep && (
-            <button className="setup-btn" type="button" onClick={ back }>Back
+      <section className="form-container">
+        <h1 className="logo">Tapio</h1>
+        <form className="setup-form " onSubmit={onNext}>
+          <p className="setup-step-count">
+            {currentStep + 1} / {steps.length}
+          </p>
+          {step}
+
+          <div className="setup-btn-container">
+            {!isFirstStep && (
+              <button className="setup-btn" type="button" onClick={back}>
+                Back
+              </button>
+            )}
+            <button
+              type="submit"
+              className={isLastStep ? "setup-btn setup-btn-final" : "setup-btn"}
+            >
+              {isLastStep ? "Let's go" : "Next"}
             </button>
-        )}
-          <button 
-            type="submit" 
-            className={isLastStep ? "setup-btn setup-btn-final" : "setup-btn"}>
-            { isLastStep ? "Let's go" : "Next"}
-          </button>
-        </div>
-      </form>
-    </section>
+          </div>
+        </form>
+      </section>
     </>
-  )
-  }
+  );
+};
 
 export default SetupForm;
