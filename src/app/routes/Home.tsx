@@ -5,7 +5,7 @@ import Welcome from "../../components/ui/Welcome";
 import "./Home.css";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import TestEmails from "./TestEmails";
+import EmailSection from "./TestEmails";
 
 const Home = () => {
   const [showEmailSection, setShowEmailSection] = useState(false);
@@ -21,7 +21,7 @@ const Home = () => {
     }
   
     try {
-      const res = await fetch("http://localhost:3000/api/fetch-emails", {
+      const res = await fetch("http://localhost:3000/api/google-emails", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -52,8 +52,7 @@ const Home = () => {
       {!showEmailSection ? (
         <Welcome onConnectEmails={handleConnectEmails} />
       ) : (
-        // <EmailSection title="UNREAD" />
-        <TestEmails />
+        <EmailSection title="UNREAD" />
       )}
     </main>
   );
