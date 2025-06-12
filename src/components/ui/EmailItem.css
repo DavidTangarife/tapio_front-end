@@ -16,7 +16,10 @@
   height: 10px;
   background-color: var(--color-green-dark-mode);
   border-radius: 50%;
-  display: none;
+  display: block;
+}
+.tap-in-dot.inactive {
+  background-color: grey;
 }
 .email-content-date-flex {
   display: flex;
@@ -27,6 +30,9 @@
   padding: 10px 20px;
   border-radius: var(--border-radius);
   margin-bottom: 10px;
+}
+.email-content-date-flex.inactive {
+  border: 1px solid grey;
 }
 .email-sender-subject-flex {
   display: flex;

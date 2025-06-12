@@ -1,5 +1,5 @@
 
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 import "./ViewEmail.css"
 import Button from "../../components/ui/Button"
@@ -7,15 +7,17 @@ import ViewEmailActionButton from "../../components/ui/ViewEmailActionButton"
 import AddToBoardModal from "../../components/ui/AddToBoardModal";
 import { ViewKanbanOutlined, TouchAppOutlined, Reply, DeleteOutlined } from '@mui/icons-material';
 
+
 const ViewEmail = () => {
     const [openModal, setOpenModal] = useState(false);
-     const modalData = "";
+    const modalData = "";
+    const {projectId} = useParams();
 
     return (
         <>
         <main>
           <section className="header-container">
-            <Link to={'/home'} className="back-btn">Back</Link>
+            <Link to={`/projects/${projectId}/emails`} className="back-btn">Back</Link>
             <h1 className="logo">Tapio</h1>
             <Button className="user-btn" buttonText="MJ"/>
           </section>

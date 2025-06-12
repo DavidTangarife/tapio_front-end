@@ -1,6 +1,9 @@
 .email-section {
   display: block;
   margin-bottom: 50px;
+  max-width: 966px;
+  margin: 0 auto;
+  padding: 8px;
 }
 .email-section-title {
   margin-left: 20px;

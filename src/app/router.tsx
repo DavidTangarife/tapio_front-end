@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router";
 import Landing from "./routes/Landing";
 import SetupForm from "./routes/AccountSetUp";
 import Home from "./routes/Home";
-import TestEmails from "./routes/TestEmails";
+import EmailSection from "../components/ui/EmailSection";
 import Kanban from "./routes/Kanban";
 import ViewEmail from "./routes/ViewEmail";
 // import Filter from "./routes/Filter"
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
       return data;
     },
     path: "/projects/:projectId/emails",
-    Component: TestEmails,
+    Component: EmailSection,
   },
   { path: "/", Component: Landing },
   { path: "/setup", Component: SetupForm },

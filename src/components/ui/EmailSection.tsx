@@ -1,103 +1,104 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useLoaderData, useParams } from "react-router-dom";
 import EmailItem from "./EmailItem";
-import Loader from "../../assets/Spinner.svg?react";
+import Header from "./Header";
+// import Loader from "../../assets/Spinner.svg?react";
 import "./EmailSection.css";
 
 interface email {
-  id: number;
-  sender: string;
+  _id: string;
+  from: string;
   subject: string;
   senderAddress: string;
   body: string;
-  read: boolean;
-  date: string;
+  isRead: boolean;
+  isTapped: boolean;
+  date: Date;
+ 
 }
 
-const testEmails: email[] = [
-  {
-    id: 1,
-    subject: "Thank you for your application",
-    sender: "carsales",
-    senderAddress: "recruitment@carsales.com",
-    body: "Thank you for your application for our Graduate Program",
-    read: false,
-    date: "22-05-2025",
-  },
-  {
-    id: 2,
-    subject: "Thank you for your application",
-    sender: "CBA HR",
-    senderAddress: "recruitment@cba.com",
-    body: "Thank you for your application for our Graduate Program",
-    read: false,
-    date: "22-05-2025",
-  },
-  {
-    id: 3,
-    subject: "Thank you for your application",
-    sender: "REA",
-    senderAddress: "recruitment@rea.com",
-    body: "Thank you for your application for our Graduate Program",
-    read: false,
-    date: "22-05-2025",
-  },
-  {
-    id: 4,
-    subject: "Thank you for your application",
-    sender: "NAB",
-    senderAddress: "recruitment@nab.com",
-    body: "Thank you for your application for our Graduate Program",
-    read: false,
-    date: "22-05-2025",
-  },
-];
 
-interface EmailSectionProps {
-  title: string;
-}
-
-const EmailSection = (props: EmailSectionProps) => {
-  const [emails, setEmails] = useState<email[]>([]);
-  const [loadingEmails, setLoadingEmails] = useState(false);
-
-  const getEmailsFromBackend = async () => {
-    setLoadingEmails(true);
-    setTimeout(() => {
-      setEmails(testEmails);
-      setLoadingEmails(false);
-    }, 5000);
-  };
+const EmailSection = () => {
+  
+  const emails: email[] = useLoaderData() ?? [];
+  // console.log(emails)
+  const {projectId} = useParams()
 
   useEffect(() => {
-    getEmailsFromBackend();
-  }, [emails]);
+      if (projectId) {
+        fetch(`http://localhost:3000/api/projects/${projectId}/last-login`, {
+          method: "PATCH",
+          credentials: "include",
+      }).catch((err) => console.error("Failed to update lastLogin:", err));
+        }
+    }, [projectId]);
+  if (!emails.length) return <p>No emails found</p>;
+  
+  const readEmails = emails.filter(email =>
+    email.isRead && !email.isTapped)
+  const unreadEmails = emails.filter(email =>
+    !email.isRead && !email.isTapped)
+  const tappedEmails = emails.filter(email =>
+    email.isTapped && email.isRead)
 
   return (
     <>
       <div className="email-section">
-        {emails.length > 0 && (
-          <h3 className="email-section-title">{props.title}</h3>
-        )}
+        <Header />
+
+        <h3 className="email-section-title">TAPPED UP</h3>
         <div className="email-list">
-          {loadingEmails ? (
-            <>
-              <h2 className="loader-title">Loading emails</h2>
-              <Loader className="spin-loader" />
-            </>
-          ) : (
-            emails.map((email: email) => (
+          {tappedEmails.length > 0 ? (
+            tappedEmails.map((email) => (
               <EmailItem
-                key={email.id}
-                //id={email.id}
-                sender={email.sender}
+                key={email._id}
+                _id={email._id}
+                sender={email.from}
+                subject={email.subject}
+                senderAddress={email.from}
+                body={email.body}
+                isRead={email.isRead}
+                date={email.date}
+                isTapped={email.isTapped}
+              />
+            ))
+          ) : (
+            <p>No read emails</p>
+          )}
+        </div>
+        
+        <h3 className="email-section-title">UNREAD</h3>
+        <div className="email-list">
+            {unreadEmails.map((email) => (
+              <EmailItem
+                key={email._id}
+                _id={email._id}
+                sender={email.from}
                 subject={email.subject}
                 senderAddress={email.senderAddress}
                 body={email.body}
-                read={email.read}
+                isRead={email.isRead}
                 date={email.date}
+                isTapped={email.isTapped}
               />
-            ))
-          )}
+))}
+        </div>
+
+                <h3 className="email-section-title">READ</h3>
+        <div className="email-list">
+            {readEmails.map((email) => (
+              <EmailItem
+                key={email._id}
+                _id={email._id}
+                sender={email.from}
+                subject={email.subject}
+                senderAddress={email.senderAddress}
+                body={email.body}
+                isRead={email.isRead}
+                date={email.date}
+                isTapped={email.isTapped}
+              />
+))}
         </div>
       </div>
     </>

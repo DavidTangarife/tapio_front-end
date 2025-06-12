@@ -1,55 +1,53 @@
 import "./EmailItem.css"
-import { Link, useLoaderData, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 
 interface EmailItemProps {
   sender: string;
   subject: string;
   senderAddress: string;
-  read?: boolean;
+  isRead: boolean;
   body: string;
-  date: string;
-  id: string //use for navigation to emailid
+  date: Date;
+  _id: string //use for navigation to emailid
+  className?: string;
+  isTapped: boolean;
 
 }
-const EmailItem = () => {
+const EmailItem = (props: EmailItemProps) => {
+const {projectId} = useParams();
+const emailId = props._id;
+console.log(emailId)
 
-  const emails = useLoaderData() ?? [];
-  // console.log(emails)
-  const {projectId} = useParams()
-
-  useEffect(() => {
-      if (projectId) {
-        fetch(`http://localhost:3000/api/projects/${projectId}/last-login`, {
-          method: "PATCH",
-          credentials: "include",
-      }).catch((err) => console.error("Failed to update lastLogin:", err));
-        }
-    }, [projectId]);
-  if (!emails.length) return <p>No emails found</p>;
+const getDate = props.date;
+const formattedDate = new Date(getDate).toLocaleDateString('en-GB', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit'
+});
 
   return (
     <>
-    <Link to={'/email/:emailid'} //{props.id}
+    <Link to={`/${projectId}/email/${emailId}`} //{props.id}
       className="email-item-flex">
-        {emails.length && emails.map((email: EmailItemProps) => (
-          <>
-           <div className="tap-in-wrapper"><div className="tap-in-dot"></div></div>
-          <div className="email-content-date-flex">
+        <div className="tap-in-wrapper">
+          <div className={!props.isTapped ? "tap-in-dot inactive" : "tap-in-dot"}></div>
+        </div>
+     
+          <div className={!props.isRead ? "email-content-date-flex" : "email-content-date-flex inactive"}>
             <div className="email-content">
               <div className="email-sender-subject-flex">
-                <p className="email-sender">{email.sender}</p>
-                <p className="email-subject">{email.subject}</p>
+                <p className="email-sender">{props.sender}</p>
+                <p className="email-subject">{props.subject}</p>
               </div>
               
               <div className="email-sender-address-content-flex">
-                <p className="email-sender-address">{email.senderAddress}</p>
-                <p className="email-content-">{email.body}</p>
+                <p className="email-sender-address">{props.senderAddress}</p>
+                <p className="email-content-">{props.body}</p>
               </div>
             </div>
-            <p className="email-date">{email.date}</p>
+            <p className="email-date">{formattedDate}</p>
           </div>
-          </>))}
+        
       </Link>
     </>
   )
