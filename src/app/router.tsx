@@ -6,7 +6,7 @@ import Home from "./routes/Home";
 import EmailSection from "../components/ui/EmailSection";
 import Kanban from "./routes/Kanban";
 import ViewEmail from "./routes/ViewEmail";
-// import Filter from "./routes/Filter"
+import Filter from "./routes/Filter"
 
 const router = createBrowserRouter([
   {
@@ -24,6 +24,7 @@ const router = createBrowserRouter([
   { path: "/setup", Component: SetupForm },
   { path: "/projects/:projectId/home", Component: Home },
   { path: "/:projectId/email/:emailId", Component: ViewEmail },
+  { path: "/filter", Component: Filter},
   {
     loader: async ({ params }) => {
       const projectId = params.projectId;
