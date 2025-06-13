@@ -9,17 +9,17 @@ import EmailSection from "./TestEmails";
 
 const Home = () => {
   const [showEmailSection, setShowEmailSection] = useState(false);
-  const {projectId} = useParams()
+  const { projectId } = useParams()
   const navigate = useNavigate()
   const handleConnectEmails = async () => {
     setShowEmailSection(true);
-  
- 
+
+
     if (!projectId) {
       console.error("No projectId found");
       return;
     }
-  
+
     try {
       const res = await fetch("http://localhost:3000/api/google-emails", {
         method: 'POST',
@@ -27,7 +27,7 @@ const Home = () => {
           'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify({ projectId }) 
+        body: JSON.stringify({ projectId })
       });
       console.log("request sent to fetch-emails")
       if (!res.ok) throw new Error("Failed to fetch and save emails");
@@ -52,7 +52,7 @@ const Home = () => {
       {!showEmailSection ? (
         <Welcome onConnectEmails={handleConnectEmails} />
       ) : (
-        <EmailSection title="UNREAD" />
+        <EmailSection />
       )}
     </main>
   );
