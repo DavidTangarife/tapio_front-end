@@ -12,13 +12,14 @@ const SetupForm = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
+      console.log(new Date().getTimezoneOffset())
       try {
         const res = await fetch("http://localhost:3000/api/meprofile", {
           credentials: "include",
         });
         if (!res.ok) {
-          throw new Error("Faile to fetch user");
-        }  
+          throw new Error("Failed to fetch user");
+        }
       } catch (err) {
         console.error("User fetch error:", err);
         // maybe we shoud sent them somewhere if they cannot log in
@@ -58,39 +59,41 @@ const SetupForm = () => {
     try {
       // send project name and start date to create a new project for the user
       console.log("Sending data...");
+      const time = (new Date(formData.searchDate).getTime() - ((new Date().getTimezoneOffset()) * 60 * 1000))
       const payload1 = {
         name: formData.projectName,
-        startDate: new Date(formData.searchDate).toISOString(),
+        startDate: new Date(time).toISOString(),
       };
+
       const res1 = await fetch("http://localhost:3000/api/projects", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(payload1),
-    });
-    if (!res1.ok) {
-      throw new Error("Failed to submit project data");
-    }
-    
-    // send user fullName and userId to update user's name in database
-    const payload2 = {
-      fullName: formData.fullName
-    };
-    const res2 = await fetch("http://localhost:3000/api/update-name", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(payload2),
-    });
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(payload1),
+      });
+      if (!res1.ok) {
+        throw new Error("Failed to submit project data");
+      }
+
+      // send user fullName and userId to update user's name in database
+      const payload2 = {
+        fullName: formData.fullName
+      };
+      const res2 = await fetch("http://localhost:3000/api/update-name", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(payload2),
+      });
 
       if (!res2.ok) {
         throw new Error("Failed to submit user data");
       }
-       const data = await res1.json();
+      const data = await res1.json();
       const projectId = data._id;
       console.log("Data successfully submitted");
       navigate(`/projects/${projectId}/home`);
@@ -99,7 +102,7 @@ const SetupForm = () => {
     }
   };
 
-  
+
   const onNext = async (e: FormEvent) => {
     e.preventDefault();
     if (!isLastStep) {
