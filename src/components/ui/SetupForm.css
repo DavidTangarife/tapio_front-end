@@ -1,4 +1,5 @@
 .setup-form-title {
+    color: var(--color-font-primary);
     text-align: center;
     font-family: var(--font-stylised);
     font-size: 3rem;

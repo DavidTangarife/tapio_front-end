@@ -1,9 +1,8 @@
 import { useEffect } from "react";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import EmailItem from "./EmailItem";
 import Header from "./Header";
 // import Loader from "../../assets/Spinner.svg?react";
-import "./EmailSection.css";
 
 interface email {
   _id: string;

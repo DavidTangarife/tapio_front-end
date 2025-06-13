@@ -5,6 +5,9 @@
   margin: 0 auto;
   padding: 8px;
 }
+.email-list {
+  margin-bottom: 24px;
+}
 .email-section-title {
   margin-left: 20px;
   margin-bottom: 10px;
@@ -21,4 +24,9 @@
 .loader-title {
   font-family: var(--font-stylised);
   text-align: center;
+}
+.empty-inbox-msg {
+  font-size: var(--font-size-title);
+  color: var(--color-font-offwhite);
+  margin-left: 20px;
 }

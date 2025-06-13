@@ -1,0 +1,184 @@
+main {
+    max-width: 966px;
+}
+.filter-container {
+    width: 100%;
+    padding: 4px;
+}
+.filter-btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    gap: 8px;
+    margin: 0 0 20px 0;
+}
+.filter-btn {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--color-font-primary);
+    background-color: var(--color-primary);
+    font-family: var(--font-stylised);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-medium);
+}
+.filter-btn:hover {
+    cursor: pointer;
+}
+/* Filter buttons non-selected state */
+.filter-btn.all {
+    border: var(--border-orange);
+}
+.filter-btn.allowed {
+    border: var(--border-green-dark-mode)
+}
+.filter-btn.blocked {
+    border: var(--border-red);
+}
+
+/* Filter buttons on. hover and selected state */
+.filter-btn.all:hover,
+.filter-btn.all.active {
+    background-color: var(--color-orange);
+    color: var(--color-font-dark);
+}
+.filter-btn.allowed:hover,
+.filter-btn.allowed.active {
+    background-color: var(--color-green-dark-mode);
+    color: var(--color-font-dark);
+}
+.filter-btn.blocked:hover,
+.filter-btn.blocked.active  {
+    background-color: var(--color-red);
+    color: var(--color-font-dark);
+}
+.filter-date-title {
+  margin-bottom: 10px;
+  border-bottom: var(--border-grey-dark-mode);
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-stylised);
+  color: var(--color-font-offwhite);
+}
+.sender-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* email li element */
+.sender-list-item {
+    width: 100%;
+    min-height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    list-style: none;
+    border: var(--border-grey-dark-mode);
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
+}
+.sender-subject-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.filter-sender-name {
+  line-height: 1;
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-font-primary);
+}
+.filter-sender-subject {
+  font-family: var(--font-bodycopy);
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-weight-light);
+  color: var(--color-font-offwhite);
+}
+.filter-email-date {
+  font-family: var(--font-bodycopy);
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-weight-light);
+  color: var(--color-font-primary);
+}
+
+/* conatiner for date and thumb up thumbs down */
+.filter-status-date-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* Thumbs up vs Thumbs down buttons */
+.allowed-vs-blocked {
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-primary);
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+}
+.allowed-vs-blocked:hover {
+    background-color: #444444;
+    cursor: pointer;
+}
+.set-allowed {
+  color: var(--color-green-dark-mode);
+}
+.set-blocked {
+  color: var(--color-red);
+}
+
+.save-filters-btn {
+  margin-top: 40px;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  font-family: var(--font-stylised);
+  font-size: var(--font-size-title);
+  color: var(--font-color-offwhite);
+  font-weight: var(--font-weight-bold);
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-font-dark);
+}
+
+.save-filters-btn:hover {
+  border: var(--border-green-dark-mode);
+  cursor: pointer;
+}
+/* Mobile styling */
+@media (max-width: 500px) {
+    /* .filter-date-title {
+        text-align: center;
+    } */
+    .sender-list-item {
+        min-height: 70px;
+    }
+    .sender-subject-flex {
+      gap: 2px;
+    }
+    .filter-sender-name {
+        font-size: var(--font-size-regular);
+        line-height: 1;
+        margin-bottom: 8px;
+    }
+    .filter-sender-subject {
+        font-size: var(--font-size-small-bodycopy);
+    }
+    .filter-email-date {
+        font-size: var(--font-size-small-bodycopy);
+    }
+    .filter-status-date-container {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .allowed-vs-blocked {
+        width: 30px;
+        height: 30px;
+    }
+}
