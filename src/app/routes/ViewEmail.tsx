@@ -6,6 +6,7 @@ import Button from "../../components/ui/Button"
 import ViewEmailActionButton from "../../components/ui/ViewEmailActionButton"
 import AddToBoardModal from "../../components/ui/AddToBoardModal";
 import { ViewKanbanOutlined, TouchAppOutlined, Reply, DeleteOutlined } from '@mui/icons-material';
+import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react"
 
 
 const ViewEmail = () => {
@@ -18,7 +19,7 @@ const ViewEmail = () => {
         <main>
           <section className="header-container">
             <Link to={`/projects/${projectId}/emails`} className="back-btn">Back</Link>
-            <h1 className="logo">Tapio</h1>
+            <TapioLogoDesktop className="logo" />
             <Button className="user-btn" buttonText="MJ"/>
           </section>
           <section className="email-view-container">
@@ -26,7 +27,7 @@ const ViewEmail = () => {
               <h3 className="email-view-subject">Thank you for your application</h3>
               <h4 className="email-view-sender">carsales<span className="email-view-sender-address">&#60;notifications@smartrecruiters&#62;</span></h4>
             </div>
-            <p className="email-view-body">Hi Maxine,
+            <p className="email-view-body">Hi Maxine,
               <br />
               <br /> 
               Thank you for your application for our Graduate Program - Technology role and congratulations on taking the first step towards being a big part of something big!  

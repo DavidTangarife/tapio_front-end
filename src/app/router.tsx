@@ -10,6 +10,7 @@ import Filter from "./routes/Filter"
 
 const router = createBrowserRouter([
   {
+    path: "/projects/:projectId/emails", Component: EmailSection,
     loader: async ({ params }) => {
       const response = await fetch(`http://localhost:3000/api/projects/${params.projectId}/emails`, {
         credentials: "include",
@@ -17,14 +18,21 @@ const router = createBrowserRouter([
       const data = await response.json();  // parse JSON body (the emails array)
       return data;
     },
-    path: "/projects/:projectId/emails",
-    Component: EmailSection,
   },
   { path: "/", Component: Landing },
   { path: "/setup", Component: SetupForm },
   { path: "/projects/:projectId/home", Component: Home },
   { path: "/:projectId/email/:emailId", Component: ViewEmail },
-  { path: "/filter", Component: Filter},
+  { 
+    path: "/filter/:projectId", Component: Filter,
+    loader: async ({ params }) => {
+      const response = await fetch(`http://localhost:3000/api/projects/${params.projectId}/emails`, {
+        credentials: "include",
+    });
+    const data = await response.json();
+    return data;
+    }
+  },
   {
     loader: async ({ params }) => {
       const projectId = params.projectId;

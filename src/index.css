@@ -7,13 +7,15 @@
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-bold: 700;
+  --font-size-small-bodycopy: 0.8rem;
   --font-size-regular: 1rem;
   --font-size-medium: 1.2rem;
   --font-size-title: 1.4rem;
   --color-grad-green-dark-mode: linear-gradient(#86dd14, #21950c);
   --color-green-dark-mode: #86dd14;
   --color-primary: #1f1f1f;
-  --color-dark-mode-hover: #2d2d2d;
+  --color-primary-dark: #181818;
+  --color-dark-mode-hover: #272727;
   --color-font-dark: #181818;
   --color-font-offwhite: #dfdfdf;
   --color-font-primary: #f5f5f5;
