@@ -93,7 +93,7 @@ const SetupForm = () => {
        const data = await res1.json();
       const projectId = data._id;
       console.log("Data successfully submitted");
-      navigate(`/projects/${projectId}/home`);
+      navigate(`/projects/${projectId}/connect`);
     } catch (err) {
       console.error("Error submitting data:", err);
     }

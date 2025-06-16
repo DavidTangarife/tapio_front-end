@@ -1,10 +1,9 @@
 import { useEffect } from "react";
 import { useLoaderData, useParams } from "react-router-dom";
-import EmailItem from "./EmailItem";
-import Header from "./Header";
+import EmailItem from "../../components/ui/EmailItem";
+import Header from "../../components/ui/Header";
 //import TapUpModal from "./TapUpModal";
-// import Loader from "../../assets/Spinner.svg?react";
-import "./EmailSection.css";
+import "./Inbox.css";
 
 interface email {
   _id: string;
@@ -17,7 +16,7 @@ interface email {
   date: Date;
 }
 
-const EmailSection = () => {
+const Inbox = () => {
   
   const emails: email[] = useLoaderData() ?? [];
   // console.log(emails)
@@ -103,4 +102,4 @@ const EmailSection = () => {
         </div>
       </>
 )};
-export default EmailSection;
+export default Inbox;

@@ -2,15 +2,15 @@ import { createBrowserRouter } from "react-router";
 
 import Landing from "./routes/Landing";
 import SetupForm from "./routes/AccountSetUp";
-import Home from "./routes/Home";
-import EmailSection from "../components/ui/EmailSection";
+import ConnectEmails from "./routes/ConnectEmails";
+import Inbox from "./routes/Inbox";
 import Kanban from "./routes/Kanban";
 import ViewEmail from "./routes/ViewEmail";
 import Filter from "./routes/Filter"
 
 const router = createBrowserRouter([
   {
-    path: "/projects/:projectId/emails", Component: EmailSection,
+    path: "/projects/:projectId/emails", Component: Inbox,
     loader: async ({ params }) => {
       const response = await fetch(`http://localhost:3000/api/projects/${params.projectId}/emails`, {
         credentials: "include",
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
   },
   { path: "/", Component: Landing },
   { path: "/setup", Component: SetupForm },
-  { path: "/projects/:projectId/home", Component: Home },
+  { path: "/projects/:projectId/connect", Component: ConnectEmails },
   { path: "/:projectId/email/:emailId", Component: ViewEmail },
   { 
     path: "/filter/:projectId", Component: Filter,

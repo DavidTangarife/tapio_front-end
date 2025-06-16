@@ -16,10 +16,9 @@ type SenderData = {
 
   // Return an array of emails  
   const emails: SenderData[] = useLoaderData() ?? [];
-  console.log(emails);
 
   // Grab projectId from URL params
-  const { projectId } = useParams();
+   const { projectId } = useParams();
   
   // State to store emails
   const [senderState, setSenderState] = useState(emails);
@@ -30,10 +29,16 @@ type SenderData = {
       if (projectId) {
         fetch(`http://localhost:3000/api/projects/${projectId}/last-login`, {
           method: "PATCH",
-          credentials: "include",
-      }).catch((err) => console.error("Failed to update lastLogin:", err));
+          credentials: "include", }
+        ).catch((err) => console.error("Failed to update lastLogin:", err));
+
+        fetch (`http://localhost:3000/api/projects/${projectId}`, {
+          method: "GET",
+          credentials: "include", 
+        }).catch((err) => console.error("Failed to get project", err));
         }
     }, [projectId]);
+    
   if (!emails.length) return <p>No emails found</p>;
 
   //To toggle tap in tap out state for allowed and blocked senders
