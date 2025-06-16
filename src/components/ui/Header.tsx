@@ -83,7 +83,7 @@ const Header = () => {
   };
 
   const swapProject = (projecIdtomove: string) => {
-    navigate(`/projects/${projecIdtomove}/home`);
+    navigate(`/projects/${projecIdtomove}/inbox`);
     setProjectOpen(false);
   };
 
@@ -94,11 +94,11 @@ const Header = () => {
         <div className="tgl-btn-container">
           <Button
             className={`tgl-btn inbox-tgl-btn ${
-              location.pathname === `/projects/${projectId}/inbox`
+              location.pathname === `/projects/${projectId}/emails`
                 ? "active"
                 : ""
             }`}
-            onClick={() => navigate(`/projects/${projectId}/inbox`)}
+            onClick={() => navigate(`/projects/${projectId}/emails`)}
             buttonText="Inbox"
           />
           <Button

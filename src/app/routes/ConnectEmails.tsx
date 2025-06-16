@@ -5,12 +5,12 @@ import Welcome from "../../components/ui/Welcome";
 import "./ConnectEmails.css";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import  Loader from "../../assets/Spinner.svg?react"
+import Loader from "../../assets/Spinner.svg?react";
 const ConnectEmails = () => {
   const [showEmailSection, setShowEmailSection] = useState(false);
-  const { projectId } = useParams()
-  const navigate = useNavigate()
-  
+  const { projectId } = useParams();
+  const navigate = useNavigate();
+
   const handleConnectEmails = async () => {
     setShowEmailSection(true);
 
@@ -20,14 +20,14 @@ const ConnectEmails = () => {
     }
     try {
       const res = await fetch("http://localhost:3000/api/google-emails", {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
-        body: JSON.stringify({ projectId })
+        credentials: "include",
+        body: JSON.stringify({ projectId }),
       });
-      if (!res.ok) throw new Error("Failed to fetch and save emails");      
+      if (!res.ok) throw new Error("Failed to fetch and save emails");
     } catch (err) {
       console.error("Error connecting emails:", err);
     } finally {
@@ -48,7 +48,10 @@ const ConnectEmails = () => {
       {!showEmailSection ? (
         <Welcome onConnectEmails={handleConnectEmails} />
       ) : (
-        <><h2 className="loader-title">Loading emails</h2><Loader className="spin-loader"/></>
+        <>
+          <h2 className="loader-title">Loading emails</h2>
+          <Loader className="spin-loader" />
+        </>
       )}
     </main>
   );
