@@ -1,0 +1,117 @@
+main {
+    max-width: 966px;
+}
+.filter-title {
+    color: var(--color-font-primary);
+    font-size: 3rem;
+    font-weight: 500;
+}
+.filter-container {
+    width: 100%;
+    background-color: var(--color-primary);
+    padding: 8px;
+}
+.filter-btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0 20px 0;
+}
+.filter-btn {
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    background-color: var(--color-primary);
+    font-family: var(--font-stylised);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--button-font-size);
+}
+.filter-btn:hover {
+    cursor: pointer;
+}
+.filter-btn.all {
+    border: var(--border-orange)
+}
+.filter-btn.all:hover,
+.filter-btn.all.active {
+    background-color: var(--color-orange);
+    color: var(--color-font-dark);
+}
+.filter-btn.allowed {
+    border: var(--border-green-dark-mode)
+}
+.filter-btn.allowed:hover,
+.filter-btn.allowed.active {
+    background-color: var(--color-green-dark-mode);
+    color: var(--color-font-dark);
+}
+.filter-btn.blocked {
+    border: var(--border-red);
+}
+.filter-btn.blocked:hover,
+.filter-btn.blocked.active  {
+    background-color: var(--color-red);
+    color: var(--color-font-dark);
+}
+.sender-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+.sender-list-item {
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid orange;
+    border-radius: var(--border-radius);
+    padding: 8px;
+    margin-bottom: 10px;
+}
+.sender-subject-flex {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.filter-sender-name {
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-bold);
+}
+.filter-sender-subject {
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-medium);
+}
+.filter-sender-email {
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-size-regular);
+}
+.filter-status-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.allowed-vs-blocked {
+    font-size: var(--font-size-medium);
+    font-weight: 700;
+}
+.set-allowed {
+  color: var(--color-green-dark-mode);
+}
+.set-blocked {
+  color: var(--color-red);
+}
+.tapin-tapout-btn {
+    background-color: #181818;
+    border-radius: var(--border-radius);
+    width: 75px;
+    height: 35px;
+    border: none;
+    font-weight: 500;
+
+}
+.tapin-tapout-btn {
+  cursor: pointer;
+}
+.tapin-tapout-btn:hover {
+  background-color: var(--color-dark-mode-hover);
+}
