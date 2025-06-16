@@ -1,12 +1,15 @@
 import Button from "./Button";
 import "./Header.css";
-import { useNavigate, useParams } from "react-router-dom";
+import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react"
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [fullName, setFullName] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const {projectId} = useParams();
 
   useEffect(() => {
@@ -53,7 +56,7 @@ const Header = () => {
 return (
   <>
     <section className="header-container">
-      <h1 className="logo">Tapio</h1>
+      <TapioLogoDesktop className="logo" />
       <div className="tgl-btn-container">
         <Button 
           className={`tgl-btn inbox-tgl-btn ${location.pathname === `/projects/${projectId}/emails` ? "active" : ""}`}
@@ -64,6 +67,11 @@ return (
           className={`tgl-btn board-tgl-btn ${location.pathname === `/kanban/${projectId}` ? "active" : ""}`}
           onClick={() => navigate(`/kanban/${projectId}`)}
           buttonText="Board"
+        />
+        <Button
+          className={`tgl-btn filter-tgl-btn ${location.pathname === `/filter/${projectId}` ? "active" : ""}`}
+          onClick={() => navigate(`/filter/${projectId}`)}
+          buttonText="Filter"
         />
       </div>
       <div className="user-menu">

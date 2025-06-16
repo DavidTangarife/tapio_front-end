@@ -5,21 +5,23 @@
   align-items: center;
   margin-bottom: 50px;
 }
-
+.logo {
+  max-width: 120px;
+  height: auto;
+}
 .back-btn {
-  height: 40px;
-  width: 80px;
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-stylised);
-  font-size: var(--button-font-size);
-  border-radius: var(--border-radius);
-  background-color: var(--color-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
+  padding: 10px 20px;
   text-decoration: none;
-  color: #f5f5f5;
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-stylised);
+  color: var(--color-font-primary);
+  font-size: var(--button-font-size);
+  border: 1px solid #1f1f1f;
+  border-radius: var(--border-radius);
+  background-color: var(--color-primary);
 }
 .back-btn:hover {
   border: var(--border-green-dark-mode);
@@ -27,6 +29,7 @@
 }
 .email-view-container {
   background-color: var(--color-primary);
+  border-radius: var(--border-radius);
   padding: 20px;
 }
 .email-view-sender-details {
@@ -36,20 +39,24 @@
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-regular);
   font-family: var(--font-bodycopy);
+  color: var(--color-font-primary);
   margin-bottom: 10px;
 }
 .email-view-sender {
   font-family: var(--font-bodycopy);
   font-size: var(--font-size-regular);
+  color: var(--color-font-primary);
 }
 .email-view-sender-address {
   font-weight: var(--font-weight-light);
+  color: var(--color-font-primary);
   margin-left: 10px;
 }
 .email-view-body {
   font-size: var(--font-size-regular);
   font-family: var(--font-bodycopy);
   font-weight: var(--font-weight-light);
+  color: var(--color-font-primary);
 }
 .email-view-btn-panel {
   margin-top: 50px;
@@ -64,11 +71,11 @@
   height: 80px;
   font-family: var(--font-stylised);
   font-size: var(--font-size-regular);
+  color: var(--color-font-primary);
   font-weight: var(--font-weight-bold);
   line-height: 1;
-  background-color: #181818;
+  background-color: var(--color-primary-dark);
   border: none;
-  padding: 8px;
   border-radius: var(--border-radius);
   display: flex;
   flex-direction: column;

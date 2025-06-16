@@ -81,30 +81,49 @@ const AddToBoardModal = ({closeModal}: AddToBoardModalProps) => {
   return (
     <>
       <div className="modal-backdrop" onClick={closeModal} />
-        <aside>
-          {isSubmitted ? ( <div><h3>Added to Board</h3></div>) : (
+        <aside className="opportunity-modal">
+          {isSubmitted ? ( <div><h3 className="add-opp-success-msg">Added to Board</h3></div>) : (
+            <>
+        <h3 className="create-opp-title">Create opportunity</h3>
         <div className="form-container">
-          <h3>Create opportunity</h3>
           <form ref={modalInputRef} onSubmit={handleSubmit}>
             <label>
             Company Name:
-            <input  type="text" name="companyname" />
-          </label>
-          <label>
+            <input  
+              className="opp-modal-txt-input"
+              type="text" 
+              name="companyname" 
+              autoFocus
+              required
+            />
+            </label>
+           <label>
             Role:
-            <input type="text" name="role" />
+            <input 
+              className="opp-modal-txt-input"
+              type="text" 
+              name="role" 
+              required
+            />
           </label>
-          <select name="board" required>
+          <select 
+            className="select-board-menu"
+            name="board" 
+            required>
             {statuses.map((status: any) => (
               <option key={status._id} value={status._id}>
                 {status.title}
               </option>
             ))}
           </select>
-          <button type="submit">Submit</button>
+          <button 
+            type="submit"
+            className="add-opp-submit-btn">Submit</button>
           </form>
         </div>
+         </>
          )}
+        
           </aside>
       </>
   );

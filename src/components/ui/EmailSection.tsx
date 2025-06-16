@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useLoaderData, useParams } from "react-router-dom";
 import EmailItem from "./EmailItem";
 import Header from "./Header";
+//import TapUpModal from "./TapUpModal";
 // import Loader from "../../assets/Spinner.svg?react";
 import "./EmailSection.css";
 
@@ -20,7 +21,7 @@ const EmailSection = () => {
   
   const emails: email[] = useLoaderData() ?? [];
   // console.log(emails)
-  const {projectId} = useParams()
+  const {projectId} = useParams();
 
   useEffect(() => {
       if (projectId) {
@@ -42,27 +43,26 @@ const EmailSection = () => {
     <>
       <div className="email-section">
         <Header />
-
-        <h3 className="email-section-title">TAPPED UP</h3>
-        <div className="email-list">
-          {tappedEmails.length > 0 ? (
-            tappedEmails.map((email) => (
-              <EmailItem
-                key={email._id}
-                _id={email._id}
-                sender={email.from}
-                subject={email.subject}
-                senderAddress={email.from}
-                body={email.body}
-                isRead={email.isRead}
-                date={email.date}
-                isTapped={email.isTapped}
+          {tappedEmails.length > 0 && (
+            <>
+              <h3 className="email-section-title">TAPPED UP</h3>
+              <div className="email-list">
+              {tappedEmails.map((email) => (
+                <EmailItem
+                  key={email._id}
+                  _id={email._id}
+                  sender={email.from}
+                  subject={email.subject}
+                  senderAddress={email.from}
+                  body={email.body}
+                  isRead={email.isRead}
+                  date={email.date}
+                  isTapped={email.isTapped}
               />
-            ))
-          ) : (
-            <p>No read emails</p>
-          )}
-        </div>
+            ))}
+          </div>
+        </>
+        )}
         
         <h3 className="email-section-title">UNREAD</h3>
         <div className="email-list">
@@ -80,9 +80,11 @@ const EmailSection = () => {
               />
             ))}
         </div>
-
-                <h3 className="email-section-title">READ</h3>
-        <div className="email-list">
+        
+        {readEmails.length > 0 && (
+          <>
+            <h3 className="email-section-title">READ</h3>
+            <div className="email-list">
             {readEmails.map((email) => (
               <EmailItem
                 key={email._id}
@@ -96,9 +98,9 @@ const EmailSection = () => {
                 isTapped={email.isTapped}
               />
             ))}
+            </div>
+          </>)}
         </div>
-      </div>
-    </>
-  );
-};
+      </>
+)};
 export default EmailSection;

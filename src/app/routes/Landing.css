@@ -1,0 +1,64 @@
+
+.landing-page {
+    height: 100vh;
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(23, 43, 23, 0.8) 10%, transparent 30%),
+        radial-gradient(circle at 90% 10%, rgba(2, 55, 2, 0.7) 15%, transparent 35%),
+        linear-gradient(#131713, #070807);
+        background-size: 200% 150%;
+        animation: mottle 15s ease-in-out infinite;
+}
+
+.logo-landing {
+    width: 150px;
+    height: auto;
+    margin-top: 70px;
+}
+.login-wrapper {
+    width: 500px;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    border-radius: var(--border-radius);
+    background-color: rgba(6, 6, 6, 0.6);
+}
+.sign-up-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-family: var(--font-stylised);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-font-offwhite)
+}
+.login-btn {
+    width: 220px;
+    height: 50px;
+    background-color: var(--color-font-offwhite);
+    border: 1px solid var(--color-grey);
+    border-radius: var(--border-radius);
+    color: #070807;
+}
+.login-btn:hover {
+    cursor: pointer;
+}
+.login-btn.google {
+    margin-top: 70px;
+}
+@keyframes mottle {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}

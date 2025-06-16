@@ -27,28 +27,21 @@ const formattedDate = new Date(getDate).toLocaleDateString('en-GB', {
 
   return (
     <>
-    <Link to={`/${projectId}/email/${emailId}`} //{props.id}
-      className="email-item-flex">
-        <div className="tap-in-wrapper">
-          <div className={!props.isTapped ? "tap-in-dot inactive" : "tap-in-dot"}></div>
-        </div>
-     
-          <div className={!props.isRead ? "email-content-date-flex" : "email-content-date-flex inactive"}>
-            <div className="email-content">
-              <div className="email-sender-subject-flex">
-                <p className="email-sender">{props.sender}</p>
-                <p className="email-subject">{props.subject}</p>
-              </div>
-              
-              <div className="email-sender-address-content-flex">
-                <p className="email-sender-address">{props.senderAddress}</p>
-                <p className="email-content-">{props.body}</p>
-              </div>
-            </div>
-            <p className="email-date">{formattedDate}</p>
+    <div
+      className="email-item-tapin-flex-wrapper"> 
+      {/* tap in dot */}
+      <div className="tap-in-wrapper">
+        <div className={!props.isTapped ? "tap-in-dot inactive" : "tap-in-dot"}></div>
+      </div>
+      {/* email item */}
+      <Link to={`/${projectId}/email/${emailId}`} className={!props.isRead ? "email-content-date-flex" : "email-content-date-flex inactive"}>
+          <div className="email-sender-subject-flex">
+            <p className="email-sender">{props.sender}</p>
+            <p className="email-subject">{props.subject}</p>
           </div>
-        
+        <p className="email-date">{formattedDate}</p>
       </Link>
+    </div>
     </>
   )
 }

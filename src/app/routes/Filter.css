@@ -1,98 +1,132 @@
 main {
     max-width: 966px;
 }
-.filter-title {
-    color: var(--color-font-primary);
-    font-size: 3rem;
-    font-weight: 500;
-}
 .filter-container {
     width: 100%;
-    background-color: var(--color-primary);
-    padding: 8px;
+    padding: 4px;
 }
 .filter-btn-container {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: left;
     gap: 8px;
-    margin: 20px 0 20px 0;
+    margin: 0 0 20px 0;
 }
 .filter-btn {
-    padding: 10px 20px;
-    border-radius: var(--border-radius);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: var(--color-font-primary);
     background-color: var(--color-primary);
     font-family: var(--font-stylised);
     font-weight: var(--font-weight-bold);
-    font-size: var(--button-font-size);
+    font-size: var(--font-size-medium);
 }
 .filter-btn:hover {
     cursor: pointer;
 }
+/* Filter buttons non-selected state */
 .filter-btn.all {
-    border: var(--border-orange)
+    border: var(--border-orange);
 }
+.filter-btn.allowed {
+    border: var(--border-green-dark-mode)
+}
+.filter-btn.blocked {
+    border: var(--border-red);
+}
+
+/* Filter buttons on. hover and selected state */
 .filter-btn.all:hover,
 .filter-btn.all.active {
     background-color: var(--color-orange);
     color: var(--color-font-dark);
-}
-.filter-btn.allowed {
-    border: var(--border-green-dark-mode)
 }
 .filter-btn.allowed:hover,
 .filter-btn.allowed.active {
     background-color: var(--color-green-dark-mode);
     color: var(--color-font-dark);
 }
-.filter-btn.blocked {
-    border: var(--border-red);
-}
 .filter-btn.blocked:hover,
 .filter-btn.blocked.active  {
     background-color: var(--color-red);
     color: var(--color-font-dark);
 }
+.filter-date-title {
+  margin-bottom: 10px;
+  border-bottom: var(--border-grey-dark-mode);
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-stylised);
+  color: var(--color-font-offwhite);
+}
 .sender-container {
-    max-width: 700px;
+    width: 100%;
     margin: 0 auto;
 }
+
+/* email li element */
 .sender-list-item {
-    margin: 0 auto;
     width: 100%;
+    min-height: 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid orange;
-    border-radius: var(--border-radius);
-    padding: 8px;
     margin-bottom: 10px;
+    list-style: none;
+    border: var(--border-grey-dark-mode);
+    border-radius: var(--border-radius);
+    padding: 10px 20px;
 }
 .sender-subject-flex {
     display: flex;
-    align-items: center;
-    gap: 4px;
+    flex-direction: column;
+    gap: 6px;
 }
 .filter-sender-name {
+  line-height: 1;
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-bold);
+  color: var(--color-font-primary);
 }
 .filter-sender-subject {
-  font-size: var(--font-size-title);
-  font-weight: var(--font-weight-medium);
-}
-.filter-sender-email {
+  font-family: var(--font-bodycopy);
   font-size: var(--font-size-regular);
-  font-weight: var(--font-size-regular);
+  font-weight: var(--font-weight-light);
+  color: var(--color-font-offwhite);
 }
-.filter-status-container {
+.filter-email-date {
+  font-family: var(--font-bodycopy);
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-weight-light);
+  color: var(--color-font-primary);
+}
+
+/* conatiner for date and thumb up thumbs down */
+.filter-status-date-container {
     display: flex;
     gap: 10px;
     align-items: center;
 }
+
+/* Thumbs up vs Thumbs down buttons */
 .allowed-vs-blocked {
-    font-size: var(--font-size-medium);
-    font-weight: 700;
+    width: 40px;
+    height: 40px;
+    background-color: var(--color-primary);
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+}
+.allowed-vs-blocked:hover {
+    background-color: #444444;
+    cursor: pointer;
 }
 .set-allowed {
   color: var(--color-green-dark-mode);
@@ -100,18 +134,35 @@ main {
 .set-blocked {
   color: var(--color-red);
 }
-.tapin-tapout-btn {
-    background-color: #181818;
-    border-radius: var(--border-radius);
-    width: 75px;
-    height: 35px;
-    border: none;
-    font-weight: 500;
 
-}
-.tapin-tapout-btn {
-  cursor: pointer;
-}
-.tapin-tapout-btn:hover {
-  background-color: var(--color-dark-mode-hover);
+/* Mobile styling */
+@media (max-width: 500px) {
+    /* .filter-date-title {
+        text-align: center;
+    } */
+    .sender-list-item {
+        min-height: 70px;
+    }
+    .sender-subject-flex {
+      gap: 2px;
+    }
+    .filter-sender-name {
+        font-size: var(--font-size-regular);
+        line-height: 1;
+        margin-bottom: 8px;
+    }
+    .filter-sender-subject {
+        font-size: var(--font-size-small-bodycopy);
+    }
+    .filter-email-date {
+        font-size: var(--font-size-small-bodycopy);
+    }
+    .filter-status-date-container {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .allowed-vs-blocked {
+        width: 30px;
+        height: 30px;
+    }
 }
