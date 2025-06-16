@@ -1,15 +1,101 @@
-.header-container {
-  width: 100%;
+/* LOGO PROJECTS AND USER MENU */
+.header {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 50px;
+  height: 100px;
+  position: relative;
 }
+
 .logo {
   font-size: 4rem;
+  padding-bottom: 2%;
 }
+
+.project,
+.user-menu {
+  position: relative;
+}
+.project button {
+  padding: 10px 20px;
+  width: 300px;
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-stylised);
+  font-size: var(--button-font-size);
+  border-radius: var(--border-radius);
+  background-color: var(--color-grey);
+  color: black;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.project button:hover {
+  background-color: var(--color-font-offwhite);
+}
+
+.user-btn {
+  width: 55px;
+  height: 55px;
+  background-color: var(--color-grey);
+  border-radius: 50%;
+  padding: var(--button-padding);
+  font-size: var(--button-font-size);
+  font-weight: var(--font-weight-bold);
+  color: black;
+  border: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.user-btn:hover {
+  background-color: var(--color-font-offwhite);
+}
+
+.dropdown {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background-color: var(--color-grey);
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.dropdown button {
+  background: none;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 12px 18px;
+  font-size: var(--button-font-size);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-stylised);
+  text-align: left;
+  color: black;
+  width: 100%;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.dropdown button:hover {
+  background-color: var(--color-font-offwhite);
+  cursor: pointer;
+}
+
+.project .dropdown {
+  width: 300px;
+}
+
+.user-menu .dropdown {
+  width: 150px;
+}
+
+/* INBOX, KANBAN BOARD AND OPPORTUNITIES */
 .tgl-btn-container {
-  max-width: 200px;
   display: flex;
   gap: 8px;
   padding: 8px;
@@ -24,68 +110,14 @@
   border-radius: var(--border-radius);
   text-decoration: none;
   background: var(--color-primary);
-  color: #f5f5f5; 
 }
 
-.user-btn {
-  width: 55px;
-  height: 55px;
-  background-color: var(--color-grey);
-  border-radius: 50%;
-  padding: var( --button-padding);
-  font-size: var(--button-font-size);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-font-dark);
-  border: none;
-}
 .tgl-btn:hover {
   cursor: pointer;
   border: var(--border-green-dark-mode);
-}
-.user-btn:hover {
-  cursor: pointer;
-  background-color: var(--color-font-offwhite);
-  transition: ease-in-out 0.3s;
 }
 
 .tgl-btn.active {
   background: var(--color-grad-green-dark-mode);
   color: var(--color-font-dark);
-}
-
-.user-menu {
-  position: relative;
-}
-
-.dropdown {
-  position: absolute;
-  top: 65px;
-  right: 0;
-  background-color: var(--color-grey);
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 8px 0;
-  z-index: 100;
-  min-width: 140px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.dropdown button {
-  background: none;
-  border: none;
-  padding: 12px 18px;
-  font-size: var(--button-font-size);
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-stylised);
-  text-align: left;
-  color: var(--color-font-dark);
-  width: 100%;
-  transition: 0.2s ease-in-out;
-}
-
-.dropdown button:hover {
-  background-color: var(--color-font-offwhite);
-  cursor: pointer;
 }
