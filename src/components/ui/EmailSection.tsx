@@ -14,9 +14,7 @@ interface email {
   isRead: boolean;
   isTapped: boolean;
   date: Date;
- 
 }
-
 
 const EmailSection = () => {
   
@@ -38,8 +36,7 @@ const EmailSection = () => {
     email.isRead && !email.isTapped)
   const unreadEmails = emails.filter(email =>
     !email.isRead && !email.isTapped)
-  const tappedEmails = emails.filter(email =>
-    email.isTapped && email.isRead)
+  const tappedEmails = emails.filter(email => email.isTapped)
 
   return (
     <>
@@ -81,7 +78,7 @@ const EmailSection = () => {
                 date={email.date}
                 isTapped={email.isTapped}
               />
-))}
+            ))}
         </div>
 
                 <h3 className="email-section-title">READ</h3>
@@ -98,7 +95,7 @@ const EmailSection = () => {
                 date={email.date}
                 isTapped={email.isTapped}
               />
-))}
+            ))}
         </div>
       </div>
     </>
