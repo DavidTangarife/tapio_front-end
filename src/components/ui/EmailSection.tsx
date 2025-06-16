@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLoaderData, useParams } from "react-router-dom";
 import EmailItem from "./EmailItem";
 import Header from "./Header";
-import TapUpModal from "./TapUpModal";
+//import TapUpModal from "./TapUpModal";
 // import Loader from "../../assets/Spinner.svg?react";
 import "./EmailSection.css";
 
