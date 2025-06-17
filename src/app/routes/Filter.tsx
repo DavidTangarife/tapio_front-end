@@ -16,10 +16,9 @@ type SenderData = {
 
   // Return an array of emails  
   const emails: SenderData[] = useLoaderData() ?? [];
-  console.log(emails);
 
   // Grab projectId from URL params
-  const { projectId } = useParams();
+   const { projectId } = useParams();
   
   // State to store emails
   const [senderState, setSenderState] = useState(emails);

@@ -2,11 +2,11 @@ import { useState } from "react";
 import Header from "../../components/ui/Header";
 import Welcome from "../../components/ui/Welcome";
 // import EmailSection from "../../components/ui/EmailSection";
-import "./Home.css";
+import "./ConnectEmails.css";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import  Loader from "../../assets/Spinner.svg?react"
-const Home = () => {
+const ConnectEmails = () => {
   const [showEmailSection, setShowEmailSection] = useState(false);
   const { projectId } = useParams()
   const navigate = useNavigate()
@@ -56,4 +56,4 @@ const Home = () => {
     </main>
   );
 };
-export default Home;
+export default ConnectEmails;
