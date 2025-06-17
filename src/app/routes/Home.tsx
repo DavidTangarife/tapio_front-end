@@ -27,7 +27,10 @@ const Home = () => {
         credentials: 'include',
         body: JSON.stringify({ projectId })
       });
-      if (!res.ok) throw new Error("Failed to fetch and save emails");      
+      if (!res.ok) throw new Error("Failed to fetch and save emails");   
+      
+      await new Promise(res => setTimeout(res, 600)); 
+   
     } catch (err) {
       console.error("Error connecting emails:", err);
     } finally {

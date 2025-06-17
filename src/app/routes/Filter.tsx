@@ -26,14 +26,14 @@ type SenderData = {
   const [filteredSenders, setFilteredSenders] = useState<"all" | "allowed" | "blocked">("all")
 
   // Fetch emails from backend
-   useEffect(() => {
-      if (projectId) {
-        fetch(`http://localhost:3000/api/projects/${projectId}/last-login`, {
-          method: "PATCH",
-          credentials: "include",
+  useEffect(() => {
+    if (projectId) {
+      fetch(`http://localhost:3000/api/projects/${projectId}/last-login`, {
+        method: "PATCH",
+        credentials: "include",
       }).catch((err) => console.error("Failed to update lastLogin:", err));
-        }
-    }, [projectId]);
+    }
+  }, [projectId]);
   if (!emails.length) return <p>No emails found</p>;
 
   //To toggle tap in tap out state for allowed and blocked senders
@@ -58,6 +58,34 @@ type SenderData = {
     return senderState;
   }
 
+function extractEmailAddress(from: string): string {
+  const match = from.match(/<(.+)>/);
+  return match ? match[1] : from.trim();
+}
+
+  const handleSaveFilters = async () => {
+    if (!projectId) return;
+    const allowedSenders = senderState
+      .filter(sender => !sender.isBlocked)
+      .map(sender => extractEmailAddress(sender.from));
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/projects/${projectId}/filters`, {
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ filters: allowedSenders })
+      });
+      if (!res.ok) throw new Error("Failed to save filters");
+      // TODO: need a message to show filters updated
+    } catch (err) {
+      console.error("Error saving filters:", err);
+    }
+  };
+  const today = (new Date).toLocaleDateString('en-GB')
+
   return (
     <>
     <main>
@@ -74,7 +102,7 @@ type SenderData = {
           className={`filter-btn blocked ${filteredSenders === "blocked" ? "active" : ""}`}
           onClick={() => setFilteredSenders("blocked")}><ThumbDownOutlined /></button>
         </div>
-         <h3 className="filter-date-title">14/06/2025</h3>
+         <h3 className="filter-date-title">{today}</h3>
         <div className="sender-container">
             <ul className="sender-list">
             {getFilteredSenders().map((sender) => (
@@ -103,6 +131,12 @@ type SenderData = {
             </li>
             ))}
         </ul>
+        {/* TODO: need CSS */}
+        <button 
+          onClick={handleSaveFilters} 
+          className="save-filters-btn">
+          Save Filters
+        </button>
         </div>
        </section>
       </main>

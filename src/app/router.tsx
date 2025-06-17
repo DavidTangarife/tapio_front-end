@@ -12,10 +12,10 @@ const router = createBrowserRouter([
   {
     path: "/projects/:projectId/emails", Component: EmailSection,
     loader: async ({ params }) => {
-      const response = await fetch(`http://localhost:3000/api/projects/${params.projectId}/emails`, {
+      const response = await fetch(`http://localhost:3000/api/projects/${params.projectId}/inbox`, {
         credentials: "include",
       });
-      const data = await response.json();  // parse JSON body (the emails array)
+      const data = await response.json();
       return data;
     },
   },
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
   { 
     path: "/filter/:projectId", Component: Filter,
     loader: async ({ params }) => {
-      const response = await fetch(`http://localhost:3000/api/projects/${params.projectId}/emails`, {
+      const response = await fetch(`http://localhost:3000/api/projects/${params.projectId}/filter-emails`, {
         credentials: "include",
     });
     const data = await response.json();
@@ -44,7 +44,6 @@ const router = createBrowserRouter([
     path: "/kanban/:projectId",
     Component: Kanban,
   },
-  // { path: '/filter', Component: Filter}
 ]);
 
 export default router;
