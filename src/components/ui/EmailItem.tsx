@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./EmailItem.css"
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface EmailItemProps {
   sender: string;
