@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLoaderData, useParams } from "react-router-dom";
 import Header from "../../components/ui/Header";
 import "./Filter.css";
+import Button from "../../components/ui/Button";
 import { ThumbUpOutlined, ThumbDownOutlined } from '@mui/icons-material';
 
 type SenderData = {
@@ -131,13 +132,13 @@ function extractEmailAddress(from: string): string {
             ))}
         </ul>
         {/* TODO: need CSS */}
-        <button 
+          </div>
+        </section>
+        <Button 
+          buttonText="Save Filters"
           onClick={handleSaveFilters} 
           className="save-filters-btn">
-          Save Filters
-        </button>
-        </div>
-       </section>
+        </Button>
       </main>
     </>
    

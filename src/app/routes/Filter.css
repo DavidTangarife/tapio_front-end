@@ -135,6 +135,22 @@ main {
   color: var(--color-red);
 }
 
+.save-filters-btn {
+  margin-top: 40px;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  font-family: var(--font-stylised);
+  font-size: var(--font-size-title);
+  color: var(--font-color-offwhite);
+  font-weight: var(--font-weight-bold);
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-font-dark);
+}
+
+.save-filters-btn:hover {
+  border: var(--border-green-dark-mode);
+  cursor: pointer;
+}
 /* Mobile styling */
 @media (max-width: 500px) {
     /* .filter-date-title {
