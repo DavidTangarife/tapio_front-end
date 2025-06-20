@@ -120,22 +120,34 @@ const Header = () => {
             buttonText="Filter"
           />
         </div>
-        <div className="project">
-          <button onClick={toggleProject}>{currentProject?.name}</button>
+        <div className="usr-project-btn-container">
+          <button onClick={toggleProject}
+                  className="usr-project-btn">
+            {currentProject?.name}
+          </button>
           {projectOpen && (
             <div className="dropdown">
-              {projects.map((pro) => {
+                <p className="user-panel-name">Hi {fullName}</p>
+                <p className="panel-project-title">{currentProject?.name}</p>
+                <div className="signout-newproj-container">
+                  <button onClick={createProject}>New Project +</button>
+                  <button>Sign out</button>
+                </div>
+          <h3>Your Projects</h3>
+          <div className="project-list">
+                {projects.map((pro) => {
                 return (
-                  <button key={pro._id} onClick={() => swapProject(pro._id)}>
+                  <button className="panel-listed-projects" key={pro._id} onClick={() => swapProject(pro._id)}>
                     {pro.name}
                   </button>
                 );
               })}
-              <button onClick={createProject}>New Project +</button>
+          </div>
             </div>
           )}
         </div>
-        <div className="user-menu">
+    
+        {/* <div className="user-menu">
           <button className="user-btn" onClick={toggleMenu}>
             {userInitials}
           </button>
@@ -145,7 +157,7 @@ const Header = () => {
               <button onClick={handleLogout}>Logout</button>
             </div>
           )}
-        </div>
+        </div> */}
       </section>
     </>
   );

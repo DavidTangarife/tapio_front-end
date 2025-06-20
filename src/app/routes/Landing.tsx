@@ -36,14 +36,16 @@ const Landing = () => {
           <span style={{display: 'none'}}>Continue with Google</span>
         </div>
         </button>
+
         {/* Microsoft login button */}
         <button
          className="ms-login-btn"
          onClick={handleMicrosoftLogin}>
-          <img src={MicrosoftLogo} alt="microsoft logo" className="ms-login-logo"/>
+          <div className="ms-login-logo">
+            <MicrosoftLogo alt="microsoft-logo" />
+          </div>
           Continue with Microsoft
         </button> 
-      
         </div>
       </section>
       </>

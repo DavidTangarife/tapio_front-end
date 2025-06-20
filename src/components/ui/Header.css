@@ -1,72 +1,91 @@
 /* LOGO PROJECTS AND USER MENU */
-.header {
+.header-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin: 25px 0 50px 0;
 }
-
 .logo {
   max-width: 120px;
   height: auto;
 }
-
-.project,
-.user-menu {
+.usr-project-btn-container {
   position: relative;
 }
-.project button {
+.usr-project-btn {
   padding: 10px 20px;
-  width: 300px;
+  color: var(--font-color-primary);
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: var(--border-radius);
+
+}
+/* .project button {
+  padding: 10px 20px;
   font-weight: var(--font-weight-bold);
   font-family: var(--font-stylised);
-  font-size: var(--button-font-size);
+  font-size: var(--font-size-regular);
   border-radius: var(--border-radius);
-  background-color: var(--color-grey);
-  color: black;
+  background-color: var(--color-primary);
+  color: var(--font-color-primary);
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
+} */
 
-.project button:hover {
-  background-color: var(--color-font-offwhite);
+.project-list {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-regular);
+  font-family: var(--font-stylised);
+  color: #fff;
+  align-items: stretch;
+  width: 100px;
 }
-
-.user-btn {
-  width: 55px;
-  height: 55px;
-  background-color: var(--color-grey);
-  border-radius: 50%;
-  padding: var(--button-padding);
-  font-size: var(--button-font-size);
+.panel-listed-projects {
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-regular);
+  font-family: var(--font-stylised);
+  color: #fff;
+  margin-bottom: 8px;
+}
+.panel-project-title {
+  text-align: center;
+  font-size: var(--font-size-title);
   font-weight: var(--font-weight-bold);
-  color: black;
-  border: none;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
+  font-family: var(--font-stylised);
+  color: var(--font-color-primary);
 }
+.user-panel-name {
+  text-align: center;
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-stylised);
+  color: var(--font-color-primary);
+}
+.signout-newproj-container {
+  display: flex;
+  justify-content: space-between
 
-.user-btn:hover {
-  background-color: var(--color-font-offwhite);
+
 }
 
 .dropdown {
+  max-width: 300px;
   position: absolute;
   top: 110%;
   right: 0;
-  background-color: var(--color-grey);
+  background-color: #595b59;
   border-radius: var(--border-radius);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 8px 0;
+  padding: 50px;
   z-index: 100;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
 }
 
-.dropdown button {
+/* .dropdown button {
   background: none;
   border: none;
   border-radius: var(--border-radius);
@@ -78,6 +97,7 @@
   color: black;
   width: 100%;
   transition: background-color 0.2s ease-in-out;
+  color: var(--color-font-primary);
 }
 
 .dropdown button:hover {
@@ -87,11 +107,11 @@
 
 .project .dropdown {
   width: 300px;
-}
+} */
 
-.user-menu .dropdown {
+/* .user-menu .dropdown {
   width: 150px;
-}
+} */
 
 /* INBOX, KANBAN BOARD AND OPPORTUNITIES */
 .tgl-btn-container {
