@@ -1,27 +1,47 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../components/ui/Header";
 import Welcome from "../../components/ui/Welcome";
 // import EmailSection from "../../components/ui/EmailSection";
 import "./Home.css";
-import { useParams } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import EmailSection from "./TestEmails";
+import EmailSection from "../../components/ui/EmailSection";
+
 
 const Home = () => {
   const [showEmailSection, setShowEmailSection] = useState(false);
   const { projectId } = useParams()
   const navigate = useNavigate()
+
+  // If user not validated or other error, Redirect to login
+  const data = useLoaderData()
+  useEffect(() => {
+    if (data) {
+      if (data['error'] == "Unauthorized access: Please login") {
+        navigate('/')
+      } else if (data['error'] == "No Project Found") {
+        navigate('/setup')
+      }
+    }
+    if (data.emails) {
+      if (data.emails.length !== 0) {
+        setShowEmailSection(true)
+      }
+    }
+  }, [data, navigate])
+
   const handleConnectEmails = async () => {
     setShowEmailSection(true);
 
 
-    if (!projectId) {
+    /*if (!projectId) {
       console.error("No projectId found");
       return;
-    }
+    }*/
+
 
     try {
-      const res = await fetch("http://localhost:3000/api/google-emails", {
+      const res = await fetch("http://localhost:3000/api/direct-emails", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -48,13 +68,16 @@ const Home = () => {
 
   return (
     <main>
-      <Header />
       {!showEmailSection ? (
-        <Welcome onConnectEmails={handleConnectEmails} />
+        <>
+          <Header />
+          <Welcome onConnectEmails={handleConnectEmails} />
+        </>
       ) : (
-        <EmailSection />
-      )}
-    </main>
+        <EmailSection email={data.emails} />
+      )
+      }
+    </main >
   );
 };
 export default Home;

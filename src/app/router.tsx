@@ -20,7 +20,24 @@ const router = createBrowserRouter([
     path: "/projects/:projectId/emails",
     Component: EmailSection,
   },
-  { path: "/", Component: Landing },
+  {
+    path: "/home", Component: Home, loader: async () => {
+      const response = await fetch(`http://localhost:3000/api/projects/emails`, {
+        credentials: "include"
+      });
+      const data = await response.json();
+      return data
+    }
+  },
+  {
+    path: "/", Component: Landing, loader: async () => {
+      const response = await fetch(`http://localhost:3000/api/users/check`, {
+        credentials: "include"
+      })
+      const data = await response.json();
+      return data
+    }
+  },
   { path: "/setup", Component: SetupForm },
   { path: "/projects/:projectId/home", Component: Home },
   { path: "/:projectId/email/:emailId", Component: ViewEmail },

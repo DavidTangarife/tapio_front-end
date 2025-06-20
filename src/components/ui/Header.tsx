@@ -7,7 +7,7 @@ const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [fullName, setFullName] = useState("");
   const navigate = useNavigate();
-  const {projectId} = useParams();
+  const { projectId } = useParams();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -44,41 +44,49 @@ const Header = () => {
     setMenuOpen(false);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // logout logic
     console.log("Logging out...");
+    const res = await fetch(`http://localhost:3000/api/users/logout`, {
+      method: 'POST',
+      credentials: "include"
+    })
+    const data = await res.json()
+    if (data.logout) {
+      navigate('/')
+    }
     setMenuOpen(false);
   };
 
-return (
-  <>
-    <section className="header-container">
-      <h1 className="logo">Tapio</h1>
-      <div className="tgl-btn-container">
-        <Button 
-          className={`tgl-btn inbox-tgl-btn ${location.pathname === `/projects/${projectId}/emails` ? "active" : ""}`}
-          onClick={() => navigate(`/projects/${projectId}/emails`)}
-          buttonText="Inbox"
-        />
-        <Button
-          className={`tgl-btn board-tgl-btn ${location.pathname === `/kanban/${projectId}` ? "active" : ""}`}
-          onClick={() => navigate(`/kanban/${projectId}`)}
-          buttonText="Board"
-        />
-      </div>
-      <div className="user-menu">
-        <button className="user-btn" onClick={toggleMenu}>
-          {userInitials}
-        </button>
-        {menuOpen && (
-          <div className="dropdown">
-            <button onClick={handleSettings}>Settings</button>
-            <button onClick={handleLogout}>Logout</button>
-          </div>
-        )}
-      </div>
-    </section>
-  </>
-)
+  return (
+    <>
+      <section className="header-container">
+        <h1 className="logo">Tapio</h1>
+        <div className="tgl-btn-container">
+          <Button
+            className={`tgl-btn inbox-tgl-btn ${location.pathname === `/projects/${projectId}/emails` ? "active" : ""}`}
+            onClick={() => navigate(`/projects/${projectId}/emails`)}
+            buttonText="Inbox"
+          />
+          <Button
+            className={`tgl-btn board-tgl-btn ${location.pathname === `/kanban/${projectId}` ? "active" : ""}`}
+            onClick={() => navigate(`/kanban/${projectId}`)}
+            buttonText="Board"
+          />
+        </div>
+        <div className="user-menu">
+          <button className="user-btn" onClick={toggleMenu}>
+            {userInitials}
+          </button>
+          {menuOpen && (
+            <div className="dropdown">
+              <button onClick={handleSettings}>Settings</button>
+              <button onClick={handleLogout}>Logout</button>
+            </div>
+          )}
+        </div>
+      </section>
+    </>
+  )
 }
 export default Header;
