@@ -2,6 +2,7 @@ import "./Landing.css"
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react"
 import MicrosoftLogo from "../../assets/ms_login_logo.svg?react"
 import { useLoaderData, useNavigate } from "react-router-dom";
+import Button from "../../components/ui/Button";
 import { useEffect } from "react";
 
 const handleGoogleLogin = () => {
@@ -14,13 +15,12 @@ const handleMicrosoftLogin = () => {
 const Landing = () => {
   const data = useLoaderData()
   const navigate = useNavigate()
-  console.log(data)
 
   useEffect(() => {
     if (data.user) {
       navigate('/home')
     }
-  }, [data])
+  }, [data, navigate])
   return (
     <>
       <section className="landing-page">
