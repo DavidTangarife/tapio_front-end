@@ -37,7 +37,7 @@ const router = createBrowserRouter([
           const data = await response.json(); // parse JSON body (the emails array)
           return data;
         },
-        path: "emails",
+        path: "inbox",
         Component: Inbox,
       },
       {

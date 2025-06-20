@@ -94,11 +94,11 @@ const Header = () => {
         <div className="tgl-btn-container">
           <Button
             className={`tgl-btn inbox-tgl-btn ${
-              location.pathname === `/projects/${projectId}/emails`
+              location.pathname === `/projects/${projectId}/inbox`
                 ? "active"
                 : ""
             }`}
-            onClick={() => navigate(`/projects/${projectId}/emails`)}
+            onClick={() => navigate(`/projects/${projectId}/inbox`)}
             buttonText="Inbox"
           />
           <Button
@@ -112,7 +112,9 @@ const Header = () => {
           />
           <Button
             className={`tgl-btn board-tgl-btn ${
-              location.pathname === `/kanban/${projectId}` ? "active" : ""
+              location.pathname === `/kanban/${projectId}/filter`
+                ? "active"
+                : ""
             }`}
             onClick={() => navigate(`/projects/${projectId}/filter`)}
             buttonText="Filter"

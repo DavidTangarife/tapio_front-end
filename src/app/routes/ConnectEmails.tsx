@@ -12,13 +12,16 @@ const ConnectEmails = () => {
   const navigate = useNavigate();
 
   const handleConnectEmails = async () => {
+    console.log("Starting handleConnectEmails function");
     setShowEmailSection(true);
 
     if (!projectId) {
       console.error("No projectId found");
       return;
     }
+
     try {
+      console.log("Making fetch request...");
       const res = await fetch("http://localhost:3000/api/google-emails", {
         method: "POST",
         headers: {
@@ -27,20 +30,33 @@ const ConnectEmails = () => {
         credentials: "include",
         body: JSON.stringify({ projectId }),
       });
-      if (!res.ok) throw new Error("Failed to fetch and save emails");
+
+      console.log("Response status:", res.status);
+      console.log("Response ok:", res.ok);
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("Response error:", errorText);
+        throw new Error(
+          `Failed to fetch and save emails: ${res.status} ${errorText}`
+        );
+      }
+
+      const data = await res.json();
+      console.log("Email response:", data);
+      console.log("Fetch completed successfully");
     } catch (err) {
       console.error("Error connecting emails:", err);
+      // Don't return here - let it continue to finally block
     } finally {
-      navigate(`/projects/${projectId}/emails`);
+      console.log("Entering finally block...");
+      console.log("Navigating to inbox now...");
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Fixed: resolve instead of res
+      console.log("About to navigate...");
+      navigate(`/projects/${projectId}/inbox`);
+      console.log("Navigate called");
     }
   };
-  // useEffect(() => {
-  //   if (showEmailSection && projectId) {
-  //     fetch(`/api/projects/${projectId}/last-login`, {
-  //       method: "PATCH",
-  //   }).catch((err) => console.error("Failed to update lastLogin:", err));
-  //     }
-  // }, [showEmailSection, projectId]);
 
   return (
     <main>
