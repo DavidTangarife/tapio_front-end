@@ -31,30 +31,11 @@ const ConnectEmails = () => {
         body: JSON.stringify({ projectId }),
       });
 
-      console.log("Response status:", res.status);
-      console.log("Response ok:", res.ok);
-
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.error("Response error:", errorText);
-        throw new Error(
-          `Failed to fetch and save emails: ${res.status} ${errorText}`
-        );
-      }
-
-      const data = await res.json();
-      console.log("Email response:", data);
-      console.log("Fetch completed successfully");
+      if (!res.ok) throw new Error("Failed to fetch and save emails");
     } catch (err) {
-      console.error("Error connecting emails:", err);
-      // Don't return here - let it continue to finally block
+      console.log("Error Connecting email ", err);
     } finally {
-      console.log("Entering finally block...");
-      console.log("Navigating to inbox now...");
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Fixed: resolve instead of res
-      console.log("About to navigate...");
       navigate(`/projects/${projectId}/inbox`);
-      console.log("Navigate called");
     }
   };
 

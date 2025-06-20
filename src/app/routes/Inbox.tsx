@@ -1,11 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLoaderData, useParams } from "react-router-dom";
 import EmailItem from "../../components/ui/EmailItem";
 import Header from "../../components/ui/Header";
 //import TapUpModal from "./TapUpModal";
 import "./Inbox.css";
 
-interface email {
+interface Email {
   _id: string;
   from: string;
   subject: string;
@@ -17,9 +17,8 @@ interface email {
 }
 
 const Inbox = () => {
-  
-  const emails: email[] = useLoaderData() ?? [];
-  // console.log(emails)
+  const initialEmails: Email[] = useLoaderData() ?? [];
+  const [emails, setEmails] = useState<Email[]>(initialEmails);
   const {projectId} = useParams();
 
   useEffect(() => {
@@ -37,6 +36,30 @@ const Inbox = () => {
   const unreadEmails = emails.filter(email =>
     !email.isRead && !email.isTapped)
   const tappedEmails = emails.filter(email => email.isTapped)
+
+  const handleTapUpdate = async(emailId: string, newTapped: boolean) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/emails/${emailId}/tap`, {
+        method:'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ isTapped: newTapped})
+      });
+      if (!res.ok) {
+        throw new Error('Failed to update tap-in status')
+      }
+      const updatedEmail = await res.json();
+
+      // Update local email state
+      setEmails(prevEmails =>
+        prevEmails.map(email =>
+          email._id === emailId ? { ...email, isTapped: updatedEmail.isTapped } : email
+        )
+      );
+    } catch (err) {
+      console.error("Error updating tap-in:", err);
+    }
+  }
 
   return (
     <>
@@ -57,6 +80,7 @@ const Inbox = () => {
                   isRead={email.isRead}
                   date={email.date}
                   isTapped={email.isTapped}
+                  onTapUpdate={handleTapUpdate}
               />
             ))}
           </div>
@@ -76,6 +100,7 @@ const Inbox = () => {
                 isRead={email.isRead}
                 date={email.date}
                 isTapped={email.isTapped}
+                onTapUpdate={handleTapUpdate}
               />
             ))}
         </div>
@@ -95,6 +120,7 @@ const Inbox = () => {
                 isRead={email.isRead}
                 date={email.date}
                 isTapped={email.isTapped}
+                onTapUpdate={handleTapUpdate}
               />
             ))}
             </div>

@@ -8,10 +8,38 @@ import ViewEmail from "./routes/ViewEmail";
 import Filter from "./routes/Filter";
 
 const router = createBrowserRouter([
+  {
+    path: "/projects/:projectId/emails",
+    Component: Inbox,
+    loader: async ({ params }) => {
+      const response = await fetch(
+        `http://localhost:3000/api/projects/${params.projectId}/inbox`,
+        {
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      return data;
+    },
+  },
+
   { path: "/", Component: Landing },
   { path: "/setup", Component: SetupForm },
   { path: "/:projectId/email/:emailId", Component: ViewEmail },
-
+  {
+    path: "/filter/:projectId",
+    Component: Filter,
+    loader: async ({ params }) => {
+      const response = await fetch(
+        `http://localhost:3000/api/projects/${params.projectId}/filter-emails`,
+        {
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      return data;
+    },
+  },
   {
     path: "/projects/:projectId",
     children: [
