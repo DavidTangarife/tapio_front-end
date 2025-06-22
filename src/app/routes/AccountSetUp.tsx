@@ -3,7 +3,7 @@ import { useSetupForm } from "../../hooks/useSetupForm";
 import { useFormData } from "../../hooks/useFormData";
 import "./AccountSetUp.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect, type FormEvent } from "react";
+import { FormEvent } from "react";
 
 const SetupForm = () => {
   const navigate = useNavigate();
@@ -13,47 +13,47 @@ const SetupForm = () => {
 
   const steps = isCreateProject
     ? [
-      <FormInput
-        label="Enter a Project Name"
-        type="text"
-        name="projectName"
-        value={formData.projectName}
-        onChange={updateFormData}
-        placeholder="E.g. My Job Hunt"
-      />,
-      <FormInput
-        label="When did you start your search?"
-        type="date"
-        name="searchDate"
-        value={formData.searchDate}
-        onChange={updateFormData}
-      />,
-    ]
+        <FormInput
+          label="Enter a Project Name"
+          type="text"
+          name="projectName"
+          value={formData.projectName}
+          onChange={updateFormData}
+          placeholder="E.g. My Job Hunt"
+        />,
+        <FormInput
+          label="When did you start your search?"
+          type="date"
+          name="searchDate"
+          value={formData.searchDate}
+          onChange={updateFormData}
+        />,
+      ]
     : [
-      <FormInput
-        label="What's your full name?"
-        type="text"
-        name="fullName"
-        value={formData.fullName}
-        onChange={updateFormData}
-      />,
+        <FormInput
+          label="What's your full name?"
+          type="text"
+          name="fullName"
+          value={formData.fullName}
+          onChange={updateFormData}
+        />,
 
-      <FormInput
-        label="Enter a Project Name"
-        type="text"
-        name="projectName"
-        value={formData.projectName}
-        onChange={updateFormData}
-        placeholder="E.g. My Job Hunt"
-      />,
-      <FormInput
-        label="When did you start your search?"
-        type="date"
-        name="searchDate"
-        value={formData.searchDate}
-        onChange={updateFormData}
-      />,
-    ];
+        <FormInput
+          label="Enter a Project Name"
+          type="text"
+          name="projectName"
+          value={formData.projectName}
+          onChange={updateFormData}
+          placeholder="E.g. My Job Hunt"
+        />,
+        <FormInput
+          label="When did you start your search?"
+          type="date"
+          name="searchDate"
+          value={formData.searchDate}
+          onChange={updateFormData}
+        />,
+      ];
 
   const {
     steps: formSteps,
@@ -69,7 +69,9 @@ const SetupForm = () => {
     try {
       // send project name and start date to create a new project for the user
       console.log("Sending data...");
-      const time = (new Date(formData.searchDate).getTime() - ((new Date().getTimezoneOffset()) * 60 * 1000))
+      const time =
+        new Date(formData.searchDate).getTime() -
+        new Date().getTimezoneOffset() * 60 * 1000;
       const payload1 = {
         name: formData.projectName,
         startDate: new Date(time).toISOString(),
@@ -107,8 +109,9 @@ const SetupForm = () => {
       }
       const data = await res1.json();
       const projectId = data._id;
-      console.log("Data successfully submitted");
-      navigate('/home');
+      navigate("/home", {
+        state: { newProjectId: projectId },
+      });
     } catch (err) {
       console.error("Error submitting data:", err);
     }

@@ -1,18 +1,18 @@
 import Button from "./Button";
 import "./Header.css";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Project } from "../../types/types";
 import { useEffect, useState } from "react";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [projectOpen, setProjectOpen] = useState(false);
+  const [projectsOpen, setProjectOpen] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   const [fullName, setFullName] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const { projectId } = useParams();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -37,6 +37,15 @@ const Header = () => {
         const projectData = await res.json();
         if (res.ok) {
           setProjects(projectData.projects);
+
+          const state = location.state as { newProjectId?: string };
+
+          if (state?.newProjectId) {
+            setSelectedProjectId(state.newProjectId);
+            navigate(location.pathname, { replace: true, state: {} });
+          } else if (projectData.projects.length > 0) {
+            setSelectedProjectId(projectData.projects[0]._id);
+          }
         }
       } catch (err) {
         console.error("Failed to fetch projects", err);
@@ -68,17 +77,17 @@ const Header = () => {
     // logout logic
     console.log("Logging out...");
     const res = await fetch(`http://localhost:3000/api/users/logout`, {
-      method: 'POST',
-      credentials: "include"
-    })
-    const data = await res.json()
+      method: "POST",
+      credentials: "include",
+    });
+    const data = await res.json();
     if (data.logout) {
-      navigate('/')
+      navigate("/");
     }
     setMenuOpen(false);
   };
 
-  const currentProject = projects.find((p) => p._id === projectId);
+  const currentProject = projects.find((p) => p._id === selectedProjectId);
   const toggleProject = () => {
     setProjectOpen((prev) => !prev);
   };
@@ -90,8 +99,9 @@ const Header = () => {
     setProjectOpen(false);
   };
 
-  const swapProject = (projecIdtomove: string) => {
-    navigate(`/projects/${projecIdtomove}/inbox`);
+  const swapProject = (projectIdToMove: string) => {
+    setSelectedProjectId(projectIdToMove);
+    navigate("/inbox", { state: { selectedProjectId: projectIdToMove } });
     setProjectOpen(false);
   };
 
@@ -101,33 +111,30 @@ const Header = () => {
         <TapioLogoDesktop className="logo" />
         <div className="tgl-btn-container">
           <Button
-            className={`tgl-btn inbox-tgl-btn ${location.pathname === `/projects/${projectId}/inbox`
-              ? "active"
-              : ""
-              }`}
-            onClick={() => navigate(`/inbox`)}
+            className={`tgl-btn inbox-tgl-btn ${
+              location.pathname === "/inbox" ? "active" : ""
+            }`}
+            onClick={() => navigate("/inbox", { state: { selectedProjectId } })}
             buttonText="Inbox"
           />
           <Button
-            className={`tgl-btn board-tgl-btn ${location.pathname === `/projects/${projectId}/kanban`
-              ? "active"
-              : ""
-              }`}
-            onClick={() => navigate(`/board`)}
+            className={`tgl-btn board-tgl-btn ${
+              location.pathname === "/board" ? "active" : ""
+            }`}
+            onClick={() => navigate("/board", { state: { selectedProjectId } })}
             buttonText="Board"
           />
           <Button
-            className={`tgl-btn board-tgl-btn ${location.pathname === `/kanban/${projectId}/filter`
-              ? "active"
-              : ""
-              }`}
-            onClick={() => navigate(`/filter`)}
+            className={`tgl-btn board-tgl-btn ${
+              location.pathname === "/filter" ? "active" : ""
+            }`}
+            onClick={() => navigate("/filter", { state:  {selectedProjectId} })}
             buttonText="Filter"
           />
         </div>
         <div className="project">
           <button onClick={toggleProject}>{currentProject?.name}</button>
-          {projectOpen && (
+          {projectsOpen && (
             <div className="dropdown">
               {projects.map((pro) => {
                 return (

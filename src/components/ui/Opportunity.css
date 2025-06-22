@@ -24,3 +24,17 @@
   font-weight: 200;
   color: #f5f5f5;
 }
+
+.companyLogo {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+.opportunityInner {
+  position: relative;
+}

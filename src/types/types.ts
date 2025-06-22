@@ -2,10 +2,10 @@ export type Opportunity = {
   _id: string;
   title: string;
   company: {
-    faviconUrl: string;
     name: string;
+    logoUrl: string;
+    brandColor: string;
   };
-  color: string;
   status_Id: string;
 };
 
@@ -35,10 +35,9 @@ export interface ViewEmailActionButtonProps {
   onClick?: () => void;
   iconSx?: object;
 }
-// POST /opportunities → Create new opportunity
-
-// PATCH /opportunities/:id → Update opportunity (e.g., when moved to another board)
 
 export interface AddToBoardModalProps {
   closeModal: () => void;
 }
+
+
