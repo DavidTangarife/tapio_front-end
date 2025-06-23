@@ -1,3 +1,4 @@
+
 /* LOGO PROJECTS AND USER MENU */
 .header-container {
   display: flex;
@@ -10,108 +11,85 @@
   max-width: 120px;
   height: auto;
 }
-.usr-project-btn-container {
+.project {
   position: relative;
+  
 }
-.usr-project-btn {
-  padding: 10px 20px;
-  color: var(--font-color-primary);
+.project .dropdown {
+  width: 280px;
   background-color: var(--color-primary);
-  border: none;
-  border-radius: var(--border-radius);
-
 }
-/* .project button {
-  padding: 10px 20px;
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-stylised);
-  font-size: var(--font-size-regular);
-  border-radius: var(--border-radius);
-  background-color: var(--color-primary);
-  color: var(--font-color-primary);
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-} */
-
-.project-list {
-  display: flex;
-  flex-direction: column;
-  font-size: var(--font-size-title);
-  font-weight: var(--font-weight-regular);
-  font-family: var(--font-stylised);
-  color: #fff;
-  align-items: stretch;
-  width: 100px;
-}
-.panel-listed-projects {
-  font-size: var(--font-size-title);
-  font-weight: var(--font-weight-regular);
-  font-family: var(--font-stylised);
-  color: #fff;
-  margin-bottom: 8px;
-}
-.panel-project-title {
-  text-align: center;
-  font-size: var(--font-size-title);
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-stylised);
-  color: var(--font-color-primary);
-}
-.user-panel-name {
-  text-align: center;
-  font-size: var(--font-size-title);
-  font-weight: var(--font-weight-medium);
-  font-family: var(--font-stylised);
-  color: var(--font-color-primary);
-}
-.signout-newproj-container {
-  display: flex;
-  justify-content: space-between
-
-
-}
-
 .dropdown {
   max-width: 300px;
   position: absolute;
   top: 110%;
   right: 0;
-  background-color: #595b59;
+  background-color: var(--color-primary);
   border-radius: var(--border-radius);
-  padding: 50px;
   z-index: 100;
   display: flex;
   flex-direction: column;
 }
-
-/* .dropdown button {
-  background: none;
-  border: none;
+/* current project name button */
+.project .current-project-title {
+  width: 180px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 4px 10px 20px;
   border-radius: var(--border-radius);
-  padding: 12px 18px;
-  font-size: var(--button-font-size);
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-font-primary);
+  font-size: var(--font-size-medium);
   font-weight: var(--font-weight-bold);
   font-family: var(--font-stylised);
-  text-align: left;
-  color: black;
-  width: 100%;
-  transition: background-color 0.2s ease-in-out;
-  color: var(--color-font-primary);
 }
-
+.current-project-title:hover {
+  border: var(--border-green-dark-mode);
+}
+/* Inside dropdown */
+.my-projects-title {
+  font-size: var(--font-size-title);
+  padding: 12px 20px 4px;
+}
 .dropdown button:hover {
-  background-color: var(--color-font-offwhite);
+  background-color: var(--color-dark-mode-hover);
   cursor: pointer;
 }
-
-.project .dropdown {
-  width: 300px;
-} */
-
-/* .user-menu .dropdown {
-  width: 150px;
-} */
+/* project names */
+.project-btns {
+  width: 100%;
+  padding: 8px 30px;
+  text-align: left;
+  border: none;
+  font-size: 1.3rem;
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-stylised);
+  color: var(--color-font-offwhite);
+  background-color: var(--color-primary);
+  transition: background-color 0.2s ease-in-out;
+}
+.add-project-btn, .logout-btn {
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background-color: var(--color-primary);
+  font-family: var(--font-stylised);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-medium);
+  color: var(--color-font-primary);
+}
+.logout-btn {
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
 
 /* INBOX, KANBAN BOARD AND OPPORTUNITIES */
 .tgl-btn-container {

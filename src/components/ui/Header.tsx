@@ -1,18 +1,21 @@
+
 import Button from "./Button";
 import "./Header.css";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Project } from "../../types/types";
 import { useEffect, useState } from "react";
+import { KeyboardArrowDown, Logout, Add } from '@mui/icons-material';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [projectOpen, setProjectOpen] = useState(false);
   const [fullName, setFullName] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
+  const [currentProject, setCurrentProject] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const { projectId } = useParams();
+  //const { projectId } = useParams();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -37,6 +40,7 @@ const Header = () => {
         const projectData = await res.json();
         if (res.ok) {
           setProjects(projectData.projects);
+          setCurrentProject((prev) => prev || projectData.projects[0]._id)
         }
       } catch (err) {
         console.error("Failed to fetch projects", err);
@@ -46,22 +50,10 @@ const Header = () => {
     fetchProjects();
   }, []);
 
-  const getInitials = (name: string) => {
-    const names = name.trim().split(" ");
-    if (names.length === 1) return names[0][0].toUpperCase();
-    return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase();
-  };
-
-  const userInitials = getInitials(fullName || "U");
-
-  const toggleMenu = () => {
-    setMenuOpen((prev) => !prev);
-  };
-
-  const handleSettings = () => {
-    // navigate to settings page
-    navigate("/settings");
-    setMenuOpen(false);
+  
+  const maxCharsProjectName = (name: string, maxChars: number = 16) => {
+    if (name.length <= maxChars) return name;
+    return name.substring(0, maxChars) + "...";
   };
 
   const handleLogout = () => {
@@ -70,7 +62,7 @@ const Header = () => {
     setMenuOpen(false);
   };
 
-  const currentProject = projects.find((p) => p._id === projectId);
+  const showCurrentProject = projects.find((p) => p._id === currentProject);
   const toggleProject = () => {
     setProjectOpen((prev) => !prev);
   };
@@ -83,7 +75,8 @@ const Header = () => {
   };
 
   const swapProject = (projecIdtomove: string) => {
-    navigate(`/projects/${projecIdtomove}/inbox`);
+    setCurrentProject(projecIdtomove);
+    navigate(`/inbox`);
     setProjectOpen(false);
   };
 
@@ -93,60 +86,58 @@ const Header = () => {
         <TapioLogoDesktop className="logo" />
         <div className="tgl-btn-container">
           <Button
-            className={`tgl-btn inbox-tgl-btn ${
-              location.pathname === `/projects/${projectId}/inbox`
-                ? "active"
-                : ""
-            }`}
-            onClick={() => navigate(`/projects/${projectId}/inbox`)}
+            className={`tgl-btn inbox-tgl-btn ${location.pathname === "/inbox"
+              ? "active"
+              : ""
+              }`}
+            onClick={() => navigate(`/inbox`)}
             buttonText="Inbox"
           />
           <Button
-            className={`tgl-btn board-tgl-btn ${
-              location.pathname === `/projects/${projectId}/kanban`
-                ? "active"
-                : ""
-            }`}
-            onClick={() => navigate(`/projects/${projectId}/kanban`)}
+            className={`tgl-btn board-tgl-btn ${location.pathname === "/kanban"
+              ? "active"
+              : ""
+              }`}
+            onClick={() => navigate(`/board`)}
             buttonText="Board"
           />
           <Button
-            className={`tgl-btn board-tgl-btn ${
-              location.pathname === `/kanban/${projectId}/filter`
-                ? "active"
-                : ""
-            }`}
-            onClick={() => navigate(`/projects/${projectId}/filter`)}
+            className={`tgl-btn board-tgl-btn ${location.pathname === "/filter"
+              ? "active"
+              : ""
+              }`}
+            onClick={() => navigate(`/filter`)}
             buttonText="Filter"
           />
         </div>
-        <div className="usr-project-btn-container">
-          <button onClick={toggleProject}
-                  className="usr-project-btn">
-            {currentProject?.name}
-          </button>
+        <div className="project">
+          <button 
+            onClick={toggleProject}
+            className="current-project-title">
+             {showCurrentProject ? maxCharsProjectName(showCurrentProject?.name) : "Select a Project"}
+            <KeyboardArrowDown />
+            </button>
           {projectOpen && (
             <div className="dropdown">
-                <p className="user-panel-name">Hi {fullName}</p>
-                <p className="panel-project-title">{currentProject?.name}</p>
-                <div className="signout-newproj-container">
-                  <button onClick={createProject}>New Project +</button>
-                  <button>Sign out</button>
-                </div>
-          <h3>Your Projects</h3>
-          <div className="project-list">
-                {projects.map((pro) => {
+              <h3 className="my-projects-title">Projects</h3>
+              {projects.map((pro) => {
                 return (
-                  <button className="panel-listed-projects" key={pro._id} onClick={() => swapProject(pro._id)}>
+                  <button key={pro._id} 
+                    onClick={() => swapProject(pro._id)}
+                    className="project-btns">
                     {pro.name}
                   </button>
+                
                 );
               })}
-          </div>
+              <button onClick={createProject}
+                      className="add-project-btn"><Add sx={{color: "var(--color-green-dark-mode)"}}/>Add New Project</button>
+              
+              <button onClick={handleLogout}
+                      className="logout-btn"><Logout sx={{color: "var(--color-green-dark-mode)"}} />Logout</button>
             </div>
           )}
         </div>
-    
         {/* <div className="user-menu">
           <button className="user-btn" onClick={toggleMenu}>
             {userInitials}
@@ -154,7 +145,7 @@ const Header = () => {
           {menuOpen && (
             <div className="dropdown">
               <button onClick={handleSettings}>Settings</button>
-              <button onClick={handleLogout}>Logout</button>
+              
             </div>
           )}
         </div> */}
