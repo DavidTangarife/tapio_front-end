@@ -1,42 +1,64 @@
-import { useEffect, useState } from "react";
 import Header from "../../components/ui/Header";
 import Welcome from "../../components/ui/Welcome";
 import "./ConnectEmails.css";
-import { useLoaderData } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../assets/Spinner.svg?react";
 import Inbox from "./Inbox";
-
+import {Email} from "../../types/types"
+import { useEffect, useState } from "react";
 
 const ConnectEmails = () => {
   const [showEmailSection, setShowEmailSection] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [emails, setEmails] = useState<Email[]>([]);
+  const [refreshTrigger, setRefreshTrigger] = useState(0); // used to re-fetch emails when project changes
   const navigate = useNavigate()
 
-  // If user not validated or other error, Redirect to login
-  const data = useLoaderData()
+  /**
+   * Sync showEmailSection with emails state
+   * This toggles between Welcome and Inbox based on whether we have emails.
+   */
   useEffect(() => {
-    if (data) {
-      if (data['error'] == "Unauthorized access: Please login") {
-        navigate('/')
-      } else if (data['error'] == "No Project Found") {
-        navigate('/setup')
-      }
-    }
-    console.log(data)
-    console.log('DATA IS HERE ')
-    if (data.emails) {
-      if (data.emails.length !== 0) {
-        setShowEmailSection(true)
-      }
-    }
-  }, [data, loading, navigate])
+    setShowEmailSection(emails.length > 0);
+  }, [emails]);
 
+  /**
+   * Fetch emails when component mounts or refreshTrigger changes
+   */
+  useEffect(() => {
+    const fetchEmails = async () => {
+      const res = await fetch("http://localhost:3000/api/getemails", {
+        credentials: "include",
+      });
+      const data = await res.json();
 
+      if (data.error === "Unauthorized access: Please login") {
+        return navigate("/");
+      }
+      if (data.error === "No Project Found") {
+        return navigate("/setup");
+      }
+
+      setEmails(data.emails || []);
+    };
+
+    fetchEmails();
+  }, [refreshTrigger]);
+
+  /**
+   * Called by Header component after user swaps project.
+   * Triggers useEffect to refetch emails.
+   */
+  const handleProjectSwap = () => {
+    setRefreshTrigger(Date.now());
+  };
+
+  /**
+   * Called when user clicks "Connect Emails" button in Welcome screen.
+   * Sends request to fetch & save emails, then updates state.
+   */
   const handleConnectEmails = async () => {
-    setShowEmailSection(true);
     setLoading(true)
-    console.log("Starting handleConnectEmails function");
 
     try {
       const res = await fetch("http://localhost:3000/api/direct-emails", {
@@ -46,10 +68,9 @@ const ConnectEmails = () => {
         },
         credentials: "include",
       });
-      data.emails = await res.json()
-      console.log(data.emails)
-      console.log('HEY THERE')
-
+      const resData = await res.json()
+      // console.log(resData)
+      setEmails(resData.emails || [])
       if (!res.ok) throw new Error("Failed to fetch and save emails");
     } catch (err) {
       console.log("Error Connecting email ", err);
@@ -57,10 +78,38 @@ const ConnectEmails = () => {
     setLoading(false)
   };
 
+  /**
+   * Called when a user taps an email (handled in EmailItem)
+   * Sends PATCH request to update tap status and updates local state.
+   */
+  const handleTapUpdate = async (emailId: string, newTapped: boolean) => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/emails/${emailId}/tap`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ isTapped: newTapped })
+      });
+      if (!res.ok) {
+        throw new Error('Failed to update tap-in status')
+      }
+      const updatedEmail = await res.json();
+
+      // Update local email state
+      setEmails(prevEmails =>
+        prevEmails.map(email =>
+          email._id === emailId ? { ...email, isTapped: updatedEmail.isTapped } : email
+        )
+      );
+    } catch (err) {
+      console.error("Error updating tap-in:", err);
+    }
+  }
+
   return (
     <main>
       <>
-        <Header />
+        <Header onProjectSwap={handleProjectSwap} />
         {!showEmailSection ? (
           <Welcome onConnectEmails={handleConnectEmails} />
         ) : (
@@ -71,7 +120,7 @@ const ConnectEmails = () => {
                 <Loader className="spin-loader" />
               </>
             ) : (
-              <Inbox emails={data.emails} />
+              <Inbox emails={emails} onTapUpdate={handleTapUpdate}/>
             )}
           </>
         )}

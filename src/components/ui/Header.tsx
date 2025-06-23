@@ -1,18 +1,16 @@
 import Button from "./Button";
 import "./Header.css";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Project } from "../../types/types";
 import { useEffect, useState } from "react";
 
-const Header = () => {
+const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [projectsOpen, setProjectOpen] = useState(false);
-  const [selectedProjectId, setSelectedProjectId] = useState<string>("");
   const [fullName, setFullName] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -37,15 +35,6 @@ const Header = () => {
         const projectData = await res.json();
         if (res.ok) {
           setProjects(projectData.projects);
-
-          const state = location.state as { newProjectId?: string };
-
-          if (state?.newProjectId) {
-            setSelectedProjectId(state.newProjectId);
-            navigate(location.pathname, { replace: true, state: {} });
-          } else if (projectData.projects.length > 0) {
-            setSelectedProjectId(projectData.projects[0]._id);
-          }
         }
       } catch (err) {
         console.error("Failed to fetch projects", err);
@@ -86,8 +75,6 @@ const Header = () => {
     }
     setMenuOpen(false);
   };
-
-  const currentProject = projects.find((p) => p._id === selectedProjectId);
   const toggleProject = () => {
     setProjectOpen((prev) => !prev);
   };
@@ -99,10 +86,27 @@ const Header = () => {
     setProjectOpen(false);
   };
 
-  const swapProject = (projectIdToMove: string) => {
-    setSelectedProjectId(projectIdToMove);
-    navigate("/inbox", { state: { selectedProjectId: projectIdToMove } });
-    setProjectOpen(false);
+  const swapProject = async (projecIdtomove: string) => {
+    try {
+      const res = await fetch("http://localhost:3000/api/session-update", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ projectId: projecIdtomove }),
+      });
+
+      if (res.ok) {
+        console.log(res);
+        onProjectSwap();
+      } else {
+        throw new Error("Failed to update session!");
+      }
+      setProjectOpen(false);
+    } catch (err) {
+      console.error("Error updating session project:", err);
+    }
   };
 
   return (
@@ -114,26 +118,26 @@ const Header = () => {
             className={`tgl-btn inbox-tgl-btn ${
               location.pathname === "/inbox" ? "active" : ""
             }`}
-            onClick={() => navigate("/inbox", { state: { selectedProjectId } })}
+            onClick={() => navigate("/inbox")}
             buttonText="Inbox"
           />
           <Button
             className={`tgl-btn board-tgl-btn ${
               location.pathname === "/board" ? "active" : ""
             }`}
-            onClick={() => navigate("/board", { state: { selectedProjectId } })}
+            onClick={() => navigate("/board")}
             buttonText="Board"
           />
           <Button
             className={`tgl-btn board-tgl-btn ${
               location.pathname === "/filter" ? "active" : ""
             }`}
-            onClick={() => navigate("/filter", { state:  {selectedProjectId} })}
+            onClick={() => navigate("/filter")}
             buttonText="Filter"
           />
         </div>
         <div className="project">
-          <button onClick={toggleProject}>{currentProject?.name}</button>
+          <button onClick={toggleProject}>{"currentProject?.name"}</button>
           {projectsOpen && (
             <div className="dropdown">
               {projects.map((pro) => {

@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router";
 import Landing from "./routes/Landing";
 import SetupForm from "./routes/AccountSetUp";
 import ConnectEmails from "./routes/ConnectEmails";
-// import Inbox from "./routes/Inbox";
 import Kanban from "./routes/Kanban";
 import ViewEmail from "./routes/ViewEmail";
 import Filter from "./routes/Filter";
@@ -53,15 +52,7 @@ const router = createBrowserRouter([
     },
   },
   {
-    path: "/inbox",
-    Component: ConnectEmails,
-    loader: async () => {
-      const response = await fetch(`http://localhost:3000/api/getemails`, {
-        credentials: "include"
-      });
-      const data = await response.json();
-      return data
-    },
+    path: "/inbox", Component: ConnectEmails,
   },
   {
     path: "/email/:emailId", Component: ViewEmail

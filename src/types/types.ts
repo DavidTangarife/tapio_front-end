@@ -40,4 +40,18 @@ export interface AddToBoardModalProps {
   closeModal: () => void;
 }
 
+export interface Email {
+  _id: string;
+  from: string;
+  subject: string;
+  senderAddress: string;
+  body: string;
+  isRead: boolean;
+  isTapped: boolean;
+  date: Date;
+}
 
+export interface InboxProps {
+  emails: Email[];
+  onTapUpdate: (emailId: string, newTapped: boolean) => void;
+}
