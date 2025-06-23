@@ -16,11 +16,10 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const [projectsOpen, setProjectOpen] = useState(false);
   const [fullName, setFullName] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
-  const [currentProject, setCurrentProject] = useState<string | null>(null);
+  const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  //const { projectId } = useParams();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -44,8 +43,21 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
         });
         const projectData = await res.json();
         if (res.ok) {
+          // The issue is that we were trying to work from a Patch or function that only works when clickin on the dropdown, when it should be setup on the use effect and just a get project ID
           setProjects(projectData.projects);
-          setCurrentProject((prev) => prev || projectData.projects[0]._id);
+          const current_res = await fetch(
+            "http://localhost:3000/api/session-project",
+            {
+              credentials: "include",
+            }
+          );
+          const current_data = await current_res.json();
+          const currentProject = projectData.projects.find(
+            (p: Project) => p._id === current_data.projectId
+          );
+          if (currentProject) {
+            setCurrentProjectId(currentProject._id);
+          }
         }
       } catch (err) {
         console.error("Failed to fetch projects", err);
@@ -74,7 +86,6 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
     setMenuOpen(false);
   };
 
-  const showCurrentProject = projects.find((p) => p._id === currentProject);
   const toggleProject = () => {
     setProjectOpen((prev) => !prev);
   };
@@ -96,8 +107,8 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
         credentials: "include",
         body: JSON.stringify({ projectId: projecIdtomove }),
       });
-
       if (res.ok) {
+        setCurrentProjectId(projecIdtomove);
         onProjectSwap();
       } else {
         throw new Error("Failed to update session!");
@@ -107,6 +118,8 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
       console.error("Error updating session project:", err);
     }
   };
+
+  const currentProject = projects.find((p) => p._id === currentProjectId);
 
   return (
     <>
@@ -137,8 +150,8 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
         </div>
         <div className="project">
           <button onClick={toggleProject} className="current-project-title">
-            {showCurrentProject
-              ? maxCharsProjectName(showCurrentProject?.name)
+            {currentProject
+              ? maxCharsProjectName(currentProject?.name)
               : "Select a Project"}
             <KeyboardArrowDown />
           </button>
@@ -184,7 +197,7 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
             <p className="confirm-delete-msg">
               Are you sure you want to delete:
             </p>
-            <p className="project-to-delete">{showCurrentProject?.name}?</p>
+            <p className="project-to-delete">{currentProject?.name}?</p>
             <div className="delete-modal-btn-container">
               <button className="delete-modal-btn yes">Yes</button>
               <button
