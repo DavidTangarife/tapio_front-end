@@ -10,6 +10,7 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const [projectsOpen, setProjectOpen] = useState(false);
   const [fullName, setFullName] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
+  const [currentProject, setCurrentProject] = useState<Project>();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -98,7 +99,11 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
       });
 
       if (res.ok) {
-        console.log(res);
+        const data = await res.json();
+        console.log(data);
+        const currentPro = projects.find((p) => p._id === data.projectId);
+        console.log(currentPro?.name);
+        setCurrentProject(currentPro);
         onProjectSwap();
       } else {
         throw new Error("Failed to update session!");
@@ -137,7 +142,7 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
           />
         </div>
         <div className="project">
-          <button onClick={toggleProject}>{"currentProject?.name"}</button>
+          <button onClick={toggleProject}>{currentProject?.name || projects[0]?.name}</button> //Deal with this when brain is Ok
           {projectsOpen && (
             <div className="dropdown">
               {projects.map((pro) => {

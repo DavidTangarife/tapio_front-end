@@ -43,7 +43,7 @@ const ConnectEmails = () => {
     };
 
     fetchEmails();
-  }, [refreshTrigger]);
+  }, [navigate, refreshTrigger]);
 
   /**
    * Called by Header component after user swaps project.
