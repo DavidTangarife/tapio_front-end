@@ -46,8 +46,8 @@ const ConnectEmails = () => {
   }, [refreshTrigger]);
 
   /**
-   * Called by <Header /> after user swaps project.
-   * Triggers useEffect to re-fetch emails.
+   * Called by Header component after user swaps project.
+   * Triggers useEffect to refetch emails.
    */
   const handleProjectSwap = () => {
     setRefreshTrigger(Date.now());
