@@ -110,7 +110,7 @@ const SetupForm = () => {
       const data = await res1.json();
       const projectId = data._id;
       console.log("Data successfully submitted");
-      navigate('/home');
+      navigate('/projects/${projectId}/connect');
     } catch (err) {
       console.error("Error submitting data:", err);
     }
@@ -143,7 +143,7 @@ const SetupForm = () => {
   return (
     <>
       <section className="form-container">
-        <TapioLogoDesktop className="logo" />
+        <TapioLogoDesktop className="logo-setup" />
         <form className={`setup-form ${animateClass}`}onSubmit={onNext}>
           <p className="setup-step-count">
             {currentStep + 1} / {formSteps.length}

@@ -5,7 +5,7 @@ import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Project } from "../../types/types";
 import { useEffect, useState } from "react";
-import { KeyboardArrowDown, Logout, Add } from '@mui/icons-material';
+import { KeyboardArrowDown, Logout, Add, DeleteOutlined } from '@mui/icons-material';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,6 +13,7 @@ const Header = () => {
   const [fullName, setFullName] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const [currentProject, setCurrentProject] = useState<string | null>(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   //const { projectId } = useParams();
@@ -87,7 +88,7 @@ const Header = () => {
     navigate(`/inbox`);
     setProjectOpen(false);
   };
-
+  
   return (
     <>
       <section className="header-container">
@@ -130,12 +131,15 @@ const Header = () => {
               <h3 className="my-projects-title">Projects</h3>
               {projects.map((pro) => {
                 return (
-                  <button key={pro._id} 
-                    onClick={() => swapProject(pro._id)}
-                    className="project-btns">
-                    {pro.name}
-                  </button>
-                
+                  <div className="project-btn-delete-container">
+                    <button key={pro._id} 
+                      onClick={() => swapProject(pro._id)}
+                      className="project-btns">
+                      {pro.name}
+                    </button>
+                     <DeleteOutlined className="project-delete-icon"
+                    onClick={() => setOpenDeleteModal(true)} />
+                  </div>
                 );
               })}
               <button onClick={createProject}
@@ -146,18 +150,23 @@ const Header = () => {
             </div>
           )}
         </div>
-        {/* <div className="user-menu">
-          <button className="user-btn" onClick={toggleMenu}>
-            {userInitials}
-          </button>
-          {menuOpen && (
-            <div className="dropdown">
-              <button onClick={handleSettings}>Settings</button>
-              
-            </div>
-          )}
-        </div> */}
       </section>
+
+      {/* pop up to confirm delete project */}
+      {openDeleteModal && (
+        <>
+      <div className="delete-modal-overlay"></div>
+      <aside className="confirm-delete-modal">
+        <p className="confirm-delete-msg">Are you sure you want to delete:</p>
+        <p className="project-to-delete">{showCurrentProject?.name}?</p>
+        <div className="delete-modal-btn-container">
+          <button className="delete-modal-btn yes">Yes</button>
+          <button className="delete-modal-btn no" onClick={() => setOpenDeleteModal(false)}>No</button>
+        </div>
+      </aside>
+      </>
+      )}
+    
     </>
   );
 };

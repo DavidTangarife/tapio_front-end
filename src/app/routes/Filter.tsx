@@ -24,6 +24,7 @@ const Filter = () => {
   // State to store emails
   const [senderState, setSenderState] = useState(emails);
   const [filteredSenders, setFilteredSenders] = useState<"all" | "allowed" | "blocked">("all")
+  const [showSavedMessage, setshowSavedMessage] = useState(false);
 
   // Fetch emails from backend
   useEffect(() => {
@@ -78,6 +79,10 @@ const Filter = () => {
         body: JSON.stringify({ filters: allowedSenders })
       });
       if (!res.ok) throw new Error("Failed to save filters");
+      setshowSavedMessage(true);
+      setTimeout(() => {
+        setshowSavedMessage(false);
+      }, 800)
       // TODO: need a message to show filters updated
     } catch (err) {
       console.error("Error saving filters:", err);
@@ -90,7 +95,8 @@ const Filter = () => {
       <main>
         <Header />
         <section className="filter-container">
-          <div className="filter-btn-container">
+          <div className="filter-btn-save-container">
+            <div className="filter-btn-container">
             <button
               className={`filter-btn all ${filteredSenders === "all" ? "active" : ""}`}
               onClick={() => setFilteredSenders("all")} >All</button>
@@ -100,6 +106,14 @@ const Filter = () => {
             <button
               className={`filter-btn blocked ${filteredSenders === "blocked" ? "active" : ""}`}
               onClick={() => setFilteredSenders("blocked")}><ThumbDownOutlined /></button>
+          </div>
+          <div className="filters-btn-msg-container">
+          {showSavedMessage && <p className="confirm-filters-saved-msg">Saved</p>}
+            <Button
+              buttonText="Save Filters"
+              onClick={handleSaveFilters}
+              className="save-filters-btn" />
+              </div>
           </div>
           <h3 className="filter-date-title">{today}</h3>
           <div className="sender-container">
@@ -133,11 +147,8 @@ const Filter = () => {
             {/* TODO: need CSS */}
           </div>
         </section>
-        <Button
-          buttonText="Save Filters"
-          onClick={handleSaveFilters}
-          className="save-filters-btn">
-        </Button>
+      
+
       </main>
     </>
 

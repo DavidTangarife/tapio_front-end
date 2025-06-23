@@ -87,6 +87,21 @@
   cursor: pointer;
   border: var(--border-green-dark-mode);
 }
-.add-to-board-container {
+.add-to-board-container, .tapup-btn-modal-container {
   position: relative;
+}
+.tapup-confirmation-msg {
+  width: 180px;
+  padding: 10px;
+  position: absolute;
+  bottom: 110%;
+  right: -40%;
+  z-index: 100;
+  background-color: var(--color-primary-dark);
+  border: var(--border-green-dark-mode);
+  border-radius: var(--border-radius);
+  text-align: center;
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-stylised);
 }
