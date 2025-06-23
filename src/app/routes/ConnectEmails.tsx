@@ -12,9 +12,10 @@ const ConnectEmails = () => {
   const [showEmailSection, setShowEmailSection] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
+  const initialData = useLoaderData()
+  const [data, setData] = useState(initialData);
 
   // If user not validated or other error, Redirect to login
-  const data = useLoaderData()
   useEffect(() => {
     if (data) {
       if (data['error'] == "Unauthorized access: Please login") {
@@ -36,7 +37,6 @@ const ConnectEmails = () => {
   const handleConnectEmails = async () => {
     setShowEmailSection(true);
     setLoading(true)
-    console.log("Starting handleConnectEmails function");
 
     try {
       const res = await fetch("http://localhost:3000/api/direct-emails", {
@@ -46,10 +46,9 @@ const ConnectEmails = () => {
         },
         credentials: "include",
       });
-      data.emails = await res.json()
-      console.log(data.emails)
-      console.log('HEY THERE')
-
+      const resData = await res.json()
+      console.log(resData)
+      setData(resData)
       if (!res.ok) throw new Error("Failed to fetch and save emails");
     } catch (err) {
       console.log("Error Connecting email ", err);
