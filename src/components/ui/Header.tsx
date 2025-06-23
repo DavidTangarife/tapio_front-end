@@ -1,17 +1,26 @@
 import Button from "./Button";
 import "./Header.css";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Project } from "../../types/types";
 import { useEffect, useState } from "react";
+import {
+  KeyboardArrowDown,
+  Logout,
+  Add,
+  DeleteOutlined,
+} from "@mui/icons-material";
 
 const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [projectsOpen, setProjectOpen] = useState(false);
   const [fullName, setFullName] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
-  const [currentProject, setCurrentProject] = useState<Project>();
+  const [currentProject, setCurrentProject] = useState<string | null>(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  //const { projectId } = useParams();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -36,6 +45,7 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
         const projectData = await res.json();
         if (res.ok) {
           setProjects(projectData.projects);
+          setCurrentProject((prev) => prev || projectData.projects[0]._id);
         }
       } catch (err) {
         console.error("Failed to fetch projects", err);
@@ -45,22 +55,9 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
     fetchProjects();
   }, []);
 
-  const getInitials = (name: string) => {
-    const names = name.trim().split(" ");
-    if (names.length === 1) return names[0][0].toUpperCase();
-    return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase();
-  };
-
-  const userInitials = getInitials(fullName || "U");
-
-  const toggleMenu = () => {
-    setMenuOpen((prev) => !prev);
-  };
-
-  const handleSettings = () => {
-    // navigate to settings page
-    navigate("/settings");
-    setMenuOpen(false);
+  const maxCharsProjectName = (name: string, maxChars: number = 16) => {
+    if (name.length <= maxChars) return name;
+    return name.substring(0, maxChars) + "...";
   };
 
   const handleLogout = async () => {
@@ -76,6 +73,8 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
     }
     setMenuOpen(false);
   };
+
+  const showCurrentProject = projects.find((p) => p._id === currentProject);
   const toggleProject = () => {
     setProjectOpen((prev) => !prev);
   };
@@ -99,11 +98,6 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
       });
 
       if (res.ok) {
-        const data = await res.json();
-        console.log(data);
-        const currentPro = projects.find((p) => p._id === data.projectId);
-        console.log(currentPro?.name);
-        setCurrentProject(currentPro);
         onProjectSwap();
       } else {
         throw new Error("Failed to update session!");
@@ -142,32 +136,67 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
           />
         </div>
         <div className="project">
-          <button onClick={toggleProject}>{currentProject?.name || projects[0]?.name}</button> //Deal with this when brain is Ok
+          <button onClick={toggleProject} className="current-project-title">
+            {showCurrentProject
+              ? maxCharsProjectName(showCurrentProject?.name)
+              : "Select a Project"}
+            <KeyboardArrowDown />
+          </button>
           {projectsOpen && (
             <div className="dropdown">
+              <h3 className="my-projects-title">Projects</h3>
               {projects.map((pro) => {
                 return (
-                  <button key={pro._id} onClick={() => swapProject(pro._id)}>
-                    {pro.name}
-                  </button>
+                  <div className="project-btn-delete-container">
+                    <button
+                      key={pro._id}
+                      onClick={() => swapProject(pro._id)}
+                      className="project-btns"
+                    >
+                      {pro.name}
+                    </button>
+                    <DeleteOutlined
+                      className="project-delete-icon"
+                      onClick={() => setOpenDeleteModal(true)}
+                    />
+                  </div>
                 );
               })}
-              <button onClick={createProject}>New Project +</button>
-            </div>
-          )}
-        </div>
-        <div className="user-menu">
-          <button className="user-btn" onClick={toggleMenu}>
-            {userInitials}
-          </button>
-          {menuOpen && (
-            <div className="dropdown">
-              <button onClick={handleSettings}>Settings</button>
-              <button onClick={handleLogout}>Logout</button>
+              <button onClick={createProject} className="add-project-btn">
+                <Add sx={{ color: "var(--color-green-dark-mode)" }} />
+                Add New Project
+              </button>
+
+              <button onClick={handleLogout} className="logout-btn">
+                <Logout sx={{ color: "var(--color-green-dark-mode)" }} />
+                Logout
+              </button>
             </div>
           )}
         </div>
       </section>
+
+      {/* pop up to confirm delete project */}
+      {openDeleteModal && (
+        <>
+          <div className="delete-modal-overlay"></div>
+          <aside className="confirm-delete-modal">
+            <p className="confirm-delete-msg">
+              Are you sure you want to delete:
+            </p>
+            <p className="project-to-delete">{showCurrentProject?.name}?</p>
+            <div className="delete-modal-btn-container">
+              <button className="delete-modal-btn yes">Yes</button>
+              <button
+                className="delete-modal-btn no"
+                onClick={() => setOpenDeleteModal(false)}
+              >
+                No
+              </button>
+            </div>
+          </aside>
+        </>
+      )}
     </>
   );
 };

@@ -8,13 +8,20 @@ import AddToBoardModal from "../../components/ui/AddToBoardModal";
 import { ViewKanbanOutlined, TouchAppOutlined, Reply, DeleteOutlined } from '@mui/icons-material';
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react"
 
+interface EmailDetails {
+  subject?: string;
+  from?: string;
+  isTapped?: boolean;
+}
 
 const ViewEmail = () => {
   const [openModal, setOpenModal] = useState(false);
   const { projectId, emailId } = useParams();
-  const [emailDetails, setEmailDetails] = useState<any>(null);
+  const [emailDetails, setEmailDetails] = useState<EmailDetails | null>(null);
   const [emailBodyHtml, setEmailBodyHtml] = useState<string>("");
   const modalData = "";
+  const [confirmTappedUp, setConfirmTappedUp] = useState(false);
+  const [tapMessage, setTapMessage] = useState<string>("")
 
   useEffect(() => {
     const fetchEmailInfo = async () => {
@@ -47,7 +54,7 @@ const ViewEmail = () => {
 
   const handleTapUp = async () => {
     try {
-      if (!emailDetails.isTapped) {
+      if (!emailDetails?.isTapped) {
         const res = await fetch(`http://localhost:3000/api/emails/${emailId}/tap`, {
           method: "PATCH",
           credentials: "include",
@@ -56,12 +63,25 @@ const ViewEmail = () => {
             "Content-Type": "application/json",
           },
         });
-
         if (!res.ok) throw new Error("Failed to update tap status");
+        setConfirmTappedUp(true);
+        setTapMessage("Tapped up!")
+        setEmailDetails((prev) => ({...prev, isTapped: true }));
+      } else {
+        setConfirmTappedUp(true);
+        setTapMessage("Already tapped up")
       }
-      // TODO: Show a message for tap up
+        setTimeout(() => {
+        setConfirmTappedUp(false);
+         }, 1000);
+
     } catch (err) {
       console.error("Failed to tap up:", err);
+      setConfirmTappedUp(true);
+      setTapMessage("Error tapping up");
+      setTimeout(() => {
+        setConfirmTappedUp(false);
+    }, 1000);
     }
   };
   return (
@@ -99,12 +119,16 @@ const ViewEmail = () => {
               iconSx={{ transform: 'scaleX(-1)' }}
             //onClick={handleForward}
             />
-            <ViewEmailActionButton
-              icon={TouchAppOutlined}
-              text="Tap up"
-              value={modalData}
-              onClick={handleTapUp}
-            />
+            <div className="tapup-btn-modal-container">
+              <ViewEmailActionButton
+                icon={TouchAppOutlined}
+                text="Tap up"
+                value={modalData}
+                onClick={handleTapUp}
+            /> 
+           {confirmTappedUp && <div className="tapup-confirmation-msg">{tapMessage}</div>}
+            </div>
+          
             <div className="add-to-board-container">
               <ViewEmailActionButton
                 icon={ViewKanbanOutlined}

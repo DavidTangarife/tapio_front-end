@@ -6,28 +6,46 @@
     font-weight: 400;
     margin-bottom: 40px;
 }
+
 .setup-usr-input {
+    min-width: 300px;
     margin: 0 auto;
-    max-width: 500px;
     border: none;
-    background-color: #181818;
+    background-color: #181818 !important;
     height: 50px;
-    padding: 30px 20px;
+    padding: 10px 20px;
     font-family: var(--font-bodycopy);
     font-weight: 600;
     font-size: 2rem;
     text-align: center;
     border-bottom: 1px dotted var(--color-green-dark-mode);
     caret-color: var(--color-green-dark-mode);
+    -webkit-appearance: none;
+    appearance: none;
 }
 .setup-usr-input:focus {
     outline: none;
+    background-color: transparent;
 }
 .setup-usr-input::selection {
     background-color: rgba(33, 149, 12, 0.2);
 }
+
 .setup-form input::-webkit-input-placeholder {
     font-weight: 200;
+}
+
+/* Removes blue background from browser autofill  */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px #181818 inset !important;
 }
 
 @media (max-width: 480px) {
@@ -35,7 +53,7 @@
         font-size: 2.4em;
     }
     .setup-usr-input {
-        max-width: 300px;
+        width: fit-content;
         font-size: 1.8rem;
     }
    

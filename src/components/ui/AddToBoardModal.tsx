@@ -62,9 +62,6 @@ const AddToBoardModal = ({ closeModal }: AddToBoardModalProps) => {
           console.log("Opportunity created:", result);
           setIsSubmitted(true);
           modalInputRef.current.reset();
-          setTimeout(() => {
-            navigate(`/home`);
-          }, 1000);
         } else {
           const err = await res.json();
           console.error("Failed to create opportunity:", err.error);

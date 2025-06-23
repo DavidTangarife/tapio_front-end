@@ -1,15 +1,17 @@
 import { FormInput } from "../../components/ui/SetupForm";
+import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
 import { useSetupForm } from "../../hooks/useSetupForm";
 import { useFormData } from "../../hooks/useFormData";
 import "./AccountSetUp.css";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FormEvent } from "react";
+import { type FormEvent, useState } from "react";
 
 const SetupForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isCreateProject = location.state?.mode === "createProject";
   const { formData, updateFormData } = useFormData();
+  const [animateClass, setAnimateClass] = useState("");
 
   const steps = isCreateProject
     ? [
@@ -107,11 +109,7 @@ const SetupForm = () => {
           throw new Error("Failed to submit user data");
         }
       }
-      const data = await res1.json();
-      const projectId = data._id;
-      navigate("/home", {
-        state: { newProjectId: projectId },
-      });
+      navigate("/home");
     } catch (err) {
       console.error("Error submitting data:", err);
     }
@@ -121,25 +119,38 @@ const SetupForm = () => {
     e.preventDefault();
     if (!isLastStep) {
       next();
+      setAnimateClass("animate");
+      // remove class after animation complete
+      setTimeout(() => {
+        setAnimateClass("");
+      }, 200);
     } else {
       console.log("submmitting final form");
       handleSubmit();
     }
   };
 
+  const onBack = () => {
+    back();
+    setAnimateClass("animate-back");
+    // remove class after animation complete
+    setTimeout(() => {
+      setAnimateClass("");
+    }, 200);
+  };
+
   return (
     <>
       <section className="form-container">
-        <h1 className="logo">Tapio</h1>
-        <form className="setup-form " onSubmit={onNext}>
+        <TapioLogoDesktop className="logo-setup" />
+        <form className={`setup-form ${animateClass}`} onSubmit={onNext}>
           <p className="setup-step-count">
             {currentStep + 1} / {formSteps.length}
           </p>
           {step}
-
           <div className="setup-btn-container">
             {!isFirstStep && (
-              <button className="setup-btn" type="button" onClick={back}>
+              <button className="setup-btn" type="button" onClick={onBack}>
                 Back
               </button>
             )}

@@ -1,24 +1,20 @@
 .form-container {
-    width: 100%;
-    max-width: 100%;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.logo {
-    text-align: center;
-    margin-top: 0;
-}
-.setup-form {
-    max-width: 600px;
+.logo-setup {
     margin-top: 5rem;
 }
-.setupform.animate {
-    animation: slidein 0.5s 1;
+.setup-form {
+    margin-top: 5rem;
 }
-.setupform.animate-back {
-    animation: slideback 0.5s 1;
+.setup-form.animate {
+    animation: slidein 0.2s ease-out forwards;
+}
+.setup-form.animate-back {
+    animation: slideback 0.2s ease-out forwards;
 }
 .setup-step-count {
     text-align: center;
@@ -30,8 +26,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 120px;
-    
+    gap: 120px;    
 }
 .setup-btn {
     margin-top: 40px;
@@ -56,7 +51,6 @@
     background: #21950c;
     border: none;
 }
-
 @media (max-width: 480px) {
     .form-container {
         justify-content: center;
@@ -64,11 +58,21 @@
 }
 @keyframes slidein {
   from {
-    transform: translateX(100px);
+    transform: translateX(300px);
     opacity: 0;
   }
   to {
     transform: translateX(0);
     opacity: 1
+  }
+}
+@keyframes slideback {
+  from {
+    transform: translateX(-300px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0x);
+    opacity: 1;
   }
 }
