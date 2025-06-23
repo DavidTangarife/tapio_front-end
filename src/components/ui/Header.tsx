@@ -56,9 +56,17 @@ const Header = () => {
     return name.substring(0, maxChars) + "...";
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // logout logic
     console.log("Logging out...");
+    const res = await fetch(`http://localhost:3000/api/users/logout`, {
+      method: 'POST',
+      credentials: "include"
+    })
+    const data = await res.json()
+    if (data.logout) {
+      navigate('/')
+    }
     setMenuOpen(false);
   };
 

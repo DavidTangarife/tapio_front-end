@@ -1,21 +1,33 @@
 import "./Landing.css"
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react"
 import MicrosoftLogo from "../../assets/ms_login_logo.svg?react"
+import { useLoaderData, useNavigate } from "react-router-dom";
+import Button from "../../components/ui/Button";
+import { useEffect } from "react";
 
 const handleGoogleLogin = () => {
   window.location.href = "http://localhost:3000/api/google-login"
 };
 const handleMicrosoftLogin = () => {
   window.location.href = "http://localhost:3000/api/microsoft-login"
-}
+};
+
 const Landing = () => {
-    return (
-      <> 
+  const data = useLoaderData()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (data.user) {
+      navigate('/home')
+    }
+  }, [data, navigate])
+  return (
+    <>
       <section className="landing-page">
         <div className="login-wrapper">
           <TapioLogoDesktop className="logo-landing" />
           <h1 className="sign-up-title">Sign up or
-           <br />
+            <br />
             Login to your account</h1>
         {/* Google login button - directly from Google */}
         <button 
@@ -48,7 +60,7 @@ const Landing = () => {
         </button> 
         </div>
       </section>
-      </>
-    )
+    </>
+  )
 }
 export default Landing;

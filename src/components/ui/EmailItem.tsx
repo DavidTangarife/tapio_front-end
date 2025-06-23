@@ -16,7 +16,7 @@ interface EmailItemProps {
 }
 const EmailItem = (props: EmailItemProps) => {
   const [tapped, setTapped] = useState(props.isTapped);
-  const {projectId} = useParams();
+  const { projectId } = useParams();
   const navigate = useNavigate()
   const emailId = props._id;
 
@@ -42,44 +42,44 @@ const EmailItem = (props: EmailItemProps) => {
         const res = await fetch(`http://localhost:3000/api/emails/${emailId}/read`, {
           method: 'PATCH',
           headers: {
-            "Content-Type" : "application/json"
+            "Content-Type": "application/json"
           },
           credentials: "include",
           body: JSON.stringify({ emailId })
         });
         if (!res.ok) {
-          throw new Error ("Failed to update email as read");
+          throw new Error("Failed to update email as read");
         }
       } catch (err) {
         console.error("Erro making email as read", err);
       }
     }
-    navigate(`/${projectId}/email/${emailId}`);
+    navigate(`/email/${emailId}`);
   }
 
   return (
     <>
-    <div
-      className="email-item-tapin-flex-wrapper"> 
-      {/* tap in dot */}
-      <div className="tap-in-wrapper">
-        <div
-          onClick = {handleTapIn} 
-          className={!tapped ? "tap-in-dot inactive" : "tap-in-dot"}
-        ></div>
-      </div>
-      {/* email item */}
       <div
-        onClick={handleEmailClick} 
-        className={!props.isRead ? "email-content-date-flex" : "email-content-date-flex inactive"}
-      >
+        className="email-item-tapin-flex-wrapper">
+        {/* tap in dot */}
+        <div className="tap-in-wrapper">
+          <div
+            onClick={handleTapIn}
+            className={!tapped ? "tap-in-dot inactive" : "tap-in-dot"}
+          ></div>
+        </div>
+        {/* email item */}
+        <div
+          onClick={handleEmailClick}
+          className={!props.isRead ? "email-content-date-flex" : "email-content-date-flex inactive"}
+        >
           <div className="email-sender-subject-flex">
             <p className="email-sender">{props.sender}</p>
             <p className="email-subject">{props.subject}</p>
           </div>
-        <p className="email-date">{formattedDate}</p>
+          <p className="email-date">{formattedDate}</p>
+        </div>
       </div>
-    </div>
     </>
   )
 }

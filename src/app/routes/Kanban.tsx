@@ -7,24 +7,13 @@ import Board_Card from "../../components/ui/Board";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 
 export default function Kanban() {
-  const { _id } = useLoaderData() as { _id: string }; // Because we are using Type script I need to specify what im return form my loader
+  const data = useLoaderData()
   const [boards, setBoards] = useState<Bt[]>([]);
 
   useEffect(() => {
-    async function fetchKanban() {
-      try {
-        const res = await fetch(
-          `http://localhost:3000/api/status?projectId=${_id}`
-        );
-        const data = await res.json();
-        setBoards(data);
-      } catch (err) {
-        console.error(`Failed to fetch boards for project ${_id}:`, err);
-      }
-    }
+    setBoards(data)
 
-    fetchKanban();
-  }, [_id]);
+  }, [data]);
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event; // active -> Draggable Item that was move, over -> droppable board where item was dropped

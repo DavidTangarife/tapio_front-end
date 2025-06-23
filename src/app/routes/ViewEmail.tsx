@@ -10,124 +10,124 @@ import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react"
 
 
 const ViewEmail = () => {
-    const [openModal, setOpenModal] = useState(false);
-    const {projectId, emailId} = useParams();
-    const [emailDetails, setEmailDetails] = useState<any>(null);
-    const [emailBodyHtml, setEmailBodyHtml] = useState<string>("");
-    const modalData = "";
+  const [openModal, setOpenModal] = useState(false);
+  const { projectId, emailId } = useParams();
+  const [emailDetails, setEmailDetails] = useState<any>(null);
+  const [emailBodyHtml, setEmailBodyHtml] = useState<string>("");
+  const modalData = "";
 
-    useEffect(() => {
-      const fetchEmailInfo = async () => {
-        try {
-          const res = await fetch(`http://localhost:3000/api/emails/${emailId}`, {
-            credentials: 'include',
-          });
-          const data = await res.json();
-          setEmailDetails(data);
-        } catch (err) {
-          console.error("Failed to fetch email info:", err);
-        }
-      };
-      const fetchEmail = async () => {
-        try {
+  useEffect(() => {
+    const fetchEmailInfo = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/api/emails/${emailId}`, {
+          credentials: 'include',
+        });
+        const data = await res.json();
+        setEmailDetails(data);
+      } catch (err) {
+        console.error("Failed to fetch email info:", err);
+      }
+    };
+    const fetchEmail = async () => {
+      try {
         const res1 = await fetch(`http://localhost:3000/api/emails/${emailId}/body`, {
           credentials: 'include',
         });
         const data = await res1.json();
-        const body = data.body;  
+        const body = data.body;
         setEmailBodyHtml(body);
 
-        } catch (err) {
-          console.error("Failed to fetch email body:", err);
-        }
-      };
-      fetchEmail();
-      fetchEmailInfo();
-    }, [emailId]);
-
-    const handleTapUp = async () => {
-      try {
-        if (!emailDetails.isTapped){
-          const res = await fetch(`http://localhost:3000/api/emails/${emailId}/tap`, {
-            method: "PATCH",
-            credentials: "include",
-            body: JSON.stringify({ emailId, isTapped: true }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          if (!res.ok) throw new Error("Failed to update tap status");
-        }
-        // TODO: Show a message for tap up
       } catch (err) {
-        console.error("Failed to tap up:", err);
+        console.error("Failed to fetch email body:", err);
       }
     };
-    return (
-        <>
-        <main>
-          <section className="header-container">
-            <Link to={`/projects/${projectId}/emails`} className="back-btn">Back</Link>
-            <TapioLogoDesktop className="logo" />
-            <Button className="user-btn" buttonText="MJ"/>
+    fetchEmail();
+    fetchEmailInfo();
+  }, [emailId]);
+
+  const handleTapUp = async () => {
+    try {
+      if (!emailDetails.isTapped) {
+        const res = await fetch(`http://localhost:3000/api/emails/${emailId}/tap`, {
+          method: "PATCH",
+          credentials: "include",
+          body: JSON.stringify({ emailId, isTapped: true }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!res.ok) throw new Error("Failed to update tap status");
+      }
+      // TODO: Show a message for tap up
+    } catch (err) {
+      console.error("Failed to tap up:", err);
+    }
+  };
+  return (
+    <>
+      <main>
+        <section className="header-container">
+          <Link to={`/inbox`} className="back-btn">Back</Link>
+          <TapioLogoDesktop className="logo" />
+          <Button className="user-btn" buttonText="MJ" />
+        </section>
+        <section className="email-view-container">
+          <div className="email-view-sender-details">
+            <h3 className="email-view-subject">{emailDetails?.subject}</h3>
+            <h4 className="email-view-sender">{emailDetails?.from}</h4>
+          </div>
+          <section className="email-view-body">
+            <iframe
+              title="email-content"
+              style={{ width: "100%", height: "600px", border: "none" }}
+              srcDoc={emailBodyHtml}
+            />
           </section>
-          <section className="email-view-container">
-            <div className="email-view-sender-details">
-              <h3 className="email-view-subject">{emailDetails?.subject}</h3>
-              <h4 className="email-view-sender">{emailDetails?.from}</h4>
-            </div>
-            <section className="email-view-body">
-              <iframe
-                title="email-content"
-                style={{ width: "100%", height: "600px", border: "none" }}
-                srcDoc={emailBodyHtml}
-              />
-            </section>
           {/* <section className="email-view-body" dangerouslySetInnerHTML={{ __html: emailBodyHtml }} /> */}
-            <div className="email-view-btn-panel">
-              <ViewEmailActionButton 
-                icon={Reply}
-                text="Reply"
-                value={modalData}
-                //onClick={handleReply}
-              />
-              <ViewEmailActionButton 
-                icon={Reply}
-                text="Forward"
-                value={modalData}
-                iconSx={{ transform: 'scaleX(-1)' }}
-                //onClick={handleForward}
-              />
-              <ViewEmailActionButton 
-                icon={TouchAppOutlined}
-                text="Tap up"
-                value={modalData}
-                onClick={handleTapUp}
-              />
-              <div className="add-to-board-container">
-                <ViewEmailActionButton 
+          <div className="email-view-btn-panel">
+            <ViewEmailActionButton
+              icon={Reply}
+              text="Reply"
+              value={modalData}
+            //onClick={handleReply}
+            />
+            <ViewEmailActionButton
+              icon={Reply}
+              text="Forward"
+              value={modalData}
+              iconSx={{ transform: 'scaleX(-1)' }}
+            //onClick={handleForward}
+            />
+            <ViewEmailActionButton
+              icon={TouchAppOutlined}
+              text="Tap up"
+              value={modalData}
+              onClick={handleTapUp}
+            />
+            <div className="add-to-board-container">
+              <ViewEmailActionButton
                 icon={ViewKanbanOutlined}
                 text="Add to Board"
                 value={modalData}
                 onClick={() => setOpenModal(true)}
               />
-              {openModal && <AddToBoardModal closeModal={() => setOpenModal(false)}/>}
-              </div>
-              <ViewEmailActionButton 
-                icon={DeleteOutlined}
-                text="Delete"
-                value={modalData}
-                //onClick={handleDelete}
-              />
-              
+              {openModal && <AddToBoardModal closeModal={() => setOpenModal(false)} />}
             </div>
-             
-          </section>
-        </main>
-       
-        </>
-    )
+            <ViewEmailActionButton
+              icon={DeleteOutlined}
+              text="Delete"
+              value={modalData}
+            //onClick={handleDelete}
+            />
+
+          </div>
+
+        </section>
+      </main>
+
+    </>
+  )
 };
 
 export default ViewEmail;

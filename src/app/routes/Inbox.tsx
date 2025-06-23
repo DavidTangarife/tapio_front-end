@@ -16,34 +16,38 @@ interface Email {
   date: Date;
 }
 
-const Inbox = () => {
-  const initialEmails: Email[] = useLoaderData() ?? [];
+interface InboxProps {
+  emails: Email[]
+}
+
+const Inbox: React.FC<InboxProps> = (props) => {
+  const initialEmails: Email[] = props.emails ?? [];
   const [emails, setEmails] = useState<Email[]>(initialEmails);
-  const {projectId} = useParams();
+  const { projectId } = useParams();
 
   useEffect(() => {
-      if (projectId) {
-        fetch(`http://localhost:3000/api/projects/${projectId}/last-login`, {
-          method: "PATCH",
-          credentials: "include",
+    if (projectId) {
+      fetch(`http://localhost:3000/api/projects/${projectId}/last-login`, {
+        method: "PATCH",
+        credentials: "include",
       }).catch((err) => console.error("Failed to update lastLogin:", err));
-        }
-    }, [projectId]);
+    }
+  }, [projectId, props.emails]);
   if (!emails.length) return <p>No emails found</p>;
-  
+
   const readEmails = emails.filter(email =>
     email.isRead && !email.isTapped)
   const unreadEmails = emails.filter(email =>
     !email.isRead && !email.isTapped)
   const tappedEmails = emails.filter(email => email.isTapped)
 
-  const handleTapUpdate = async(emailId: string, newTapped: boolean) => {
+  const handleTapUpdate = async (emailId: string, newTapped: boolean) => {
     try {
       const res = await fetch(`http://localhost:3000/api/emails/${emailId}/tap`, {
-        method:'PATCH',
+        method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ isTapped: newTapped})
+        body: JSON.stringify({ isTapped: newTapped })
       });
       if (!res.ok) {
         throw new Error('Failed to update tap-in status')
@@ -64,11 +68,10 @@ const Inbox = () => {
   return (
     <>
       <div className="email-section">
-        <Header />
-          {tappedEmails.length > 0 && (
-            <>
-              <h3 className="email-section-title">TAPPED UP</h3>
-              <div className="email-list">
+        {tappedEmails.length > 0 && (
+          <>
+            <h3 className="email-section-title">TAPPED UP</h3>
+            <div className="email-list">
               {tappedEmails.map((email) => (
                 <EmailItem
                   key={email._id}
@@ -81,51 +84,52 @@ const Inbox = () => {
                   date={email.date}
                   isTapped={email.isTapped}
                   onTapUpdate={handleTapUpdate}
-              />
-            ))}
-          </div>
-        </>
+                />
+              ))}
+            </div>
+          </>
         )}
-        
+
         <h3 className="email-section-title">UNREAD</h3>
         <div className="email-list">
-            {unreadEmails.map((email) => (
-              <EmailItem
-                key={email._id}
-                _id={email._id}
-                sender={email.from}
-                subject={email.subject}
-                senderAddress={email.senderAddress}
-                body={email.body}
-                isRead={email.isRead}
-                date={email.date}
-                isTapped={email.isTapped}
-                onTapUpdate={handleTapUpdate}
-              />
-            ))}
+          {unreadEmails.map((email) => (
+            <EmailItem
+              key={email._id}
+              _id={email._id}
+              sender={email.from}
+              subject={email.subject}
+              senderAddress={email.senderAddress}
+              body={email.body}
+              isRead={email.isRead}
+              date={email.date}
+              isTapped={email.isTapped}
+              onTapUpdate={handleTapUpdate}
+            />
+          ))}
         </div>
-        
+
         {readEmails.length > 0 && (
           <>
             <h3 className="email-section-title">READ</h3>
             <div className="email-list">
-            {readEmails.map((email) => (
-              <EmailItem
-                key={email._id}
-                _id={email._id}
-                sender={email.from}
-                subject={email.subject}
-                senderAddress={email.senderAddress}
-                body={email.body}
-                isRead={email.isRead}
-                date={email.date}
-                isTapped={email.isTapped}
-                onTapUpdate={handleTapUpdate}
-              />
-            ))}
+              {readEmails.map((email) => (
+                <EmailItem
+                  key={email._id}
+                  _id={email._id}
+                  sender={email.from}
+                  subject={email.subject}
+                  senderAddress={email.senderAddress}
+                  body={email.body}
+                  isRead={email.isRead}
+                  date={email.date}
+                  isTapped={email.isTapped}
+                  onTapUpdate={handleTapUpdate}
+                />
+              ))}
             </div>
           </>)}
-        </div>
-      </>
-)};
+      </div>
+    </>
+  )
+};
 export default Inbox;
