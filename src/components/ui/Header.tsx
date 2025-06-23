@@ -1,17 +1,16 @@
 import Button from "./Button";
 import "./Header.css";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Project } from "../../types/types";
 import { useEffect, useState } from "react";
 
-const Header = () => {
+const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [projectOpen, setProjectOpen] = useState(false);
   const [fullName, setFullName] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const navigate = useNavigate();
-  const location = useLocation();
   const { projectId } = useParams();
 
   useEffect(() => {
@@ -90,9 +89,29 @@ const Header = () => {
     setProjectOpen(false);
   };
 
-  const swapProject = (projecIdtomove: string) => {
-    navigate(`/projects/${projecIdtomove}/inbox`);
-    setProjectOpen(false);
+  const swapProject = async (projecIdtomove: string) => {
+    try {
+      const res = await fetch("http://localhost:3000/api/session-update", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials:"include",
+        body: JSON.stringify({projectId: projecIdtomove})
+      });
+      
+      if (res.ok) {
+        onProjectSwap();
+      } else {
+        throw new Error("Failed to update session!")
+      }
+      setProjectOpen(false);
+     
+    } catch (err){
+      console.error("Error updating session project:", err);
+    }
+    
+    
   };
 
   return (
