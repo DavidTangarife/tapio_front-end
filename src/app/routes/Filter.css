@@ -5,12 +5,18 @@ main {
     width: 100%;
     padding: 4px;
 }
+.filter-btn-save-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0 20px 0;
+}
+/* Cirle buttons - All, thumbsup/thumbs down */
 .filter-btn-container {
     display: flex;
     flex-direction: row;
-    justify-content: left;
     gap: 8px;
-    margin: 0 0 20px 0;
 }
 .filter-btn {
     width: 50px;
@@ -56,6 +62,44 @@ main {
     background-color: var(--color-red);
     color: var(--color-font-dark);
 }
+
+/* Save filters button & confirm msg */
+.filters-btn-msg-container {
+  position: relative;
+}
+.save-filters-btn {
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  font-family: var(--font-stylised);
+  font-size: var(--font-size-medium);
+  color: var(--font-color-offwhite);
+  font-weight: var(--font-weight-bold);
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-font-dark);
+  transition: background-color 0.3s ease-in-out;
+}
+.save-filters-btn:hover {
+  background-color: var(--color-font-offwhite);
+  color: var(--color-font-dark);
+  cursor: pointer;
+}
+.confirm-filters-saved-msg {
+    position: absolute;
+    top: -100%;
+    left: 18%;
+    opacity: 0.8;
+    font-family: var(--font-stylised);
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-font-primary);
+    width: 80px;
+    text-align: center;
+    background-color: #454545;
+    border-radius: var(--border-radius);
+    padding: 8px 16px;
+    z-index: 100;
+}
+
 .filter-date-title {
   margin-bottom: 10px;
   border-bottom: var(--border-grey-dark-mode);
@@ -135,22 +179,7 @@ main {
   color: var(--color-red);
 }
 
-.save-filters-btn {
-  margin-top: 40px;
-  padding: 10px 20px;
-  border-radius: var(--border-radius);
-  font-family: var(--font-stylised);
-  font-size: var(--font-size-title);
-  color: var(--font-color-offwhite);
-  font-weight: var(--font-weight-bold);
-  background-color: var(--color-primary);
-  border: 1px solid var(--color-font-dark);
-}
 
-.save-filters-btn:hover {
-  border: var(--border-green-dark-mode);
-  cursor: pointer;
-}
 /* Mobile styling */
 @media (max-width: 500px) {
     /* .filter-date-title {

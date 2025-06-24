@@ -21,7 +21,7 @@
     margin-top: 80px;
 }
 .login-wrapper {
-    width: 450px;
+    width: 400px;
     min-height: 600px;
     display: flex;
     flex-direction: column;
@@ -77,9 +77,11 @@
 /* Styling for Google login button - taken directly from google */
 .gsi-material-button {
   -moz-user-select: none;
+  user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
   -webkit-appearance: none;
+  appearance: none;
   background-color: WHITE;
   background-image: none;
   border: 1px solid #747775;

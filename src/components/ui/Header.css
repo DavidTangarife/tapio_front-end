@@ -1,96 +1,175 @@
+
 /* LOGO PROJECTS AND USER MENU */
-.header {
+.header-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin: 25px 0 50px 0;
 }
-
 .logo {
-  max-width: 120px;
+  width: 120px;
   height: auto;
 }
-
-.project,
-.user-menu {
+.project {
   position: relative;
+  
 }
-.project button {
-  padding: 10px 20px;
-  width: 300px;
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-stylised);
-  font-size: var(--button-font-size);
-  border-radius: var(--border-radius);
-  background-color: var(--color-grey);
-  color: black;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.project .dropdown {
+  width: 500px;
+  background-color: var(--color-primary);
 }
-
-.project button:hover {
-  background-color: var(--color-font-offwhite);
-}
-
-.user-btn {
-  width: 55px;
-  height: 55px;
-  background-color: var(--color-grey);
-  border-radius: 50%;
-  padding: var(--button-padding);
-  font-size: var(--button-font-size);
-  font-weight: var(--font-weight-bold);
-  color: black;
-  border: none;
-  transition: background-color 0.3s ease;
-  cursor: pointer;
-}
-
-.user-btn:hover {
-  background-color: var(--color-font-offwhite);
-}
-
 .dropdown {
+  max-width: 300px;
   position: absolute;
   top: 110%;
   right: 0;
-  background-color: var(--color-grey);
+  background-color: var(--color-primary);
   border-radius: var(--border-radius);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 8px 0;
   z-index: 100;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  border: 1px solid var(--color-font-offwhite);
 }
-
-.dropdown button {
-  background: none;
-  border: none;
+/* current project name button */
+.project .current-project-title {
+  width: 200px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 4px 10px 20px;
   border-radius: var(--border-radius);
-  padding: 12px 18px;
-  font-size: var(--button-font-size);
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: var(--color-font-primary);
+  font-size: var(--font-size-medium);
   font-weight: var(--font-weight-bold);
   font-family: var(--font-stylised);
-  text-align: left;
-  color: black;
-  width: 100%;
-  transition: background-color 0.2s ease-in-out;
 }
-
+.current-project-title:hover {
+  border: var(--border-green-dark-mode);
+}
+/* Inside dropdown */
+.my-projects-title {
+  font-size: var(--font-size-title);
+  padding: 12px 20px 4px;
+}
 .dropdown button:hover {
-  background-color: var(--color-font-offwhite);
+  background-color: var(--color-dark-mode-hover);
   cursor: pointer;
 }
-
-.project .dropdown {
-  width: 300px;
+/* listed project names */
+.project-btns {
+  width: 100%;
+  padding: 8px 30px;
+  text-align: left;
+  border: none;
+  font-size: 1.3rem;
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-stylised);
+  color: var(--color-font-offwhite);
+  background-color: var(--color-primary);
+  transition: background-color 0.2s ease-in-out;
+}
+.project-btn-delete-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 20px;
+}
+.project-delete-icon {
+  color: var(--color-grey);
+}
+.project-delete-icon:hover {
+ color: #b90404;
+ cursor: pointer;
 }
 
-.user-menu .dropdown {
-  width: 150px;
+/* Pop up delete project modal */
+.delete-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 99;
+}
+.confirm-delete-modal {
+  position: absolute;
+  top: 15%;
+  left: 40%;
+  width: 300px;
+  height: 150px;
+  z-index: 100;
+  padding: 20px;
+  background-color: var(--color-font-dark);
+  border-radius: var(--border-radius);
+  border: 1px solid #b90404;
+}
+.confirm-delete-msg {
+  text-align: center;
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-weight-reguar);
+  font-family: var(--font-stylised);
+  color: var(--font-color-primary);
+}
+.project-to-delete {
+  text-align: center;
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-stylised);
+  color: var(--font-color-primary);
+}
+.delete-modal-btn-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+.delete-modal-btn {
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-primary);
+  background-color: var(--color-primary);
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-stylised);
+  color: var(--font-color-primary);
+}
+.delete-modal-btn.yes:hover {
+  cursor: pointer;
+  background-color: #b90404;
+}
+.delete-modal-btn.no:hover {
+  cursor: pointer;
+  background-color: var(--color-font-offwhite);
+  color: var(--color-font-dark);
+}
+
+/* Add project and Logout buttons  */
+.add-project-btn, .logout-btn {
+  width: 100%;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background-color: var(--color-primary);
+  font-family: var(--font-stylised);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-medium);
+  color: var(--color-font-primary);
+}
+
+.logout-btn {
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 /* INBOX, KANBAN BOARD AND OPPORTUNITIES */
