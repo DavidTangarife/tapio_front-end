@@ -3,16 +3,9 @@ import "./Inbox.css";
 import { InboxProps } from "../../types/types";
 
 
-const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate }) => {
+
+const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) => {
   
-  // useEffect(() => {
-  //   if (projectId) {
-  //     fetch(`http://localhost:3000/api/projects/${projectId}/last-login`, {
-  //       method: "PATCH",
-  //       credentials: "include",
-  //     }).catch((err) => console.error("Failed to update lastLogin:", err));
-  //   }
-  // }, [projectId, props.emails]);
   if (!emails.length) return <p>No emails found</p>;
 
   const readEmails = emails.filter(email =>
@@ -24,6 +17,10 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate }) => {
 
   return (
     <>
+      <div className="inbox-header">
+        <h2>Inbox</h2>
+        <button onClick={onRefreshInbox} className="refresh-button">Refresh Inbox</button>
+      </div>
       <div className="email-section">
         {tappedEmails.length > 0 && (
           <>

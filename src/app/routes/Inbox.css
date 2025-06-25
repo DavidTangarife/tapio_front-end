@@ -30,3 +30,16 @@
   color: var(--color-font-offwhite);
   margin-left: 20px;
 }
+.refresh-button {
+  margin-left: auto;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.refresh-button:hover {
+  background-color:var(--color-green-dark-mode);
+  color: var(--color-font-offwhite)
+}

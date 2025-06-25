@@ -14,6 +14,27 @@ const ConnectEmails = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0); // used to re-fetch emails when project changes
   const navigate = useNavigate()
 
+  const handleRefreshInbox = async () => {
+  try {
+    const res = await fetch("http://localhost:3000/api/direct-emails", {
+      method: "POST",
+      credentials: "include",
+    });
+
+    if (!res.ok) throw new Error("Failed to refresh inbox");
+    console.log("📬 Refreshed inbox from server");
+
+    // Fetch updated inbox from DB
+    const getRes = await fetch("http://localhost:3000/api/getemails", {
+      credentials: "include",
+    });
+    const data = await getRes.json();
+    setEmails(data.emails || []);
+  } catch (err) {
+    console.error("Error refreshing inbox:", err);
+  }
+};
+
   /**
    * Sync showEmailSection with emails state
    * This toggles between Welcome and Inbox based on whether we have emails.
@@ -120,7 +141,7 @@ const ConnectEmails = () => {
                 <Loader className="spin-loader" />
               </>
             ) : (
-              <Inbox emails={emails} onTapUpdate={handleTapUpdate}/>
+              <Inbox emails={emails} onTapUpdate={handleTapUpdate} onRefreshInbox={handleRefreshInbox}/>
             )}
           </>
         )}

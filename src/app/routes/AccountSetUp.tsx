@@ -71,12 +71,9 @@ const SetupForm = () => {
     try {
       // send project name and start date to create a new project for the user
       console.log("Sending data...");
-      const time =
-        new Date(formData.searchDate).getTime() -
-        new Date().getTimezoneOffset() * 60 * 1000;
       const payload1 = {
         name: formData.projectName,
-        startDate: new Date(time).toISOString(),
+        startDate: new Date(formData.searchDate).toISOString(), //"2025-10-05T14:48:00.000Z"
       };
 
       const res1 = await fetch("http://localhost:3000/api/projects", {

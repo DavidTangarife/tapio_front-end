@@ -54,4 +54,5 @@ export interface Email {
 export interface InboxProps {
   emails: Email[];
   onTapUpdate: (emailId: string, newTapped: boolean) => void;
+  onRefreshInbox: () => void;
 }
