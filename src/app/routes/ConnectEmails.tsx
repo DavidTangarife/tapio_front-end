@@ -4,7 +4,7 @@ import "./ConnectEmails.css";
 import { useNavigate } from "react-router-dom";
 import Loader from "../../assets/Spinner.svg?react";
 import Inbox from "./Inbox";
-import {Email} from "../../types/types"
+import { Email } from "../../types/types"
 import { useEffect, useState } from "react";
 
 const ConnectEmails = () => {
@@ -58,6 +58,7 @@ const ConnectEmails = () => {
    * Sends request to fetch & save emails, then updates state.
    */
   const handleConnectEmails = async () => {
+    setShowEmailSection(true);
     setLoading(true)
 
     try {
@@ -120,7 +121,7 @@ const ConnectEmails = () => {
                 <Loader className="spin-loader" />
               </>
             ) : (
-              <Inbox emails={emails} onTapUpdate={handleTapUpdate}/>
+              <Inbox emails={emails} onTapUpdate={handleTapUpdate} />
             )}
           </>
         )}
