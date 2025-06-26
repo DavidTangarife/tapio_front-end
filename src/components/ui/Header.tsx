@@ -18,6 +18,7 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [loadingProject, setLoadingProject] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -62,12 +63,14 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
       } catch (err) {
         console.error("Failed to fetch projects", err);
       }
+      setLoadingProject(false);
     };
     fetchUser();
     fetchProjects();
   }, []);
 
-  const maxCharsProjectName = (name: string, maxChars: number = 16) => {
+  const maxCharsProjectName = (name: string | undefined, maxChars: number = 16) => {
+    if (!name) return "Select Project"
     if (name.length <= maxChars) return name;
     return name.substring(0, maxChars) + "...";
   };
@@ -150,9 +153,9 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
         </div>
         <div className="project">
           <button onClick={toggleProject} className="current-project-title">
-            {currentProject
-              ? maxCharsProjectName(currentProject?.name)
-              : "Select a Project"}
+            {loadingProject
+              ? "Loading..."
+              : maxCharsProjectName(currentProject?.name)}
             <KeyboardArrowDown />
           </button>
           {projectsOpen && (
