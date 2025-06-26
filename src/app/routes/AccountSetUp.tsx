@@ -141,7 +141,8 @@ const SetupForm = () => {
 
   return (
     <>
-      <section className="form-container">
+    <div className="acct-setup-page">
+            <section className="form-container">
         <TapioLogoDesktop className="logo-setup" />
         <form className={`setup-form ${animateClass}`} onSubmit={onNext}>
           <p className="setup-step-count">
@@ -163,6 +164,8 @@ const SetupForm = () => {
           </div>
         </form>
       </section>
+    </div>
+
     </>
   );
 };

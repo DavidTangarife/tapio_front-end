@@ -25,6 +25,13 @@
   font-family: var(--font-stylised);
   text-align: center;
 }
+/* For unread section */
+.no-new-emails-msg {
+  font-size: var(--font-size-medium);
+  color: var(--color-font-offwhite);
+  margin-left: 20px;
+  margin-bottom: 40px;
+}
 .empty-inbox-msg {
   font-size: var(--font-size-title);
   color: var(--color-font-offwhite);
