@@ -15,47 +15,47 @@ const SetupForm = () => {
 
   const steps = isCreateProject
     ? [
-        <FormInput
-          label="Enter a Project Name"
-          type="text"
-          name="projectName"
-          value={formData.projectName}
-          onChange={updateFormData}
-          placeholder="E.g. My Job Hunt"
-        />,
-        <FormInput
-          label="When did you start your search?"
-          type="date"
-          name="searchDate"
-          value={formData.searchDate}
-          onChange={updateFormData}
-        />,
-      ]
+      <FormInput
+        label="Enter a Project Name"
+        type="text"
+        name="projectName"
+        value={formData.projectName}
+        onChange={updateFormData}
+        placeholder="E.g. My Job Hunt"
+      />,
+      <FormInput
+        label="When did you start your search?"
+        type="date"
+        name="searchDate"
+        value={formData.searchDate}
+        onChange={updateFormData}
+      />,
+    ]
     : [
-        <FormInput
-          label="What's your full name?"
-          type="text"
-          name="fullName"
-          value={formData.fullName}
-          onChange={updateFormData}
-        />,
+      <FormInput
+        label="What's your full name?"
+        type="text"
+        name="fullName"
+        value={formData.fullName}
+        onChange={updateFormData}
+      />,
 
-        <FormInput
-          label="Enter a Project Name"
-          type="text"
-          name="projectName"
-          value={formData.projectName}
-          onChange={updateFormData}
-          placeholder="E.g. My Job Hunt"
-        />,
-        <FormInput
-          label="When did you start your search?"
-          type="date"
-          name="searchDate"
-          value={formData.searchDate}
-          onChange={updateFormData}
-        />,
-      ];
+      <FormInput
+        label="Enter a Project Name"
+        type="text"
+        name="projectName"
+        value={formData.projectName}
+        onChange={updateFormData}
+        placeholder="E.g. My Job Hunt"
+      />,
+      <FormInput
+        label="When did you start your search?"
+        type="date"
+        name="searchDate"
+        value={formData.searchDate}
+        onChange={updateFormData}
+      />,
+    ];
 
   const {
     steps: formSteps,
@@ -72,7 +72,7 @@ const SetupForm = () => {
       // send project name and start date to create a new project for the user
       console.log("Sending data...");
       const time =
-        new Date(formData.searchDate).getTime() -
+        new Date(formData.searchDate).getTime() +
         new Date().getTimezoneOffset() * 60 * 1000;
       const payload1 = {
         name: formData.projectName,
