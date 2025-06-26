@@ -8,7 +8,7 @@ const AddToBoardModal = ({ closeModal }: AddToBoardModalProps) => {
   const modalInputRef = useRef<HTMLFormElement | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [statuses, setStatuses] = useState([]);
-  const { projectId, emailId } = useParams();
+  const { emailId } = useParams();
   const navigate = useNavigate();
 
 

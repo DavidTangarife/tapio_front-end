@@ -11,51 +11,51 @@ const SetupForm = () => {
   const location = useLocation();
   const isCreateProject = location.state?.mode === "createProject";
   const { formData, updateFormData } = useFormData();
-  const [animateClass, setAnimateClass]= useState("");
+  const [animateClass, setAnimateClass] = useState("");
 
   const steps = isCreateProject
     ? [
-      <FormInput
-        label="Enter a Project Name"
-        type="text"
-        name="projectName"
-        value={formData.projectName}
-        onChange={updateFormData}
-        placeholder="E.g. My Job Hunt"
-      />,
-      <FormInput
-        label="When did you start your search?"
-        type="date"
-        name="searchDate"
-        value={formData.searchDate}
-        onChange={updateFormData}
-      />,
-    ]
+        <FormInput
+          label="Enter a Project Name"
+          type="text"
+          name="projectName"
+          value={formData.projectName}
+          onChange={updateFormData}
+          placeholder="E.g. My Job Hunt"
+        />,
+        <FormInput
+          label="When did you start your search?"
+          type="date"
+          name="searchDate"
+          value={formData.searchDate}
+          onChange={updateFormData}
+        />,
+      ]
     : [
-      <FormInput
-        label="What's your full name?"
-        type="text"
-        name="fullName"
-        value={formData.fullName}
-        onChange={updateFormData}
-      />,
+        <FormInput
+          label="What's your full name?"
+          type="text"
+          name="fullName"
+          value={formData.fullName}
+          onChange={updateFormData}
+        />,
 
-      <FormInput
-        label="Enter a Project Name"
-        type="text"
-        name="projectName"
-        value={formData.projectName}
-        onChange={updateFormData}
-        placeholder="E.g. My Job Hunt"
-      />,
-      <FormInput
-        label="When did you start your search?"
-        type="date"
-        name="searchDate"
-        value={formData.searchDate}
-        onChange={updateFormData}
-      />,
-    ];
+        <FormInput
+          label="Enter a Project Name"
+          type="text"
+          name="projectName"
+          value={formData.projectName}
+          onChange={updateFormData}
+          placeholder="E.g. My Job Hunt"
+        />,
+        <FormInput
+          label="When did you start your search?"
+          type="date"
+          name="searchDate"
+          value={formData.searchDate}
+          onChange={updateFormData}
+        />,
+      ];
 
   const {
     steps: formSteps,
@@ -71,7 +71,9 @@ const SetupForm = () => {
     try {
       // send project name and start date to create a new project for the user
       console.log("Sending data...");
-      const time = (new Date(formData.searchDate).getTime() - ((new Date().getTimezoneOffset()) * 60 * 1000))
+      const time =
+        new Date(formData.searchDate).getTime() -
+        new Date().getTimezoneOffset() * 60 * 1000;
       const payload1 = {
         name: formData.projectName,
         startDate: new Date(time).toISOString(),
@@ -107,10 +109,7 @@ const SetupForm = () => {
           throw new Error("Failed to submit user data");
         }
       }
-      const data = await res1.json();
-      const projectId = data._id;
-      console.log("Data successfully submitted");
-      navigate('/projects/${projectId}/connect');
+      navigate("/home");
     } catch (err) {
       console.error("Error submitting data:", err);
     }
@@ -119,7 +118,7 @@ const SetupForm = () => {
   const onNext = async (e: FormEvent) => {
     e.preventDefault();
     if (!isLastStep) {
-      next();        
+      next();
       setAnimateClass("animate");
       // remove class after animation complete
       setTimeout(() => {
@@ -144,7 +143,7 @@ const SetupForm = () => {
     <>
       <section className="form-container">
         <TapioLogoDesktop className="logo-setup" />
-        <form className={`setup-form ${animateClass}`}onSubmit={onNext}>
+        <form className={`setup-form ${animateClass}`} onSubmit={onNext}>
           <p className="setup-step-count">
             {currentStep + 1} / {formSteps.length}
           </p>
