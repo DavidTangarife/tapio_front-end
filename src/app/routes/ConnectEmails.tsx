@@ -142,11 +142,7 @@ const ConnectEmails = () => {
                 <Loader className="spin-loader" />
               </>
             ) : (
-<<<<<<< HEAD
               <Inbox emails={emails} onTapUpdate={handleTapUpdate} onRefreshInbox={handleRefreshInbox}/>
-=======
-              <Inbox emails={emails} onTapUpdate={handleTapUpdate} />
->>>>>>> main
             )}
           </>
         )}
