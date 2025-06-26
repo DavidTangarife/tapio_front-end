@@ -14,7 +14,7 @@ import {
 const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [projectsOpen, setProjectOpen] = useState(false);
-  const [projectToDelete, setProjectToDelete] = useState<Project|null>(null);
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   // const [fullName, setFullName] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
@@ -131,13 +131,16 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
       if (!res.ok) {
         throw new Error("Failed to delete project");
       }
+      // Change the current project in the menu after deleting one. 
       const currentIndex = projects.findIndex(p => p._id === currentProject?._id);
       const nextIndex = (currentIndex + 1) % projects.length;
       const nextProject = projects[nextIndex]
+      // Remove the deleted project from the state
       setProjects(prevProjects => prevProjects.filter(p => p._id !== projectToDelete?._id));
       setOpenDeleteModal(false);
       setProjectToDelete(null);
-      swapProject(nextProject._id)
+      //switch to the next available project.
+      swapProject(nextProject._id);
     } catch (err) {
       console.error("Failed to delete project.")
     }

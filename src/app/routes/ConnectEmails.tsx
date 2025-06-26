@@ -12,8 +12,12 @@ const ConnectEmails = () => {
   const [loading, setLoading] = useState(false);
   const [emails, setEmails] = useState<Email[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0); // used to re-fetch emails when project changes
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
+/**
+ * function to fetch new emails from Gmail and show new emails in database
+ * It triggers when user clicks Refresh Inbox button
+ */
   const handleRefreshInbox = async () => {
   try {
     const res = await fetch("http://localhost:3000/api/direct-emails", {
@@ -22,7 +26,6 @@ const ConnectEmails = () => {
     });
 
     if (!res.ok) throw new Error("Failed to refresh inbox");
-    console.log("📬 Refreshed inbox from server");
 
     // Fetch updated inbox from DB
     const getRes = await fetch("http://localhost:3000/api/getemails", {

@@ -76,7 +76,7 @@ const SetupForm = () => {
         new Date().getTimezoneOffset() * 60 * 1000;
       const payload1 = {
         name: formData.projectName,
-        startDate: new Date(formData.searchDate).toISOString(), //"2025-10-05T14:48:00.000Z"
+        startDate: new Date(time).toISOString(), //"2025-10-05T14:48:00.000Z"
       };
 
       const res1 = await fetch("http://localhost:3000/api/projects", {
