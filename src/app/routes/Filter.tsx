@@ -35,7 +35,6 @@ const Filter = () => {
       }).catch((err) => console.error("Failed to update lastLogin:", err));
     }
   }, [projectId]);
-  if (!emails.length) return <p>No emails found</p>;
 
   //To toggle tap in tap out state for allowed and blocked senders
   const handleToggle = (SenderId: number) =>
@@ -97,57 +96,58 @@ const Filter = () => {
         <section className="filter-container">
           <div className="filter-btn-save-container">
             <div className="filter-btn-container">
-            <button
-              className={`filter-btn all ${filteredSenders === "all" ? "active" : ""}`}
-              onClick={() => setFilteredSenders("all")} >All</button>
-            <button
-              onClick={() => setFilteredSenders("allowed")}
-              className={`filter-btn allowed ${filteredSenders === "allowed" ? "filter-btn-allowed active" : "filter-btn-allowed"}`}><ThumbUpOutlined /></button>
-            <button
-              className={`filter-btn blocked ${filteredSenders === "blocked" ? "active" : ""}`}
-              onClick={() => setFilteredSenders("blocked")}><ThumbDownOutlined /></button>
-          </div>
-          <div className="filters-btn-msg-container">
-          {showSavedMessage && <p className="confirm-filters-saved-msg">Saved</p>}
-            <Button
-              buttonText="Save Filters"
-              onClick={handleSaveFilters}
-              className="save-filters-btn" />
-              </div>
+              <button
+                className={`filter-btn all ${filteredSenders === "all" ? "active" : ""}`}
+                onClick={() => setFilteredSenders("all")} >All</button>
+              <button
+                onClick={() => setFilteredSenders("allowed")}
+                className={`filter-btn allowed ${filteredSenders === "allowed" ? "filter-btn-allowed active" : "filter-btn-allowed"}`}><ThumbUpOutlined /></button>
+              <button
+                className={`filter-btn blocked ${filteredSenders === "blocked" ? "active" : ""}`}
+                onClick={() => setFilteredSenders("blocked")}><ThumbDownOutlined /></button>
+            </div>
+            <div className="filters-btn-msg-container">
+              {showSavedMessage && <p className="confirm-filters-saved-msg">Saved</p>}
+              <Button
+                buttonText="Save Filters"
+                onClick={handleSaveFilters}
+                className="save-filters-btn" />
+            </div>
           </div>
           <h3 className="filter-date-title">{today}</h3>
-          <div className="sender-container">
-            <ul className="sender-list">
-              {getFilteredSenders().map((sender) => (
-                <li className="sender-list-item">
-                  <div>
-                    <div className="sender-subject-flex">
-                      <h4 className="filter-sender-name">{sender.from}</h4>
-                      <p className="filter-sender-subject">{sender.subject}</p>
-                    </div>
+          {!emails.length ? (<p>No emails found</p>) : (
+            <div className="sender-container">
+              <ul className="sender-list">
+                {getFilteredSenders().map((sender) => (
+                  <li className="sender-list-item">
+                    <div>
+                      <div className="sender-subject-flex">
+                        <h4 className="filter-sender-name">{sender.from}</h4>
+                        <p className="filter-sender-subject">{sender.subject}</p>
+                      </div>
 
-                  </div>
-                  <div className="filter-status-date-container">
-                    <p
-                      className="filter-email-date">{new Date(sender.date).toLocaleDateString('en-GB', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                      })}
-                    </p>
-                    <button
-                      onClick={() => handleToggle(sender._id)}
-                      className={`allowed-vs-blocked ${!sender.isBlocked ? "set-allowed" : "set-blocked"}`}>
-                      {!sender.isBlocked ? <ThumbUpOutlined /> : <ThumbDownOutlined />}
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-            {/* TODO: need CSS */}
-          </div>
+                    </div>
+                    <div className="filter-status-date-container">
+                      <p
+                        className="filter-email-date">{new Date(sender.date).toLocaleDateString('en-GB', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit'
+                        })}
+                      </p>
+                      <button
+                        onClick={() => handleToggle(sender._id)}
+                        className={`allowed-vs-blocked ${!sender.isBlocked ? "set-allowed" : "set-blocked"}`}>
+                        {!sender.isBlocked ? <ThumbUpOutlined /> : <ThumbDownOutlined />}
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+              {/* TODO: need CSS */}
+            </div>)}
         </section>
-      
+
 
       </main>
     </>
