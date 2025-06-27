@@ -45,6 +45,7 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) =>
         )}
 
         <h3 className="email-section-title">UNREAD</h3>
+        {unreadEmails.length > 0 ?
         <div className="email-list">
           {unreadEmails.map((email) => (
             <EmailItem
@@ -60,8 +61,8 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) =>
               onTapUpdate={onTapUpdate}
             />
           ))}
-        </div>
-
+        </div> : <p className="no-new-emails-msg">No new emails</p>
+}
         {readEmails.length > 0 && (
           <>
             <h3 className="email-section-title">READ</h3>

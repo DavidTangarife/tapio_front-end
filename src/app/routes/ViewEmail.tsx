@@ -100,7 +100,7 @@ const ViewEmail = () => {
             Back
           </Link>
           <TapioLogoDesktop className="logo" />
-          <Button className="user-btn" buttonText="MJ" />
+          <div></div>
         </section>
         <section className="email-view-container">
           <div className="email-view-sender-details">
