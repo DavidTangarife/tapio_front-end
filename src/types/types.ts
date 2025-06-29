@@ -48,6 +48,8 @@ export interface Email {
   body: string;
   isRead: boolean;
   isTapped: boolean;
+  isProcessed: boolean;
+  isApproved: boolean;
   date: Date;
 }
 

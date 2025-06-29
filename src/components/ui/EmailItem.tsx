@@ -16,7 +16,6 @@ interface EmailItemProps {
 }
 const EmailItem = (props: EmailItemProps) => {
   const [tapped, setTapped] = useState(props.isTapped);
-  const { projectId } = useParams();
   const navigate = useNavigate()
   const emailId = props._id;
 

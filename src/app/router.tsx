@@ -30,6 +30,18 @@ const router = createBrowserRouter([
     path: "/filter",
     Component: Filter,
     loader: async () => {
+      const res = await fetch("http://localhost:3000/api/direct-emails", {
+            method: "POST",
+            credentials: "include",
+          });
+      
+          if (!res.ok) throw new Error("Failed to refresh inbox");
+      
+          // Fetch updated inbox from DB
+          // const getRes = await fetch("http://localhost:3000/api/getemails", {
+          //   credentials: "include",
+          // });
+          // const data = await getRes.json();
       const response = await fetch(
         `http://localhost:3000/api/projects/filter-emails`,
         {

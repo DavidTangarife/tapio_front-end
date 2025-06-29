@@ -10,7 +10,7 @@ type SenderData = {
   from: string;
   date: Date;
   subject: string;
-  isBlocked: boolean;
+  isApproved: boolean;
 }
 
 const Filter = () => {
@@ -18,30 +18,17 @@ const Filter = () => {
   // Return an array of emails  
   const emails: SenderData[] = useLoaderData() ?? [];
 
-  // Grab projectId from URL params
-  const { projectId } = useParams();
-
   // State to store emails
   const [senderState, setSenderState] = useState(emails);
   const [filteredSenders, setFilteredSenders] = useState<"all" | "allowed" | "blocked">("all")
   const [showSavedMessage, setshowSavedMessage] = useState(false);
-
-  // Fetch emails from backend
-  useEffect(() => {
-    if (projectId) {
-      fetch(`http://localhost:3000/api/projects/${projectId}/last-login`, {
-        method: "PATCH",
-        credentials: "include",
-      }).catch((err) => console.error("Failed to update lastLogin:", err));
-    }
-  }, [projectId]);
-  if (!emails.length) return <p>No emails found</p>;
+  
 
   //To toggle tap in tap out state for allowed and blocked senders
   const handleToggle = (SenderId: number) =>
     setSenderState(senderState.map(sender => {
       if (sender._id === SenderId) {
-        return { ...sender, isBlocked: !sender.isBlocked }
+        return { ...sender, isApproved: !sender.isApproved }
       } else {
         return sender;
       }
@@ -51,10 +38,10 @@ const Filter = () => {
   //Filter senders by allowed and blocked
   const getFilteredSenders = () => {
     if (filteredSenders === "allowed") {
-      return senderState.filter(sender => !sender.isBlocked)
+      return senderState.filter(sender => sender.isApproved)
     }
     if (filteredSenders === "blocked") {
-      return senderState.filter(sender => sender.isBlocked)
+      return senderState.filter(sender => !sender.isApproved)
     }
     return senderState;
   }
@@ -66,7 +53,7 @@ const Filter = () => {
 
   const handleSaveFilters = async () => {
     const allowedSenders = senderState
-      .filter(sender => !sender.isBlocked)
+      .filter(sender => !sender.isApproved)
       .map(sender => extractEmailAddress(sender.from));
 
     try {
@@ -78,6 +65,7 @@ const Filter = () => {
         },
         body: JSON.stringify({ filters: allowedSenders })
       });
+      console.log(allowedSenders)
       if (!res.ok) throw new Error("Failed to save filters");
       setshowSavedMessage(true);
       setTimeout(() => {
@@ -89,6 +77,7 @@ const Filter = () => {
     }
   };
   const today = (new Date).toLocaleDateString('en-GB')
+  if (!emails.length) return <p>No emails found</p>;
 
   return (
     <>
@@ -137,8 +126,8 @@ const Filter = () => {
                     </p>
                     <button
                       onClick={() => handleToggle(sender._id)}
-                      className={`allowed-vs-blocked ${!sender.isBlocked ? "set-allowed" : "set-blocked"}`}>
-                      {!sender.isBlocked ? <ThumbUpOutlined /> : <ThumbDownOutlined />}
+                      className={`allowed-vs-blocked ${sender.isApproved ? "set-allowed" : "set-blocked"}`}>
+                      {sender.isApproved ? <ThumbUpOutlined /> : <ThumbDownOutlined />}
                     </button>
                   </div>
                 </li>
