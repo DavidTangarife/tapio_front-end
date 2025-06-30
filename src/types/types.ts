@@ -6,7 +6,14 @@ export type Opportunity = {
     logoUrl: string;
     brandColor: string;
   };
-  status_Id: string;
+  description: {
+    location: string;
+    type: string;
+    salary: string;
+    posted: string;
+  };
+  snippets: string[];
+  statusId: string;
 };
 
 export type Board = {
@@ -37,6 +44,9 @@ export interface ViewEmailActionButtonProps {
 }
 
 export interface AddToBoardModalProps {
+  closeModal: () => void;
+}
+export interface linkToOppModalProps {
   closeModal: () => void;
 }
 

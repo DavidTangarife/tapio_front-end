@@ -1,18 +1,25 @@
 import { useLoaderData } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import type {
+  Board as Bt,
+  Opportunity,
+  Opportunity as Ot,
+} from "../../types/types";
 import "./Kanban.css";
 import Header from "../../components/ui/Header";
-import type { Board as Bt, Opportunity as Ot } from "../../types/types";
 import Board_Card from "../../components/ui/Board";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import Opportunity_PopUp from "../../components/ui/OppPopUp";
 
 export default function Kanban() {
-  const data = useLoaderData()
+  const data = useLoaderData();
   const [boards, setBoards] = useState<Bt[]>([]);
+  const [selectedOpportunity, setSelectedOpportunity] = useState<Ot | null>(
+    null
+  );
 
   useEffect(() => {
-    setBoards(data)
-
+    setBoards(data);
   }, [data]);
 
   function handleDragEnd(event: DragEndEvent) {
@@ -64,21 +71,94 @@ export default function Kanban() {
     });
   }
 
-  return (
-    <>
-      <div className="page">
-        <div className="header-wrapper">
-          <Header />
-        </div>
+  function editOpportunity(id: string, updatedData: Opportunity) {
+    fetch(`http://localhost:3000/api/opportunity/${id}/full`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedData),
+    })
+      .then((res) => res.json())
+      .then((updatedOpp) => {
+        setBoards((prevBoards) => {
+          // Remove opportunity from all boards first
+          const clearedBoards = prevBoards.map((board) => ({
+            ...board,
+            opportunities: board.opportunities.filter(
+              (opp) => opp._id !== updatedOpp._id
+            ),
+          }));
 
-        <div className="boardWrapper">
-          <DndContext onDragEnd={handleDragEnd}>
-            {boards.map((board) => {
-              return <Board_Card key={board._id} {...board} />;
-            })}
-          </DndContext>
-        </div>
+          // Then add the opportunity to the correct board
+          return clearedBoards.map((board) => {
+            if (board._id === updatedOpp.statusId) {
+              return {
+                ...board,
+                opportunities: [...board.opportunities, updatedOpp],
+              };
+            }
+            return board;
+          });
+        });
+        // After patching the changes we close the popup by deselecting the selectedopportunity
+        setSelectedOpportunity(null);
+      })
+      .catch((err) => {
+        console.error("Failed to update opportunity:", err);
+      });
+  }
+
+  function deleteOpportunity(id: string) {
+    fetch(`http://localhost:3000/api/opportunity/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to delete opportunity");
+        }
+        return "Opportunity Deleted / Feedback to the user";
+      })
+      .catch((err) => {
+        console.error("Error deleting opportunity:", err.message);
+      });
+  }
+
+  return (
+    <div className="page">
+      <div className="header-wrapper">
+        <Header />
       </div>
-    </>
+      <div className="boardWrapper">
+        <DndContext onDragEnd={handleDragEnd}>
+          {boards.map((board) => {
+            return (
+              <Board_Card
+                key={board._id}
+                {...board}
+                onOpportunityClick={(opportunity) =>
+                  setSelectedOpportunity(opportunity)
+                }
+              />
+            );
+          })}
+        </DndContext>
+      </div>
+      {selectedOpportunity && (
+        <Opportunity_PopUp
+          opportunity={selectedOpportunity}
+          boards={boards}
+          onClose={() => setSelectedOpportunity(null)}
+          onDelete={(id) => {
+            deleteOpportunity(id);
+            setSelectedOpportunity(null);
+          }}
+          onEdit={(id, newdata) => {
+            editOpportunity(id, newdata);
+          }}
+        />
+      )}
+    </div>
   );
 }
+
+
