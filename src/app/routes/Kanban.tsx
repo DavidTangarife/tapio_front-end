@@ -3,16 +3,18 @@ import { useEffect, useState } from "react";
 import "./Kanban.css";
 import Header from "../../components/ui/Header";
 import type { Board as Bt, Opportunity as Ot } from "../../types/types";
-import Board_Card from "../../components/ui/Board";
+import BoardCard from "../../components/ui/Board";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 
 export default function Kanban() {
   const data = useLoaderData()
   const [boards, setBoards] = useState<Bt[]>([]);
+  const [currentFocus, setCurrentFocus] = useState<HTMLInputElement | null>(null)
+
+
 
   useEffect(() => {
     setBoards(data)
-
   }, [data]);
 
   function handleDragEnd(event: DragEndEvent) {
@@ -74,7 +76,7 @@ export default function Kanban() {
         <div className="boardWrapper">
           <DndContext onDragEnd={handleDragEnd}>
             {boards.map((board) => {
-              return <Board_Card key={board._id} {...board} />;
+              return <BoardCard key={board._id} {...board} currentFocus={currentFocus} setCurrentFocus={setCurrentFocus} />;
             })}
           </DndContext>
         </div>

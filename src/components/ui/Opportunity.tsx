@@ -2,7 +2,7 @@ import "./Opportunity.css";
 import { Opportunity } from "../../types/types";
 import { useDraggable } from "@dnd-kit/core";
 
-export default function Opportunity_Card({ _id, title, company }: Opportunity) {
+export default function OpportunityCard({ _id, title, company }: Opportunity) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: _id,
   });
@@ -26,7 +26,7 @@ export default function Opportunity_Card({ _id, title, company }: Opportunity) {
       <div
         key={_id}
         className="opportunityInner"
-        // style={{ backgroundColor: color }}
+      // style={{ backgroundColor: color }}
       >
         <h2 className="companyText">{company.name}</h2>
         <h3 className="titleText">{title}</h3>

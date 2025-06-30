@@ -1,21 +1,30 @@
 import "./Board.css";
-import { Board as Bt } from "../../types/types";
-import Opportunity_Card from "./Opportunity";
+import OpportunityCard from "./Opportunity";
 import { useDroppable } from "@dnd-kit/core";
+import BoardHeading from "./BoardHeading";
 
-export default function Board_Card({ _id, title, opportunities }: Bt) {
+type BoardCardProps = {
+  _id: string
+  title: string
+  opportunities: unknown
+  currentFocus: HTMLInputElement | null
+  setCurrentFocus: (e: HTMLInputElement) => void
+}
+
+export default function BoardCard(props: BoardCardProps) {
+  const { _id, title, opportunities, currentFocus, setCurrentFocus } = props
   const { setNodeRef } = useDroppable({
-    id: _id,
+    id: props._id,
   });
 
   return (
     <div key={_id} className="boardContainer">
-      <h2 className="boardTitle">{title}</h2>
+      <BoardHeading title={title} setCurrentFocus={setCurrentFocus} currentFocus={currentFocus} columnId={_id} />
       <div ref={setNodeRef} className="opportunityList">
         {opportunities.map((opportunity) => (
-          <Opportunity_Card key={opportunity._id} {...opportunity} />
+          <OpportunityCard key={opportunity._id} {...opportunity} />
         ))}
       </div>
-    </div>
+    </div >
   );
 }
