@@ -26,15 +26,22 @@ const Filter = () => {
 
   // State to store emails
   const [emails, setEmails] = useState(initialEmails);
+  const [allEmails, setAllEmails] = useState(initialEmails);
+
   const [filteredSenders, setFilteredSenders] = useState<"new" | "allowed" | "blocked">("new")
  
  function extractEmailAddress(from: string): string {
     const match = from.match(/<(.+)>/);
     return match ? match[1] : from.trim();
   }
+
+  function getUnprocessedEmails(emails: SenderData[]) {
+  return emails.filter(email => !email.isProcessed);
+
+}
   useEffect(() => {
     if (filteredSenders === "new"){
-      setEmails(initialEmails);
+      setEmails(getUnprocessedEmails(allEmails));
       return;
     }
     const fetchByTab = async () => {
@@ -56,7 +63,7 @@ const Filter = () => {
     };
 
     fetchByTab();
-  }, [filteredSenders, initialEmails])
+  }, [filteredSenders, allEmails])
 
  // Toggle approval and update filters
   const handleToggle = async (emailId: string, isApproved: boolean) => {
@@ -96,13 +103,28 @@ const Filter = () => {
 
       console.log("Filter array updated successfully")
       
-      setEmails(prevEmails => 
-        prevEmails.map(email => 
-          email._id === emailId
-          ? { ...email, isApproved: isApproved, isProcessed: true }
-          : email
-      )
-    )
+    //   setEmails(prevEmails => 
+    //     prevEmails.map(email => 
+    //       extractEmailAddress(email.from) === sender
+    //       ? { ...email, isApproved: isApproved, isProcessed: true }
+    //       : email
+    //   )
+    // )
+    const updatedAllEmails = allEmails.map(email =>
+  extractEmailAddress(email.from) === sender
+    ? { ...email, isApproved, isProcessed: true }
+    : email
+);
+
+setAllEmails(updatedAllEmails);
+
+// Update visible emails if in "new" tab
+if (filteredSenders === "new") {
+  setEmails(getUnprocessedEmails(updatedAllEmails));
+} else {
+  // re-fetch allowed/blocked
+  setFilteredSenders(prev => (prev === "allowed" ? "allowed" : "blocked"));
+}
 
     } catch (err) {
       console.error("Error saving filters:", err);
