@@ -43,7 +43,7 @@ const router = createBrowserRouter([
           // });
           // const data = await getRes.json();
       const response = await fetch(
-        `http://localhost:3000/api/getemails`,
+        `http://localhost:3000/api/unprocessed-emails`,
         {
           credentials: "include",
         }

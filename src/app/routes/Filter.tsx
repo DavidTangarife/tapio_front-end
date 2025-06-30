@@ -19,9 +19,9 @@ type SenderData = {
 const Filter = () => {
 
   // Return an array of emails  
-  const emailData: EmailObject = useLoaderData() ?? {};
-  const initialEmails: SenderData[] = emailData.emails ?? []
-  console.log(initialEmails);
+  const initialEmails: SenderData[] = useLoaderData() ?? {};
+  
+  // console.log(initialEmails);
 
 
   // State to store emails
@@ -32,9 +32,33 @@ const Filter = () => {
     const match = from.match(/<(.+)>/);
     return match ? match[1] : from.trim();
   }
+  useEffect(() => {
+    if (filteredSenders === "new"){
+      setEmails(initialEmails);
+      return;
+    }
+    const fetchByTab = async () => {
+      let endpoint = "";
+      if (filteredSenders === "allowed") {
+        endpoint = "allowed-emails";
+      } else if (filteredSenders === "blocked") {
+        endpoint = "blocked-emails";
+      }
+      try {
+        const res = await fetch(`http://localhost:3000/api/${endpoint}`, {
+          credentials: "include",
+        });
+        const data = await res.json()
+        setEmails(data.emails ?? []);
+      } catch (err) {
+        console.error("Error fetching emails in tabs", err)
+      }
+    };
 
+    fetchByTab();
+  }, [filteredSenders, initialEmails])
 
-  //To toggle tap in tap out state for allowed and blocked senders
+ // Toggle approval and update filters
   const handleToggle = async (emailId: string, isApproved: boolean) => {
     try {
       console.log("Sending PATCH for emailId:", emailId, "isApproved:", isApproved);
@@ -52,10 +76,10 @@ const Filter = () => {
         throw new Error("Failed to update email properties");
       }
       
-      const allowedSenders = emails
-      .filter(sender => sender.isApproved)
-
-      .map(sender => extractEmailAddress(sender.from));
+      const emailObj = emails.find(email => email._id === emailId);
+      if (!emailObj) throw new Error("Email not found");
+      const sender = extractEmailAddress(emailObj.from);
+      console.log(sender)
 
       const filterRes = await fetch(`http://localhost:3000/api/projects/filters`, {
         method: "PATCH",
@@ -63,7 +87,7 @@ const Filter = () => {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ filters: allowedSenders })
+        body: JSON.stringify({ sender, action: isApproved ? "allow" : "block" })
       });
 
       if (!filterRes.ok)  {
@@ -73,10 +97,10 @@ const Filter = () => {
       console.log("Filter array updated successfully")
       
       setEmails(prevEmails => 
-      prevEmails.map(email => 
-        email._id === emailId
-        ? { ...email, isApproved: isApproved, isProcessed: true }
-        : email
+        prevEmails.map(email => 
+          email._id === emailId
+          ? { ...email, isApproved: isApproved, isProcessed: true }
+          : email
       )
     )
 
@@ -99,11 +123,8 @@ const Filter = () => {
     return emails.filter(email => !email.isProcessed);
   }
 
-
-
-
   const today = (new Date).toLocaleDateString('en-GB')
-  if (!emails.length) return <p>No emails found</p>;
+  
 
   return (
     <>
