@@ -43,7 +43,7 @@ const router = createBrowserRouter([
           // });
           // const data = await getRes.json();
       const response = await fetch(
-        `http://localhost:3000/api/projects/filter-emails`,
+        `http://localhost:3000/api/getemails`,
         {
           credentials: "include",
         }
@@ -65,6 +65,13 @@ const router = createBrowserRouter([
   },
   {
     path: "/inbox", Component: ConnectEmails,
+    loader: async () => {
+      const response = await fetch('http://localhost:3000/api/projects/emails', {
+        credentials: "include"
+      });
+      const data = await response.json();
+      return data;
+    },
   },
   {
     path: "/email/:emailId", Component: ViewEmail

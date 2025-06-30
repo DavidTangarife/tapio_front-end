@@ -36,19 +36,19 @@ main {
     cursor: pointer;
 }
 /* Filter buttons non-selected state */
-.filter-btn.all {
+.filter-btn.new {
     border: var(--border-orange);
 }
 .filter-btn.allowed {
-    border: var(--border-green-dark-mode)
+    border: var(--border-green-dark-mode);
 }
 .filter-btn.blocked {
     border: var(--border-red);
 }
 
 /* Filter buttons on. hover and selected state */
-.filter-btn.all:hover,
-.filter-btn.all.active {
+.filter-btn.new:hover,
+.filter-btn.new.active {
     background-color: var(--color-orange);
     color: var(--color-font-dark);
 }
@@ -63,43 +63,6 @@ main {
     color: var(--color-font-dark);
 }
 
-/* Save filters button & confirm msg */
-.filters-btn-msg-container {
-  position: relative;
-}
-.save-filters-btn {
-  padding: 10px 20px;
-  border-radius: var(--border-radius);
-  font-family: var(--font-stylised);
-  font-size: var(--font-size-medium);
-  color: var(--font-color-offwhite);
-  font-weight: var(--font-weight-bold);
-  background-color: var(--color-primary);
-  border: 1px solid var(--color-font-dark);
-  transition: background-color 0.3s ease-in-out;
-}
-.save-filters-btn:hover {
-  background-color: var(--color-font-offwhite);
-  color: var(--color-font-dark);
-  cursor: pointer;
-}
-.confirm-filters-saved-msg {
-    position: absolute;
-    top: -100%;
-    left: 18%;
-    opacity: 0.8;
-    font-family: var(--font-stylised);
-    font-size: var(--font-size-medium);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-font-primary);
-    width: 80px;
-    text-align: center;
-    background-color: #454545;
-    border-radius: var(--border-radius);
-    padding: 8px 16px;
-    z-index: 100;
-}
-
 .filter-date-title {
   margin-bottom: 10px;
   border-bottom: var(--border-grey-dark-mode);
@@ -111,6 +74,11 @@ main {
 .sender-container {
     width: 100%;
     margin: 0 auto;
+}
+.no-emails-msg {
+    font-size: var(--font-size-title);
+     color: var(--color-font-offwhite);
+     margin-left: 20px;
 }
 
 /* email li element */
@@ -168,17 +136,38 @@ main {
     border-radius: 50%;
     border: none;
 }
-.allowed-vs-blocked:hover {
-    background-color: #444444;
-    cursor: pointer;
-}
+
+/* Colour of thumbs up thumbs down */
 .set-allowed {
   color: var(--color-green-dark-mode);
 }
 .set-blocked {
   color: var(--color-red);
 }
-
+/* Thumbs up Thumbs down hover effects  */
+.set-allowed:hover {
+    background-color: var(--color-green-dark-mode);
+    color: var(--color-font-dark);
+    cursor: pointer;
+}
+.set-blocked:hover {
+    background-color: var(--color-red);
+    color: var(--color-font-dark);
+    cursor: pointer;
+}
+/* Set 'active' fill color of button when allocated to allowed or blocked list*/
+.allowed-active {
+    background-color: var(--color-green-dark-mode);
+    color: var(--color-font-dark);
+}
+.blocked-active {
+    background-color: var(--color-red);
+    color: var(--color-font-dark);
+}
+/* remove hover effect when on active list */
+.allowed-active:hover, .blocked-active:hover {
+    cursor: default;
+}
 
 /* Mobile styling */
 @media (max-width: 500px) {
