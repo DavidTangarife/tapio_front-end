@@ -15,7 +15,8 @@
 
 .opportunityList {
   display: flex;
-  flex: 1;
   flex-direction: column;
   gap: 1rem;
+  /* max-height: 80vh;
+  overflow-y: auto; */
 }
