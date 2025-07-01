@@ -213,8 +213,6 @@ const Filter = () => {
         )}
       </main>
     </>
-
-
   )
 }
 export default Filter;

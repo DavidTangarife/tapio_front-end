@@ -2,10 +2,10 @@ import Header from "../../components/ui/Header";
 import Welcome from "../../components/ui/Welcome";
 import "./ConnectEmails.css";
 import { useNavigate } from "react-router-dom";
-import Loader from "../../assets/Spinner.svg?react";
 import Inbox from "./Inbox";
 import { Email } from "../../types/types"
 import { useEffect, useState } from "react";
+import Spinner from "../../components/ui/Spinner";
 
 const ConnectEmails = () => {
   const [showEmailSection, setShowEmailSection] = useState(false);
@@ -140,10 +140,7 @@ const ConnectEmails = () => {
         ) : (
           <>
             {loading ? (
-              <>
-                <h2 className="loader-title">Loading emails</h2>
-                <Loader className="spin-loader" />
-              </>
+              <Spinner />
             ) : (
               <Inbox emails={emails} onTapUpdate={handleTapUpdate} onRefreshInbox={handleRefreshInbox}/>
             )}
