@@ -174,9 +174,8 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
               <h3 className="my-projects-title">Projects</h3>
               {projects.map((pro) => {
                 return (
-                  <div className="project-btn-delete-container">
+                  <div key={pro._id} className="project-btn-delete-container">
                     <button
-                      key={pro._id}
                       onClick={() => swapProject(pro._id)}
                       className="project-btns"
                     >

@@ -4,6 +4,7 @@ import "./ViewEmail.css";
 import Button from "../../components/ui/Button";
 import ViewEmailActionButton from "../../components/ui/ViewEmailActionButton";
 import AddToBoardModal from "../../components/ui/AddToBoardModal";
+import LinkToOppModal from "../../components/ui/LinkToOpportunityModal";
 import {
   ViewKanbanOutlined,
   TouchAppOutlined,
@@ -16,10 +17,12 @@ interface EmailDetails {
   subject?: string;
   from?: string;
   isTapped?: boolean;
+  projectId?: string;
 }
 
 const ViewEmail = () => {
-  const [openModal, setOpenModal] = useState(false);
+  const [openModalCreate, setOpenModalCreate] = useState(false);
+  const [openModalAdd, setOpenModalAdd] = useState(false);
   const { emailId } = useParams();
   const [emailDetails, setEmailDetails] = useState<EmailDetails | null>(null);
   const [emailBodyHtml, setEmailBodyHtml] = useState<string>("");
@@ -146,10 +149,24 @@ const ViewEmail = () => {
                 icon={ViewKanbanOutlined}
                 text="Add to Board"
                 value={modalData}
-                onClick={() => setOpenModal(true)}
+                onClick={() => setOpenModalCreate(true)}
               />
-              {openModal && (
-                <AddToBoardModal closeModal={() => setOpenModal(false)} />
+              {openModalCreate && (
+                <AddToBoardModal closeModal={() => setOpenModalCreate(false)} />
+              )}
+            </div>
+            <div className="add-to-board-container">
+              <ViewEmailActionButton
+                icon={ViewKanbanOutlined}
+                text="LinkOpp"
+                value={modalData}
+                onClick={() => setOpenModalAdd(true)}
+              />
+              {openModalAdd && (
+                <LinkToOppModal
+                  closeModal={() => setOpenModalAdd(false)}
+                  projectId={emailDetails?.projectId}
+                />
               )}
             </div>
             <ViewEmailActionButton
