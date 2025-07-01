@@ -212,13 +212,3 @@ main {
     border-radius: var(--border-radius);
     animation: fadeInOut 4s ease-in-out forwards;
 }
-
-.spin-loader {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto;
-}
-.loader-title {
-  font-family: var(--font-stylised);
-  text-align: center;
-}

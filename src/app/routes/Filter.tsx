@@ -4,17 +4,18 @@ import Header from "../../components/ui/Header";
 import "./Filter.css";
 import { ThumbUpOutlined, ThumbDownOutlined } from '@mui/icons-material';
 import { SenderData } from "../../types/types";
+import Spinner from "../../components/ui/Spinner";
 
 
 const Filter = () => {
 
   // Return an array of emails  
-  const initialEmails: SenderData[] = useLoaderData() ?? {};
+  const initialEmails = useLoaderData() as SenderData[];
   // Show message states
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [statusType, setStatusType] = useState<"allowed" | "blocked" | null>(null);
   // State to store emails
-  const [emails, setEmails] = useState(initialEmails);
+  const [emails, setEmails] = useState<SenderData[] | null>(null);
   const [allEmails, setAllEmails] = useState(initialEmails);
   const [filteredSenders, setFilteredSenders] = useState<"new" | "allowed" | "blocked">("new");
  
@@ -25,9 +26,12 @@ const Filter = () => {
   }
 
   function getUnprocessedEmails(emails: SenderData[]) {
-  return emails.filter(email => !email.isProcessed);
+    return emails.filter(email => !email.isProcessed);
+  }
+  useEffect(() => {
+    setEmails(initialEmails);
+  }, [initialEmails]);
 
-}
   useEffect(() => {
     if (filteredSenders === "new"){
       setEmails(getUnprocessedEmails(allEmails));
@@ -57,7 +61,7 @@ const Filter = () => {
  // Toggle approval and update filters
   const handleToggle = async (emailId: string, isApproved: boolean) => {
     try {
-      const emailObj = emails.find(email => email._id === emailId);
+      const emailObj = emails?.find(email => email._id === emailId);
       if (!emailObj) throw new Error("Email not found");
       const sender = extractEmailAddress(emailObj.from);
       console.log("sender",sender)
@@ -126,12 +130,12 @@ const Filter = () => {
   //Filter senders by allowed and blocked
   const getFilteredSenders = () => {
     if (filteredSenders === "allowed") {
-      return emails.filter(email => email.isProcessed && email.isApproved)
+      return emails?.filter(email => email.isProcessed && email.isApproved)
     }
     if (filteredSenders === "blocked") {
-      return emails.filter(email => email.isProcessed && !email.isApproved)
+      return emails?.filter(email => email.isProcessed && !email.isApproved)
     }
-    return emails.filter(email => !email.isProcessed);
+    return emails?.filter(email => !email.isProcessed);
   }
 
   const today = (new Date).toLocaleDateString('en-GB')
@@ -141,8 +145,12 @@ const Filter = () => {
     <>
       <main>
         <Header />
+        {!emails ? (
+          <Spinner />
+        ) : ( 
+        <>
         {statusMessage && 
-        <div className={`status-banner ${statusType}`}>
+          <div className={`status-banner ${statusType}`}>
           {statusMessage}
         </div>}
         <section className="filter-container">
@@ -158,14 +166,14 @@ const Filter = () => {
               className={`filter-btn blocked ${filteredSenders === "blocked" ? "active" : ""}`}
               onClick={() => setFilteredSenders("blocked")}><ThumbDownOutlined /></button>
           </div>
-        </div>
+          </div>
           <h3 className="filter-date-title">{today}</h3>
           <div className="sender-container">
-            {getFilteredSenders().length === 0 && filteredSenders === "new" ? (
+            {getFilteredSenders()?.length === 0 && filteredSenders === "new" ? (
               <p className="no-emails-msg">No new emails to filter</p>
             ) : (
               <ul className="sender-list">
-              {getFilteredSenders().map((email) => (
+              {getFilteredSenders()?.map((email) => (
                 <li className="sender-list-item"
                     key={email._id}>
                   <div>
@@ -201,8 +209,8 @@ const Filter = () => {
             )}
           </div>
         </section>
-      
-
+        </>
+        )}
       </main>
     </>
 

@@ -4,7 +4,11 @@ import SetupForm from "./routes/AccountSetUp";
 import ConnectEmails from "./routes/ConnectEmails";
 import Kanban from "./routes/Kanban";
 import ViewEmail from "./routes/ViewEmail";
-import Filter from "./routes/Filter";
+// import Filter from "./routes/Filter";
+import { lazy, Suspense } from "react";
+import Spinner from "../components/ui/Spinner";
+
+const Filter = lazy(() => import("./routes/Filter"));
 
 const router = createBrowserRouter([
   {
@@ -28,7 +32,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/filter",
-    Component: Filter,
+    element: (
+      <Suspense fallback={<Spinner />}>
+        <Filter />
+      </Suspense>
+    ),
     loader: async () => {
       const res = await fetch("http://localhost:3000/api/direct-emails", {
             method: "POST",
@@ -36,12 +44,6 @@ const router = createBrowserRouter([
           });
       
           if (!res.ok) throw new Error("Failed to refresh inbox");
-      
-          // Fetch updated inbox from DB
-          // const getRes = await fetch("http://localhost:3000/api/getemails", {
-          //   credentials: "include",
-          // });
-          // const data = await getRes.json();
       const response = await fetch(
         `http://localhost:3000/api/unprocessed-emails`,
         {
@@ -49,7 +51,7 @@ const router = createBrowserRouter([
         }
       );
       const data = await response.json();
-      return data ?? [];
+      return data;
     },
   },
   {
