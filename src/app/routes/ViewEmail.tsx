@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./ViewEmail.css";
-import Button from "../../components/ui/Button";
 import ViewEmailActionButton from "../../components/ui/ViewEmailActionButton";
 import AddToBoardModal from "../../components/ui/AddToBoardModal";
 import LinkToOppModal from "../../components/ui/LinkToOpportunityModal";
@@ -95,6 +94,28 @@ const ViewEmail = () => {
       }, 1000);
     }
   };
+
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    const updateHeight = () => {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (iframeDoc && iframeDoc.body) {
+        iframe.style.height = iframeDoc.body.scrollHeight + "px";
+      }
+    };
+
+    // Wait for iframe content to load
+    const onLoad = () => {
+      updateHeight()
+    };
+
+    iframe.addEventListener("load", onLoad);
+    return () => iframe.removeEventListener("load", onLoad);
+  }, [emailBodyHtml]);
   return (
     <>
       <main>
@@ -112,8 +133,10 @@ const ViewEmail = () => {
           </div>
           <section className="email-view-body">
             <iframe
+            ref={iframeRef}
+            className="iframe"
               title="email-content"
-              style={{ width: "100%", height: "600px", border: "none" }}
+              style={{ width: "100%", minHeight: "500px", border: "none", overflow: "hidden"  }}
               srcDoc={emailBodyHtml}
             />
           </section>
