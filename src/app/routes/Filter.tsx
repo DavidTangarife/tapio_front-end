@@ -3,36 +3,25 @@ import { useLoaderData } from "react-router-dom";
 import Header from "../../components/ui/Header";
 import "./Filter.css";
 import { ThumbUpOutlined, ThumbDownOutlined } from '@mui/icons-material';
+import { SenderData } from "../../types/types";
 
-type EmailObject = {
-  emails: SenderData[];
-}
-type SenderData = {
-  _id: string;
-  from: string;
-  date: Date;
-  subject: string;
-  isApproved?: boolean;
-  isProcessed?: boolean;
-}
 
 const Filter = () => {
 
   // Return an array of emails  
   const initialEmails: SenderData[] = useLoaderData() ?? {};
-  
-  // console.log(initialEmails);
-
-
+  // Show message states
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [statusType, setStatusType] = useState<"allowed" | "blocked" | null>(null);
   // State to store emails
   const [emails, setEmails] = useState(initialEmails);
   const [allEmails, setAllEmails] = useState(initialEmails);
-
-  const [filteredSenders, setFilteredSenders] = useState<"new" | "allowed" | "blocked">("new")
+  const [filteredSenders, setFilteredSenders] = useState<"new" | "allowed" | "blocked">("new");
  
  function extractEmailAddress(from: string): string {
+    if (!from) return "";
     const match = from.match(/<(.+)>/);
-    return match ? match[1] : from.trim();
+    return (match ? match[1] : from).trim().toLowerCase();
   }
 
   function getUnprocessedEmails(emails: SenderData[]) {
@@ -68,6 +57,14 @@ const Filter = () => {
  // Toggle approval and update filters
   const handleToggle = async (emailId: string, isApproved: boolean) => {
     try {
+      const emailObj = emails.find(email => email._id === emailId);
+      if (!emailObj) throw new Error("Email not found");
+      const sender = extractEmailAddress(emailObj.from);
+      console.log("sender",sender)
+      const affectedEmails = allEmails.filter(
+        email => extractEmailAddress(email.from) === sender
+      );
+      const updatedCount = affectedEmails.length;
       console.log("Sending PATCH for emailId:", emailId, "isApproved:", isApproved);
       const res = await fetch(`http://localhost:3000/api/emails/${emailId}/process`, {
         method: "PATCH",
@@ -83,10 +80,7 @@ const Filter = () => {
         throw new Error("Failed to update email properties");
       }
       
-      const emailObj = emails.find(email => email._id === emailId);
-      if (!emailObj) throw new Error("Email not found");
-      const sender = extractEmailAddress(emailObj.from);
-      console.log(sender)
+      
 
       const filterRes = await fetch(`http://localhost:3000/api/projects/filters`, {
         method: "PATCH",
@@ -101,38 +95,33 @@ const Filter = () => {
         throw new Error("Failed to save filters");
       }
 
-      console.log("Filter array updated successfully")
       
-    //   setEmails(prevEmails => 
-    //     prevEmails.map(email => 
-    //       extractEmailAddress(email.from) === sender
-    //       ? { ...email, isApproved: isApproved, isProcessed: true }
-    //       : email
-    //   )
-    // )
-    const updatedAllEmails = allEmails.map(email =>
-  extractEmailAddress(email.from) === sender
-    ? { ...email, isApproved, isProcessed: true }
-    : email
-);
+      const updatedAllEmails = allEmails.map(email =>
+        extractEmailAddress(email.from) === sender
+          ? { ...email, isApproved, isProcessed: true }
+          : email
+      );
+      setAllEmails(updatedAllEmails);
 
-setAllEmails(updatedAllEmails);
-
-// Update visible emails if in "new" tab
-if (filteredSenders === "new") {
-  setEmails(getUnprocessedEmails(updatedAllEmails));
-} else {
-  // re-fetch allowed/blocked
-  setFilteredSenders(prev => (prev === "allowed" ? "allowed" : "blocked"));
-}
-
+      // Update visible emails if in "new" tab
+      if (filteredSenders === "new") {
+        setEmails(getUnprocessedEmails(updatedAllEmails));
+      } else {
+        // re-fetch allowed/blocked
+        setFilteredSenders(prev => (prev === "allowed" ? "allowed" : "blocked"));
+      }
+      console.log(updatedCount)
+      setStatusMessage(`${updatedCount} email${updatedCount > 1 ? "s": ""} from ${sender} ${isApproved? "allowed" :  "blocked"}.`)
+      setStatusType(isApproved ? "allowed" : "blocked")
+      setTimeout(() => {
+        setStatusMessage(null);
+        setStatusType(null);
+    }, 2000); 
+      
     } catch (err) {
       console.error("Error saving filters:", err);
     }
   };
-
-    
-     
  
   //Filter senders by allowed and blocked
   const getFilteredSenders = () => {
@@ -152,6 +141,10 @@ if (filteredSenders === "new") {
     <>
       <main>
         <Header />
+        {statusMessage && 
+        <div className={`status-banner ${statusType}`}>
+          {statusMessage}
+        </div>}
         <section className="filter-container">
           <div className="filter-btn-save-container">
             <div className="filter-btn-container">

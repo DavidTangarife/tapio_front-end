@@ -15,7 +15,6 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [projectsOpen, setProjectOpen] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
-  // const [fullName, setFullName] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -24,20 +23,6 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // const fetchUser = async () => {
-    //   try {
-    //     const res = await fetch("http://localhost:3000/api/full-name", {
-    //       credentials: "include",
-    //     });
-    //     const userData = await res.json();
-    //     if (res.ok && userData.fullName) {
-    //       setFullName(userData.fullName);
-    //     }
-    //   } catch (err) {
-    //     console.error("Failed to fetch user", err);
-    //   }
-    // };
-
     const fetchProjects = async () => {
       try {
         const res = await fetch("http://localhost:3000/api/user-projects", {
@@ -66,7 +51,6 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
       }
       setLoadingProject(false);
     };
-    // fetchUser();
     fetchProjects();
   }, []);
 

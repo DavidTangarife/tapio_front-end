@@ -58,3 +58,12 @@ export interface InboxProps {
   onTapUpdate: (emailId: string, newTapped: boolean) => void;
   onRefreshInbox: () => void;
 }
+
+export type SenderData = {
+  _id: string;
+  from: string;
+  date: Date;
+  subject: string;
+  isApproved?: boolean;
+  isProcessed?: boolean;
+}
