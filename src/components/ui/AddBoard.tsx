@@ -6,11 +6,11 @@ type AddBoardProps = {
   currentFocus: HTMLInputElement | null;
   setCurrentFocus: (e: HTMLInputElement) => void;
   setBoards: (e) => void;
-  data: unknown[]
+  boards: unknown[]
 }
 
 const AddBoard = (props: AddBoardProps) => {
-  const { currentFocus, setCurrentFocus, setBoards, data } = props
+  const { currentFocus, setCurrentFocus, setBoards, boards } = props
   const [creatingNew, setCreatingNew] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -39,7 +39,7 @@ const AddBoard = (props: AddBoardProps) => {
         const result = await response.json()
         const newStatus = result.status
         setCreatingNew(false)
-        setBoards([...data, { ...newStatus, opportunities: [] }])
+        setBoards([...boards, { ...newStatus, opportunities: [] }])
       } else {
         throw new Error('Unable to create New Stage')
       }
