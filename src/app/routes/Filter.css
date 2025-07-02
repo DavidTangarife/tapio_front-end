@@ -200,3 +200,15 @@ main {
         height: 30px;
     }
 }
+
+.status-banner {
+    background-color: var(--color-primary);
+    color: var(--color-font-offwhite);
+    font-family: var(--font-bodycopy);
+    font-size: var(--font-size-regular);
+    padding: 10px 20px;
+    margin: 16px 0;
+    border-left: 6px solid var(--color-green-dark-mode);
+    border-radius: var(--border-radius);
+    animation: fadeInOut 4s ease-in-out forwards;
+}

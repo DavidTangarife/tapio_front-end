@@ -15,7 +15,6 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [projectsOpen, setProjectOpen] = useState(false);
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
-  // const [fullName, setFullName] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const [currentProjectId, setCurrentProjectId] = useState<string | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -24,20 +23,6 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // const fetchUser = async () => {
-    //   try {
-    //     const res = await fetch("http://localhost:3000/api/full-name", {
-    //       credentials: "include",
-    //     });
-    //     const userData = await res.json();
-    //     if (res.ok && userData.fullName) {
-    //       setFullName(userData.fullName);
-    //     }
-    //   } catch (err) {
-    //     console.error("Failed to fetch user", err);
-    //   }
-    // };
-
     const fetchProjects = async () => {
       try {
         const res = await fetch("http://localhost:3000/api/user-projects", {
@@ -66,12 +51,14 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
       }
       setLoadingProject(false);
     };
-    // fetchUser();
     fetchProjects();
   }, []);
 
-  const maxCharsProjectName = (name: string | undefined, maxChars: number = 16) => {
-    if (!name) return "Select Project"
+  const maxCharsProjectName = (
+    name: string | undefined,
+    maxChars: number = 16
+  ) => {
+    if (!name) return "Select Project";
     if (name.length <= maxChars) return name;
     return name.substring(0, maxChars) + "...";
   };
@@ -127,27 +114,31 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
     try {
       const res = await fetch("http://localhost:3000/api/projects", {
         method: "DELETE",
-        headers: { "Content-Type" : "application/json"},
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ projectId: projectToDelete }),
       });
       if (!res.ok) {
         throw new Error("Failed to delete project");
       }
-      // Change the current project in the menu after deleting one. 
-      const currentIndex = projects.findIndex(p => p._id === currentProject?._id);
+      // Change the current project in the menu after deleting one.
+      const currentIndex = projects.findIndex(
+        (p) => p._id === currentProject?._id
+      );
       const nextIndex = (currentIndex + 1) % projects.length;
-      const nextProject = projects[nextIndex]
+      const nextProject = projects[nextIndex];
       // Remove the deleted project from the state
-      setProjects(prevProjects => prevProjects.filter(p => p._id !== projectToDelete?._id));
+      setProjects((prevProjects) =>
+        prevProjects.filter((p) => p._id !== projectToDelete?._id)
+      );
       setOpenDeleteModal(false);
       setProjectToDelete(null);
       //switch to the next available project.
       swapProject(nextProject._id);
     } catch (err) {
-      console.error("Failed to delete project.")
+      console.error("Failed to delete project.", err);
     }
-  }
+  };
 
   const currentProject = projects.find((p) => p._id === currentProjectId);
 
@@ -190,9 +181,8 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
               <h3 className="my-projects-title">Projects</h3>
               {projects.map((pro) => {
                 return (
-                  <div className="project-btn-delete-container">
+                  <div key={pro._id} className="project-btn-delete-container">
                     <button
-                      key={pro._id}
                       onClick={() => swapProject(pro._id)}
                       className="project-btns"
                     >
@@ -232,7 +222,12 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
             </p>
             <p className="project-to-delete">{projectToDelete?.name}?</p>
             <div className="delete-modal-btn-container">
-              <button className="delete-modal-btn yes" onClick={handleDeleteProject}>Yes</button>
+              <button
+                className="delete-modal-btn yes"
+                onClick={handleDeleteProject}
+              >
+                Yes
+              </button>
               <button
                 className="delete-modal-btn no"
                 onClick={() => setOpenDeleteModal(false)}

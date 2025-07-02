@@ -8,4 +8,5 @@
   gap: 2rem;
   max-width: max-content;
   margin: 0 auto;
+  align-items: flex-start;
 }

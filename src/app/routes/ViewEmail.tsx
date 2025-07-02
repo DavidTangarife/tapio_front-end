@@ -1,9 +1,9 @@
 import { Link, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./ViewEmail.css";
-import Button from "../../components/ui/Button";
 import ViewEmailActionButton from "../../components/ui/ViewEmailActionButton";
 import AddToBoardModal from "../../components/ui/AddToBoardModal";
+import LinkToOppModal from "../../components/ui/LinkToOpportunityModal";
 import {
   ViewKanbanOutlined,
   TouchAppOutlined,
@@ -16,10 +16,12 @@ interface EmailDetails {
   subject?: string;
   from?: string;
   isTapped?: boolean;
+  projectId?: string;
 }
 
 const ViewEmail = () => {
-  const [openModal, setOpenModal] = useState(false);
+  const [openModalCreate, setOpenModalCreate] = useState(false);
+  const [openModalAdd, setOpenModalAdd] = useState(false);
   const { emailId } = useParams();
   const [emailDetails, setEmailDetails] = useState<EmailDetails | null>(null);
   const [emailBodyHtml, setEmailBodyHtml] = useState<string>("");
@@ -92,15 +94,39 @@ const ViewEmail = () => {
       }, 1000);
     }
   };
+
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    const updateHeight = () => {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      if (iframeDoc && iframeDoc.body) {
+        iframe.style.height = iframeDoc.body.scrollHeight + "px";
+      }
+    };
+
+    // Wait for iframe content to load
+    const onLoad = () => {
+      updateHeight()
+    };
+
+    iframe.addEventListener("load", onLoad);
+    return () => iframe.removeEventListener("load", onLoad);
+  }, [emailBodyHtml]);
   return (
     <>
       <main>
         <section className="header-container">
           <Link to={`/inbox`} className="back-btn">
-            Back
+            Back to Inbox
           </Link>
           <TapioLogoDesktop className="logo" />
-          <div></div>
+          <Link to={`/board`} className="back-btn">
+            Back to Board
+          </Link>
         </section>
         <section className="email-view-container">
           <div className="email-view-sender-details">
@@ -109,8 +135,10 @@ const ViewEmail = () => {
           </div>
           <section className="email-view-body">
             <iframe
+            ref={iframeRef}
+            className="iframe"
               title="email-content"
-              style={{ width: "100%", height: "600px", border: "none" }}
+              style={{ width: "100%", minHeight: "500px", border: "none", overflow: "hidden"  }}
               srcDoc={emailBodyHtml}
             />
           </section>
@@ -146,10 +174,24 @@ const ViewEmail = () => {
                 icon={ViewKanbanOutlined}
                 text="Add to Board"
                 value={modalData}
-                onClick={() => setOpenModal(true)}
+                onClick={() => setOpenModalCreate(true)}
               />
-              {openModal && (
-                <AddToBoardModal closeModal={() => setOpenModal(false)} />
+              {openModalCreate && (
+                <AddToBoardModal closeModal={() => setOpenModalCreate(false)} />
+              )}
+            </div>
+            <div className="add-to-board-container">
+              <ViewEmailActionButton
+                icon={ViewKanbanOutlined}
+                text="LinkOpp"
+                value={modalData}
+                onClick={() => setOpenModalAdd(true)}
+              />
+              {openModalAdd && (
+                <LinkToOppModal
+                  closeModal={() => setOpenModalAdd(false)}
+                  projectId={emailDetails?.projectId}
+                />
               )}
             </div>
             <ViewEmailActionButton

@@ -6,7 +6,14 @@ export type Opportunity = {
     logoUrl: string;
     brandColor: string;
   };
-  status_Id: string;
+  description: {
+    location: string;
+    type: string;
+    salary: string;
+    posted: string;
+  };
+  snippets: string[];
+  statusId: string;
 };
 
 export type Board = {
@@ -39,6 +46,9 @@ export interface ViewEmailActionButtonProps {
 export interface AddToBoardModalProps {
   closeModal: () => void;
 }
+export interface linkToOppModalProps {
+  closeModal: () => void;
+}
 
 export interface Email {
   _id: string;
@@ -48,6 +58,8 @@ export interface Email {
   body: string;
   isRead: boolean;
   isTapped: boolean;
+  isProcessed: boolean;
+  isApproved: boolean;
   date: Date;
 }
 
@@ -55,4 +67,13 @@ export interface InboxProps {
   emails: Email[];
   onTapUpdate: (emailId: string, newTapped: boolean) => void;
   onRefreshInbox: () => void;
+}
+
+export type SenderData = {
+  _id: string;
+  from: string;
+  date: Date;
+  subject: string;
+  isApproved?: boolean;
+  isProcessed?: boolean;
 }

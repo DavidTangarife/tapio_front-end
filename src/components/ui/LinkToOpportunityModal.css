@@ -1,0 +1,49 @@
+.opportunity-modal {
+  max-width: 18.75rem;
+  position: absolute;
+  bottom: 110%;
+  right: -50%;
+  z-index: 100;
+  border: var(--border-green-dark-mode);
+  border-radius: var(--border-radius);
+  background-color: var(--color-primary);
+  padding: 0.625rem;
+}
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Inside dropdown */
+.my-opportunities-title {
+  font-size: var(--font-size-title);
+  padding: 0.3125rem 1.25rem 0.625rem;
+}
+
+.opportunity-btns {
+  width: 100%;
+  padding: 8px;
+  text-align: center;
+  border: none;
+  font-size: 1.3rem;
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-stylised);
+  color: var(--color-font-offwhite);
+  background-color: var(--color-primary);
+  transition: background-color 0.2s ease-in-out;
+}
+
+.opportunity-btns:hover {
+  background-color: var(--color-dark-mode-hover);
+  cursor: pointer;
+}
+
+.opportunity-btns:active {
+  transform: scale(1.1);
+  background-color: var(--color-dark-mode-hover);
+}
