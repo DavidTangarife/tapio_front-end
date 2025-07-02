@@ -216,7 +216,7 @@ export default function Kanban() {
           currentFocus={currentFocus}
           setCurrentFocus={setCurrentFocus}
           setBoards={setBoards}
-          data={data}
+          boards={boards}
         />
       </div>
       {selectedOpportunity && (

@@ -94,12 +94,13 @@ const ConnectEmails = () => {
       });
       const resData = await res.json()
       // console.log(resData)
+      navigate('/filter')
+      return
       setEmails(resData.emails || [])
       if (!res.ok) throw new Error("Failed to fetch and save emails");
     } catch (err) {
       console.log("Error Connecting email ", err);
     }
-    setLoading(false)
   };
 
   /**
