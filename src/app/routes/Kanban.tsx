@@ -13,7 +13,6 @@ import type {
   Opportunity as Ot,
 } from "../../types/types";
 import "./Kanban.css";
-import Header from "../../components/ui/Header";
 import BoardCard from "../../components/ui/Board";
 import Opportunity_PopUp from "../../components/ui/OppPopUp";
 
@@ -159,9 +158,6 @@ export default function Kanban() {
 
   return (
     <div className="page">
-      <div className="header-wrapper">
-        <Header />
-      </div>
       <div className="boardWrapper">
         <DndContext
           sensors={sensors}
