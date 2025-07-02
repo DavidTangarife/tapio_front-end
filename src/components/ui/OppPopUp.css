@@ -135,13 +135,14 @@
   flex: 1;
   background: #2a2a2a;
   border-radius: 0.5rem;
-  padding: 1rem;
+  padding: 1rem 0.5rem;
   overflow-y: auto;
-  max-height: 12.5rem;
+  max-height: 15rem;
 }
 
-.emailList p {
-  margin-bottom: 0.5rem;
+.popupEmails > h2 {
+  margin-bottom: 1rem;
+  margin-left: 0.5rem;
 }
 
 .popupFooter {
@@ -196,4 +197,13 @@
   background: #b90404;
   color: var(--color-font-dark);
   border: none;
+}
+
+/* importing the delete modal message just changing the css position */
+
+.confirm-delete-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

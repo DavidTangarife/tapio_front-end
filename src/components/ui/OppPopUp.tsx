@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Button from "./Button";
-import { Opportunity, Board } from "../../types/types";
+import EmailItem from "../../components/ui/EmailItem";
+import { Opportunity, Board, Email } from "../../types/types";
 import "./OppPopUp.css";
 
 export default function Opportunity_PopUp({
@@ -12,29 +13,57 @@ export default function Opportunity_PopUp({
 }: {
   opportunity: Opportunity;
   onDelete: (opportuinityId: string) => void;
-  onEdit: (opportuinityId: string, newdata: Opportunity) => void;
+  onEdit: (
+    opportuinityId: string,
+    newdata: Opportunity,
+    afterSave?: (updatedOpp: Opportunity) => void
+  ) => void;
   onClose: () => void;
   boards: Board[];
 }) {
   const [editing, setEditing] = useState(false);
   const [editableData, setEditableData] = useState(opportunity);
+  const [oppoEmails, setOppoEmails] = useState<Email[]>([]);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const statusTitle =
     boards.find((b) => b._id === editableData.statusId)?.title || "Unknown";
-
   const LOGO_PUB = import.meta.env.VITE_LOGO_PUB;
+  const popupRef = useRef<HTMLDivElement | null>(null);
+
+  // Retrieve emails from the opportunity
+  const fetchEmailsFromOpp = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/getemails/${opportunity._id}`,
+        {
+          credentials: "include",
+        }
+      );
+      const data = await res.json();
+      setOppoEmails(data);
+    } catch (err) {
+      console.error("Failed to fetch the emails for this opportunity", err);
+    }
+  };
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [onClose]);
 
   useEffect(() => {
     setEditableData(opportunity);
+    fetchEmailsFromOpp();
   }, [opportunity]);
-
-  // WORKING IN PROGRESS
-  // useEffect (() => {
-  //   const fetchEmails = async () => {
-  //     const res = await fetch("http://localhost:3000/api/getemails", {
-  //       credentials: "include",
-  //     });
-  //     const data = await res.json();
-  // }, [])
 
   // Handle change for description fields
 
@@ -52,34 +81,33 @@ export default function Opportunity_PopUp({
   }
 
   // Handle snippets editing - for simplicity, let's make it a textarea with comma-separated values
-  function SnippetsChange(value: string) {
-    const arr = value
-      .split(",")
-      .map((s) => s.trim())
-      .filter((s) => s.length > 0);
-    setEditableData((prev) => ({
-      ...prev,
-      snippets: arr,
-    }));
-  }
+  // function SnippetsChange(value: string) {
+  //   const arr = value
+  //     .split(",")
+  //     .map((s) => s.trim())
+  //     .filter((s) => s.length > 0);
+  //   setEditableData((prev) => ({
+  //     ...prev,
+  //     snippets: arr,
+  //   }));
+  // }
 
   function onDeleteOpp() {
-    const sure = confirm("Are you sure you want to Selete this opportunity");
-    if (sure) {
-      onDelete(opportunity._id);
-      onClose();
-    }
+    onDelete(opportunity._id);
+    onClose();
   }
 
   function handleSave() {
-    onEdit(opportunity._id, editableData);
-    setEditing(false);
-    onClose();
+    //So when handle the save my editable data will receive my updated opportunity as a prop to display on editableData
+    onEdit(opportunity._id, editableData, (updatedOpp) => {
+      setEditableData(updatedOpp);
+      setEditing(false);
+    });
   }
 
   return (
     <div className="popupOverlay">
-      <div className="popupContent">
+      <div className="popupContent" ref={popupRef}>
         <div className="popupHeader">
           <div className="popupTitleSection">
             {editing ? (
@@ -169,8 +197,9 @@ export default function Opportunity_PopUp({
               )}
             </div>
 
-            <div className="popupBox">
-              <span className="label">Snippets / Keywords:</span>
+            {/* Work on snippets from an email */}
+            {/* <div className="popupBox">
+              <span className="label">Snippets:</span>
               {editing ? (
                 <textarea
                   rows={3}
@@ -179,19 +208,26 @@ export default function Opportunity_PopUp({
                   placeholder="Please add your Keywords seprated by a ,"
                 />
               ) : (
-                <p>{editableData.snippets?.join(", ") || "-"}</p>
+                <p>{editableData.snippets?.join(", ") || ""}</p>
               )}
-            </div>
+            </div> */}
           </div>
 
           <div className="popup right">
             <div className="popupEmails">
-              <p>Emails from this company (scrollable)</p>
-              <div className="emailList">
-                {/* example static list */}
-                <p>Email 1 content...</p>
-                <p>Email 2 content...</p>
-                <p>Email 3 content...</p>
+              <h2>Emails :</h2>
+              <div className="email-list">
+                {oppoEmails.map((email) => (
+                  <EmailItem
+                    key={email._id}
+                    sender={email.from}
+                    subject={email.subject}
+                    date={email.date}
+                    _id={email._id}
+                    onTapUpdate={() => {}}
+                    showTapIn={false}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -232,30 +268,49 @@ export default function Opportunity_PopUp({
 
           <Button
             className="button delete"
-            onClick={onDeleteOpp}
+            onClick={() => setOpenDeleteModal(true)}
             buttonText="Delete"
           />
+
+          {/* pop up to confirm delete project */}
+          {openDeleteModal && (
+            <>
+              <div className="delete-modal-overlay"></div>
+              <aside className="confirm-delete-modal">
+                <p className="confirm-delete-msg">
+                  Are you sure you want to delete
+                </p>
+                <p className="project-to-delete"> {editableData?.title} ?</p>
+                <div className="delete-modal-btn-container">
+                  <button
+                    className="delete-modal-btn yes"
+                    onClick={onDeleteOpp}
+                  >
+                    Yes
+                  </button>
+                  <button
+                    className="delete-modal-btn no"
+                    onClick={() => setOpenDeleteModal(false)}
+                  >
+                    No
+                  </button>
+                </div>
+              </aside>
+            </>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-//Main tasks:
+// Fix the snippets to save information as well (work on the snippets of Opportunity)
+// fix the title so the space where clicking is smaller (cause now you can click on empty space and stil popup will show up)
 
-// Create the delete/patch (Services, Controller, routes) on the back end -> to play and save the opportunities -------------> Completed
-// (Modify Popup when deleting opportunity - Make sure the save button Works) -------------> Completed
-// Fetch emails
-// -> Fix the Creation of an opportunity to assign that oppotunity ID to the email -------------> Completed
-// -> Email backend should have an opportunity id parameter so when user taps on an email he can selected opportunity from dropdown -------------> Completed
-// -> fetch opportunities on the emailview section (or get the opportunitys pass from that project, either prop or fetch) -------------> Completed
-// -> Back end to patch that email to have that opportunity ID when a selection was confirmed -------------> Completed
-// Fix Dropdown of oppotunitys to go up instead of down on email view -------------> Completed
+// Changing Dropdown CSS to match the projects one for opportunities (max)
+// jumpin into an email start the scroll form the bottom, when it should start from the top
+// Maybe functionality of alredady added to the board
+// this email domain is already an oppotunity would you like to link it
 
-// Changing Dropdown CSS to match the projects one for opportunities
-// From save it closes the pop up, but i want to click outsie and also close the popup
-
-// Create call to backend to fetch emails from that specific ID opprotunity (PopUp) (scrollable on the side + Go to emailbody Navigate)
-
-// Fix Dragg and Dropp Functionality on Kanban
-// Fix the snippets to save information as well
+// when swapping projects -> Board and filter should re render as well
+// redirect to fiter page (jacob)

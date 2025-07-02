@@ -8,7 +8,11 @@ export default function Board_Card({
   title,
   opportunities,
   onOpportunityClick,
-}: Bt & { onOpportunityClick: (op: Ot) => void }) {
+  isDraggingRef,
+}: Bt & {
+  onOpportunityClick: (op: Ot) => void;
+  isDraggingRef: React.RefObject<boolean>;
+}) {
   const { setNodeRef } = useDroppable({
     id: _id,
   });
@@ -21,6 +25,7 @@ export default function Board_Card({
           <Opportunity_Card
             key={op._id}
             {...op}
+            isDraggingRef={isDraggingRef}
             onClick={() => onOpportunityClick(op)}
           />
         ))}

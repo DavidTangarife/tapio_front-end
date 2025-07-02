@@ -11,6 +11,7 @@ const LinkToOppModal = ({
   closeModal: () => void;
 }) => {
   const [opportunities, setopportunities] = useState<Opportunity[]>([]);
+  const [added, setAdded] = useState(false);
   const { emailId } = useParams();
 
   useEffect(() => {
@@ -54,7 +55,7 @@ const LinkToOppModal = ({
       if (res.ok) {
         const updated = await res.json();
         console.log("Assign to opportunity:", updated);
-        closeModal();
+        setAdded(true);
       } else {
         const err = await res.json();
         console.error("Failed to assign opportunity:", err.error);
@@ -68,15 +69,24 @@ const LinkToOppModal = ({
     <>
       <div className="modal-backdrop" onClick={closeModal} />
       <aside className="opportunity-modal">
-        <h3 className="my-opportunities-title">Opportunities</h3>
-        {opportunities.map((opp) => (
-          <button
-            onClick={() => addToOpp(opp._id)}
-            className="opportunity-btns"
-          >
-            {opp.title}
-          </button>
-        ))}
+        {added ? (
+          <div>
+            <h3 className="add-opp-success-msg">Email linked</h3>
+          </div>
+        ) : (
+          <>
+            <h3 className="my-opportunities-title">Opportunities</h3>
+            {opportunities.map((opp) => (
+              <button
+                key={opp._id}
+                onClick={() => addToOpp(opp._id)}
+                className="opportunity-btns"
+              >
+                {opp.title}
+              </button>
+            ))}
+          </>
+        )}
       </aside>
     </>
   );
