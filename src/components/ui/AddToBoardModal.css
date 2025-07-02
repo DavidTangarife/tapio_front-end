@@ -1,86 +1,103 @@
 .opportunity-modal {
-    max-width: 300px;
-    position: absolute;
-    bottom: 110%;
-    right: -50%;
-    z-index: 100;
-    border: var(--border-green-dark-mode);
-    border-radius: var(--border-radius);
-    background-color: var(--color-primary);
-    padding: 16px;
+  max-width: 300px;
+  position: absolute;
+  bottom: 110%;
+  right: -50%;
+  z-index: 100;
+  border: var(--border-green-dark-mode);
+  border-radius: var(--border-radius);
+  background-color: var(--color-primary);
+  padding: 16px;
 }
 .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 9;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 .create-opp-title {
-    text-align: center;
-    font-size: var(--font-size-title);
-    font-weight: var(--font-weight-bold);
+  text-align: center;
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-bold);
 }
 form {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 label {
-    font-weight: var(--font-weight-regular);
-    color: var(--color-font-offwhite);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-font-offwhite);
 }
 .opp-modal-txt-input {
-    height: 30px;
-    background-color: var(--color-primary-dark);
-    border: 1px solid #181818;
-    padding: 6px;
-    border-radius: 4px;
-    font-size: var(--font-sizie-regular);
-    font-weight: var(--font-weight-regular);
-    font-family: var(--font-bodycopy);
+  height: 30px;
+  background-color: var(--color-primary-dark);
+  border: 1px solid #181818;
+  padding: 6px;
+  border-radius: 4px;
+  font-size: var(--font-sizie-regular);
+  font-weight: var(--font-weight-regular);
+  font-family: var(--font-bodycopy);
 }
 .opp-modal-txt-input:focus {
-    outline: 1px solid white;
-    border-radius: 4px;
+  outline: 1px solid white;
+  border-radius: 4px;
 }
 .select-board-menu {
-    height: 35px;
-    padding: 6px;
-    background-color: var(--color-primary-dark);
-    border: none;
-    border-radius: 4px;
-    color: var(--color-font-primary);
-    font-family: var(--font-bodycopy);
-    font-size: var(--font-size-regular);
-    font-weight: var(--font-weight-regulatr);
+  height: 35px;
+  padding: 6px;
+  background-color: var(--color-primary-dark);
+  border: none;
+  border-radius: 4px;
+  color: var(--color-font-primary);
+  font-family: var(--font-bodycopy);
+  font-size: var(--font-size-regular);
+  font-weight: var(--font-weight-regulatr);
 }
 .select-board-menu:focus {
-    outline: 1px solid white;
+  outline: 1px solid white;
 }
 .add-opp-submit-btn {
-    height: 40px;
-    width: 80px;
-    margin: 8px auto 0;
-    background-image: var(--color-grad-green-dark-mode);
-    border-radius: var(--border-radius);
-    border: none;
-    color: var(--color-font-dark);
-    font-family: var(--font-stylised);
-    font-size: var(--button-font-size);
-    font-weight: var(--font-weight-bold);
+  height: 40px;
+  width: 80px;
+  margin: 8px auto 0;
+  background-image: var(--color-grad-green-dark-mode);
+  border-radius: var(--border-radius);
+  border: none;
+  color: var(--color-font-dark);
+  font-family: var(--font-stylised);
+  font-size: var(--button-font-size);
+  font-weight: var(--font-weight-bold);
 }
 .add-opp-submit-btn:hover {
-    cursor: pointer;
-    background: #21950c;
+  cursor: pointer;
+  background: #21950c;
 }
 .add-opp-success-msg {
-    font-family: var(--font-stylised);
-    font-size: var(--font-size-medium);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-font-primary);
-    width: 150px;
-    text-align: center;
+  font-family: var(--font-stylised);
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-font-primary);
+  width: 150px;
+  text-align: center;
+}
+
+/* animation to mask the loading time of fetch opportunites */
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.opportunity-modal {
+  animation: slideUpFade 0.4s ease-out forwards;
 }

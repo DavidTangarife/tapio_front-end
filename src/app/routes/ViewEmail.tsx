@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./ViewEmail.css";
-import Button from "../../components/ui/Button";
 import ViewEmailActionButton from "../../components/ui/ViewEmailActionButton";
 import AddToBoardModal from "../../components/ui/AddToBoardModal";
 import LinkToOppModal from "../../components/ui/LinkToOpportunityModal";
@@ -100,10 +99,12 @@ const ViewEmail = () => {
       <main>
         <section className="header-container">
           <Link to={`/inbox`} className="back-btn">
-            Back
+            Back to Inbox
           </Link>
           <TapioLogoDesktop className="logo" />
-          <div></div>
+          <Link to={`/board`} className="back-btn">
+            Back to Board
+          </Link>
         </section>
         <section className="email-view-container">
           <div className="email-view-sender-details">

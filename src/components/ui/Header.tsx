@@ -70,8 +70,11 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
     fetchProjects();
   }, []);
 
-  const maxCharsProjectName = (name: string | undefined, maxChars: number = 16) => {
-    if (!name) return "Select Project"
+  const maxCharsProjectName = (
+    name: string | undefined,
+    maxChars: number = 16
+  ) => {
+    if (!name) return "Select Project";
     if (name.length <= maxChars) return name;
     return name.substring(0, maxChars) + "...";
   };
@@ -127,27 +130,31 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
     try {
       const res = await fetch("http://localhost:3000/api/projects", {
         method: "DELETE",
-        headers: { "Content-Type" : "application/json"},
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ projectId: projectToDelete }),
       });
       if (!res.ok) {
         throw new Error("Failed to delete project");
       }
-      // Change the current project in the menu after deleting one. 
-      const currentIndex = projects.findIndex(p => p._id === currentProject?._id);
+      // Change the current project in the menu after deleting one.
+      const currentIndex = projects.findIndex(
+        (p) => p._id === currentProject?._id
+      );
       const nextIndex = (currentIndex + 1) % projects.length;
-      const nextProject = projects[nextIndex]
+      const nextProject = projects[nextIndex];
       // Remove the deleted project from the state
-      setProjects(prevProjects => prevProjects.filter(p => p._id !== projectToDelete?._id));
+      setProjects((prevProjects) =>
+        prevProjects.filter((p) => p._id !== projectToDelete?._id)
+      );
       setOpenDeleteModal(false);
       setProjectToDelete(null);
       //switch to the next available project.
       swapProject(nextProject._id);
     } catch (err) {
-      console.error("Failed to delete project.")
+      console.error("Failed to delete project.", err);
     }
-  }
+  };
 
   const currentProject = projects.find((p) => p._id === currentProjectId);
 
@@ -231,7 +238,12 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
             </p>
             <p className="project-to-delete">{projectToDelete?.name}?</p>
             <div className="delete-modal-btn-container">
-              <button className="delete-modal-btn yes" onClick={handleDeleteProject}>Yes</button>
+              <button
+                className="delete-modal-btn yes"
+                onClick={handleDeleteProject}
+              >
+                Yes
+              </button>
               <button
                 className="delete-modal-btn no"
                 onClick={() => setOpenDeleteModal(false)}

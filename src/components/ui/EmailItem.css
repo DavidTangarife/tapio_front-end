@@ -7,6 +7,19 @@
   padding: 0 4px 0 4px;
   /* animation: loadin 1s 1; */
 }
+
+.email-item-tapin-flex-wrapper.no-tap-mode .email-sender {
+  font-size: 0.9rem;
+}
+
+.email-item-tapin-flex-wrapper.no-tap-mode .email-subject {
+  font-size: 0.6rem;
+}
+
+.email-item-tapin-flex-wrapper.no-tap-mode .email-date {
+  font-size: 0.7rem;
+}
+
 .tap-in-wrapper {
   width: 10px;
   height: auto;
@@ -26,7 +39,6 @@
 .tap-in-dot.inactive:hover {
   background-color: var(--color-green-dark-mode);
   cursor: pointer;
-
 }
 /* Email item */
 .email-content-date-flex {
@@ -101,7 +113,6 @@
   }
   to {
     transform: translateY(0px);
-    opacity: 1
+    opacity: 1;
   }
 }
-

@@ -1,12 +1,12 @@
 import "./AddToBoardModal.css";
-import { AddToBoardModalProps } from "../../types/types";
+import { AddToBoardModalProps, Board } from "../../types/types";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const AddToBoardModal = ({ closeModal }: AddToBoardModalProps) => {
   const modalInputRef = useRef<HTMLFormElement | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [statuses, setStatuses] = useState([]);
+  const [statuses, setStatuses] = useState<Board[]>([]);
   const { emailId } = useParams();
 
   useEffect(() => {
@@ -107,7 +107,7 @@ const AddToBoardModal = ({ closeModal }: AddToBoardModalProps) => {
                   />
                 </label>
                 <select className="select-board-menu" name="board" required>
-                  {statuses.map((status: any) => (
+                  {statuses.map((status) => (
                     <option key={status._id} value={status._id}>
                       {status.title}
                     </option>
