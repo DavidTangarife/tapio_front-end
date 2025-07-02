@@ -1,16 +1,18 @@
 import Header from "../../components/ui/Header";
 import Welcome from "../../components/ui/Welcome";
 import "./ConnectEmails.css";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import Loader from "../../assets/Spinner.svg?react";
 import Inbox from "./Inbox";
 import { Email } from "../../types/types"
 import { useEffect, useState } from "react";
 
 const ConnectEmails = () => {
-  const [showEmailSection, setShowEmailSection] = useState(false);
+  const loaderData = useLoaderData();
+
+  const [showEmailSection, setShowEmailSection] = useState(loaderData.emails);
   const [loading, setLoading] = useState(false);
-  const [emails, setEmails] = useState<Email[]>([]);
+  const [emails, setEmails] = useState<Email[]>(loaderData.emails || []);
   const [refreshTrigger, setRefreshTrigger] = useState(0); // used to re-fetch emails when project changes
   const navigate = useNavigate();
 
