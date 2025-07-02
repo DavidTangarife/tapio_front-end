@@ -197,3 +197,40 @@
   color: var(--color-font-dark);
   border: none;
 }
+
+/* DROP DOWN */
+select { 
+  color: var(--color-font-primary);
+  font-family: var(--font-stylised);
+  font-weight: var(--font-weight-bold);
+  
+  /* Contents of the picker */
+  &, &::picker(select) {
+  appearance: base-select;
+  border: 1px solid var(--color-font-offwhite);
+  border-radius: var(--border-radius);
+  }
+}
+/* green arrow */
+select::picker-icon {
+    color: var(--color-green-dark-mode);
+}
+/* select options */
+option {
+  font-size: var(--font-size-medium);
+  font-family: var(--font-stylised);
+  color: var(--color-font-offwhite);
+  font-weight: var(--font-weight-medium);
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+option:hover {
+  background-color: va(--color-dark-mode-hover);
+}
+
+/* green tick */
+option::checkmark {
+  color: var(--color-green-dark-mode);
+  font-size: 1rem;
+}
