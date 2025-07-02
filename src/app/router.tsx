@@ -24,7 +24,6 @@ const router = createBrowserRouter([
           return data
         }
       },
-      { path: "/setup", Component: SetupForm },
       {
         path: "/home", Component: ConnectEmails, loader: async () => {
           const response = await fetch(`http://localhost:3000/api/getemails`, {
@@ -101,12 +100,12 @@ const router = createBrowserRouter([
           return data;
         },
       },
-      { path: "/setup", Component: SetupForm },
     ]
   },
   {
     path: "/email/:emailId", Component: ViewEmail
   },
+  { path: "/setup", Component: SetupForm },
 
 
   // work on the css for the buttoms inbox, kanban,  screener to look better places

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
-import Header from "../../components/ui/Header";
 import "./Filter.css";
 import { ThumbUpOutlined, ThumbDownOutlined } from "@mui/icons-material";
 import { SenderData } from "../../types/types";
@@ -132,8 +131,7 @@ const Filter = () => {
       }
       console.log(updatedCount);
       setStatusMessage(
-        `${updatedCount} email${updatedCount > 1 ? "s" : ""} from ${sender} ${
-          isApproved ? "allowed" : "blocked"
+        `${updatedCount} email${updatedCount > 1 ? "s" : ""} from ${sender} ${isApproved ? "allowed" : "blocked"
         }.`
       );
       setStatusType(isApproved ? "allowed" : "blocked");
@@ -162,7 +160,6 @@ const Filter = () => {
   return (
     <>
       <main>
-        <Header />
         {!emails ? (
           <Spinner />
         ) : (
@@ -176,27 +173,24 @@ const Filter = () => {
               <div className="filter-btn-save-container">
                 <div className="filter-btn-container">
                   <button
-                    className={`filter-btn new ${
-                      filteredSenders === "new" ? "active" : ""
-                    }`}
+                    className={`filter-btn new ${filteredSenders === "new" ? "active" : ""
+                      }`}
                     onClick={() => setFilteredSenders("new")}
                   >
                     New
                   </button>
                   <button
                     onClick={() => setFilteredSenders("allowed")}
-                    className={`filter-btn allowed ${
-                      filteredSenders === "allowed"
+                    className={`filter-btn allowed ${filteredSenders === "allowed"
                         ? "filter-btn-allowed active"
                         : "filter-btn-allowed"
-                    }`}
+                      }`}
                   >
                     <ThumbUpOutlined />
                   </button>
                   <button
-                    className={`filter-btn blocked ${
-                      filteredSenders === "blocked" ? "active" : ""
-                    }`}
+                    className={`filter-btn blocked ${filteredSenders === "blocked" ? "active" : ""
+                      }`}
                     onClick={() => setFilteredSenders("blocked")}
                   >
                     <ThumbDownOutlined />
@@ -206,7 +200,7 @@ const Filter = () => {
               <h3 className="filter-date-title">{today}</h3>
               <div className="sender-container">
                 {getFilteredSenders()?.length === 0 &&
-                filteredSenders === "new" ? (
+                  filteredSenders === "new" ? (
                   <p className="no-emails-msg">No new emails to filter</p>
                 ) : (
                   <ul className="sender-list">
@@ -230,22 +224,20 @@ const Filter = () => {
                           </p>
                           <button
                             onClick={() => handleToggle(email._id, true)}
-                            className={`allowed-vs-blocked set-allowed ${
-                              filteredSenders !== "new" && email.isApproved
+                            className={`allowed-vs-blocked set-allowed ${filteredSenders !== "new" && email.isApproved
                                 ? "allowed-active"
                                 : ""
-                            }`}
+                              }`}
                           >
                             <ThumbUpOutlined />
                           </button>
 
                           <button
                             onClick={() => handleToggle(email._id, false)}
-                            className={`allowed-vs-blocked set-blocked ${
-                              filteredSenders !== "new" && !email.isApproved
+                            className={`allowed-vs-blocked set-blocked ${filteredSenders !== "new" && !email.isApproved
                                 ? "blocked-active"
                                 : ""
-                            }`}
+                              }`}
                           >
                             <ThumbDownOutlined />
                           </button>

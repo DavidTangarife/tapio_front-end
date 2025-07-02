@@ -7,7 +7,7 @@ import BoardHeading from "./BoardHeading";
 type BoardCardProps = {
   _id: string
   title: string
-  opportunities: unknown
+  opportunities: Ot[]
   currentFocus: HTMLInputElement | null
   setCurrentFocus: (e: HTMLInputElement) => void
   onOpportunityClick: (op: Ot) => void;
@@ -24,7 +24,7 @@ export default function BoardCard(props: BoardCardProps) {
     <div key={_id} className="boardContainer">
       <BoardHeading title={title} setCurrentFocus={setCurrentFocus} currentFocus={currentFocus} columnId={_id} />
       <div ref={setNodeRef} className="opportunityList">
-        {opportunities.map((opportunity) => (
+        {opportunities.map((opportunity: Ot) => (
           <OpportunityCard key={opportunity._id} {...opportunity}
             isDraggingRef={isDraggingRef}
             onClick={() => onOpportunityClick(opportunity)} />))}
