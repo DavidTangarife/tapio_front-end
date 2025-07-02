@@ -1,12 +1,13 @@
-
 .header-wrapper {
   max-width: 966px;
   margin: 0 auto;
 }
+
 .boardWrapper {
   display: flex;
   gap: 2rem;
   max-width: max-content;
   margin: 0 auto;
   align-items: flex-start;
+  overflow-x: scroll;
 }
