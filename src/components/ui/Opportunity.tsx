@@ -8,9 +8,11 @@ export default function OpportunityCard({
   company,
   onClick,
   isDraggingRef,
+  style,
 }: Opportunity & {
   onClick: () => void;
   isDraggingRef: React.RefObject<boolean>;
+  style?: React.CSSProperties;
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
@@ -39,7 +41,7 @@ export default function OpportunityCard({
       ref={setNodeRef}
       className="opportunityContainer"
       data-testid="opportunity"
-      style={observe_drag}
+      style={{ ...observe_drag, ...style }}
       {...attributes}
       {...listeners}
     >

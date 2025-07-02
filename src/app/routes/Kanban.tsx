@@ -1,7 +1,9 @@
 import { useLoaderData } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import {
+  DragOverlay,
   DndContext,
+  DragStartEvent,
   DragEndEvent,
   PointerSensor,
   useSensor,
@@ -14,6 +16,7 @@ import type {
 } from "../../types/types";
 import "./Kanban.css";
 import BoardCard from "../../components/ui/Board";
+import OpportunityCard from "../../components/ui/Opportunity";
 import Opportunity_PopUp from "../../components/ui/OppPopUp";
 import { useHorizontalScroll } from "../../hooks/useHorizontalScroll";
 import AddBoard from "../../components/ui/AddBoard";
@@ -21,9 +24,14 @@ import AddBoard from "../../components/ui/AddBoard";
 export default function Kanban() {
   const data = useLoaderData();
   const [boards, setBoards] = useState<Bt[]>([]);
-  const [currentFocus, setCurrentFocus] = useState<HTMLInputElement | null>(null)
+  const [currentFocus, setCurrentFocus] = useState<HTMLInputElement | null>(
+    null
+  );
   const [selectedOpportunity, setSelectedOpportunity] = useState<Ot | null>(
     null
+  );
+  const [activeOpportunityId, setActiveOpportunityId] = useState<string | null>(
+    ""
   );
   const isDragging = useRef(false);
   const { elementRef, setActivator } = useHorizontalScroll();
@@ -44,11 +52,13 @@ export default function Kanban() {
     })
   );
 
-  function handleDragStart() {
+  function handleDragStart(event: DragStartEvent) {
+    setActiveOpportunityId(event.active.id as string);
     isDragging.current = true;
   }
 
   function handleDragEnd(event: DragEndEvent) {
+    setActiveOpportunityId(null);
     isDragging.current = false; // Reset after drag
 
     const { active, over } = event; // active -> Draggable Item that was move, over -> droppable board where item was dropped
@@ -97,6 +107,10 @@ export default function Kanban() {
       console.error("Failed to update opportunity:", err);
     });
   }
+
+  const active = boards
+    .flatMap((b) => b.opportunities)
+    .find((op) => op._id === activeOpportunityId);
 
   function editOpportunity(
     id: string,
@@ -186,6 +200,17 @@ export default function Kanban() {
               />
             );
           })}
+
+          <DragOverlay>
+            {activeOpportunityId ? (
+              <OpportunityCard
+                {...(active as Opportunity)}
+                isDraggingRef={isDragging}
+                onClick={() => {}}
+                style={{ opacity: 0.6 }}
+              />
+            ) : null}
+          </DragOverlay>
         </DndContext>
         <AddBoard
           currentFocus={currentFocus}
