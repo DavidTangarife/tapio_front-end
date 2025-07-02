@@ -25,9 +25,9 @@ export default function BoardCard(props: BoardCardProps) {
       <BoardHeading title={title} setCurrentFocus={setCurrentFocus} currentFocus={currentFocus} columnId={_id} />
       <div ref={setNodeRef} className="opportunityList">
         {opportunities.map((opportunity) => (
-          <OpportunityCard key={opportunity._id} {...opportunity} 
+          <OpportunityCard key={opportunity._id} {...opportunity}
             isDraggingRef={isDraggingRef}
-            onClick={() => onOpportunityClick(opportunity)}/>
+            onClick={() => onOpportunityClick(opportunity)} />))}
       </div>
     </div >
   );

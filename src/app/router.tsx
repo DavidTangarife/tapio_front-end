@@ -4,7 +4,6 @@ import SetupForm from "./routes/AccountSetUp";
 import ConnectEmails from "./routes/ConnectEmails";
 import Kanban from "./routes/Kanban";
 import ViewEmail from "./routes/ViewEmail";
-import Filter from "./routes/Filter";
 import MainLayout from "../components/layouts/MainLayout";
 // import Filter from "./routes/Filter";
 import { lazy, Suspense } from "react";
@@ -23,36 +22,39 @@ const router = createBrowserRouter([
           })
           const data = await response.json();
           return data
-    }
-  },
-  { path: "/setup", Component: SetupForm },
-  {
-    path: "/home", Component: ConnectEmails, loader: async () => {
-      const response = await fetch(`http://localhost:3000/api/getemails`, {
-        credentials: "include"
-      });
-      const data = await response.json();
-      return data
-    }
-  },
-  {
-    path: "/filter",
-    element: (
-      <Suspense fallback={<Spinner />}>
-        <Filter />
-      </Suspense>
-    ),
-    loader: async () => {
-      const res = await fetch("http://localhost:3000/api/direct-emails", {
+        }
+      },
+      { path: "/setup", Component: SetupForm },
+      {
+        path: "/home", Component: ConnectEmails, loader: async () => {
+          const response = await fetch(`http://localhost:3000/api/getemails`, {
+            credentials: "include"
+          });
+          const data = await response.json();
+          return data
+        }
+      },
+      {
+        path: "/filter",
+        element: (
+          <Suspense fallback={<Spinner />}>
+            <Filter />
+          </Suspense>
+        ),
+        loader: async () => {
+          const res = await fetch("http://localhost:3000/api/direct-emails", {
             method: "POST",
             credentials: "include",
           });
-      
+
           if (!res.ok) throw new Error("Failed to refresh inbox");
-      const response = await fetch(
-        `http://localhost:3000/api/unprocessed-emails`,
-        {
-          credentials: "include",
+          const response = await fetch(
+            `http://localhost:3000/api/unprocessed-emails`,
+            {
+              credentials: "include",
+            })
+          const data = await response.json();
+          return data
         }
       },
       {
