@@ -64,6 +64,10 @@ const BoardHeading = (props: BoardHeadingProps) => {
     }
   }
 
+  const loseFocus = () => {
+    setEditing(false)
+  }
+
 
 
   return (
@@ -80,6 +84,7 @@ const BoardHeading = (props: BoardHeadingProps) => {
               disableUnderline: true, // <== added this
               defaultValue: title
             }}
+            onBlur={loseFocus}
             onSubmit={submitTitle}
             onChange={async (e) => {
               setTempTitle(e.target.value)

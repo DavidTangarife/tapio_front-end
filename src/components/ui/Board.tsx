@@ -12,18 +12,27 @@ type BoardCardProps = {
   setCurrentFocus: (e: HTMLInputElement) => void
   onOpportunityClick: (op: Ot) => void;
   isDraggingRef: React.RefObject<boolean>;
+  setActivator: (bool: boolean) => void;
 }
 
 export default function BoardCard(props: BoardCardProps) {
-  const { _id, title, opportunities, currentFocus, setCurrentFocus, onOpportunityClick, isDraggingRef } = props
+  const { _id, title, opportunities, currentFocus, setCurrentFocus, onOpportunityClick, isDraggingRef, setActivator } = props
   const { setNodeRef } = useDroppable({
     id: props._id,
   });
 
+  const mouseEntered = () => {
+    setActivator(false)
+  }
+
+  const mouseLeft = () => {
+    setActivator(true)
+  }
+
   return (
-    <div key={_id} className="boardContainer">
+    <div key={_id} className="boardContainer" >
       <BoardHeading title={title} setCurrentFocus={setCurrentFocus} currentFocus={currentFocus} columnId={_id} />
-      <div ref={setNodeRef} className="opportunityList">
+      <div ref={setNodeRef} className="opportunityList" onMouseEnter={mouseEntered} onMouseLeave={mouseLeft}>
         {opportunities.map((opportunity: Ot) => (
           <OpportunityCard key={opportunity._id} {...opportunity}
             isDraggingRef={isDraggingRef}
