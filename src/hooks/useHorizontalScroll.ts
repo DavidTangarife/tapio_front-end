@@ -6,13 +6,12 @@ export function useHorizontalScroll() {
 
   useEffect(() => {
     const scroll: HTMLDivElement = elementRef.current;
-    console.log(scroll)
     if (scroll && activator) {
       const onWheel = (e: WheelEvent) => {
         if (e.deltaY == 0) return;
         e.preventDefault();
         scroll.scrollTo({
-          left: scroll.scrollLeft + e.deltaY,
+          left: scroll.scrollLeft + (e.deltaY * 2.2),
           behavior: "smooth"
         });
       };

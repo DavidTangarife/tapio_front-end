@@ -68,8 +68,6 @@ const BoardHeading = (props: BoardHeadingProps) => {
     setEditing(false)
   }
 
-
-
   return (
     <div className="headerContainer" onMouseEnter={() => { if (!editing) { setHovering(true) } }} onMouseLeave={() => { setHovering(false) }} onClick={editTitle}>
       {editing ? (

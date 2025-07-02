@@ -16,6 +16,7 @@ import "./Kanban.css";
 import BoardCard from "../../components/ui/Board";
 import Opportunity_PopUp from "../../components/ui/OppPopUp";
 import { useHorizontalScroll } from "../../hooks/useHorizontalScroll";
+import AddBoard from "../../components/ui/AddBoard";
 
 export default function Kanban() {
   const data = useLoaderData();
@@ -30,6 +31,10 @@ export default function Kanban() {
   useEffect(() => {
     setBoards(data);
   }, [data]);
+
+  useEffect(() => {
+    console.log('Updating Boards')
+  }, [boards])
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -182,6 +187,12 @@ export default function Kanban() {
             );
           })}
         </DndContext>
+        <AddBoard
+          currentFocus={currentFocus}
+          setCurrentFocus={setCurrentFocus}
+          setBoards={setBoards}
+          data={data}
+        />
       </div>
       {selectedOpportunity && (
         <Opportunity_PopUp
