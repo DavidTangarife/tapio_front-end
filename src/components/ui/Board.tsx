@@ -29,14 +29,14 @@ export default function BoardCard(props: BoardCardProps) {
   });
 
   return (
-    <div key={_id} className="boardContainer">
+    <div key={_id} className="boardContainer" ref={setNodeRef}>
       <BoardHeading
         title={title}
         setCurrentFocus={setCurrentFocus}
         currentFocus={currentFocus}
         columnId={_id}
       />
-      <div ref={setNodeRef} className="opportunityList">
+      <div className="opportunityList">
         {opportunities.map((opportunity) => (
           <OpportunityCard
             key={opportunity._id}
