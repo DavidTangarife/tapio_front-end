@@ -14,12 +14,13 @@ import type {
 } from "../../types/types";
 import "./Kanban.css";
 import Header from "../../components/ui/Header";
-import Board_Card from "../../components/ui/Board";
+import BoardCard from "../../components/ui/Board";
 import Opportunity_PopUp from "../../components/ui/OppPopUp";
 
 export default function Kanban() {
   const data = useLoaderData();
   const [boards, setBoards] = useState<Bt[]>([]);
+  const [currentFocus, setCurrentFocus] = useState<HTMLInputElement | null>(null)
   const [selectedOpportunity, setSelectedOpportunity] = useState<Ot | null>(
     null
   );
@@ -169,13 +170,15 @@ export default function Kanban() {
         >
           {boards.map((board) => {
             return (
-              <Board_Card
+              <BoardCard
                 key={board._id}
                 {...board}
                 isDraggingRef={isDragging}
                 onOpportunityClick={(opportunity) =>
                   setSelectedOpportunity(opportunity)
                 }
+                currentFocus={currentFocus}
+                setCurrentFocus={setCurrentFocus}
               />
             );
           })}

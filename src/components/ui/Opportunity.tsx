@@ -2,7 +2,7 @@ import "./Opportunity.css";
 import { Opportunity } from "../../types/types";
 import { useDraggable } from "@dnd-kit/core";
 
-export default function Opportunity_Card({
+export default function OpportunityCard({
   _id,
   title,
   company,
