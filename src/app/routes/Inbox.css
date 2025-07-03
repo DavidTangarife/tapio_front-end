@@ -1,3 +1,5 @@
+Inbox.css
+
 .email-section {
   display: block;
   margin-bottom: 50px;
@@ -43,7 +45,7 @@
   gap: 15px;
   justify-content: start;
   width: 100%;
-  max-width: 920px;
+  max-width: 966px;
   margin: 0 auto;
   padding: 12px 8px;
 }
@@ -64,22 +66,26 @@
 .search-wrapper {
   position: relative;
   width: 100%;
-  max-width: 800px;
+  /* max-width: 900px; */
 }
 
 .search-dropdown {
   position: absolute;
-  top: 16%;
-  left:13%;
+  top: 93%;
   background-color: var(--color-primary);
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
-  max-width: 800px;
+  /* max-width: 800px; */
   width: 100%;
   border-radius: 4px;
   z-index:100;
   margin-top: 4px;
   max-height: 450px;
-   list-style:none;
+  list-style:none;
+  overflow: auto;
+}
+
+.inbox-header:has(.search-dropdown:not(:empty)) + .email-section {
+  filter: blur(4px);
 }
 
 .search-dropdown-item {
@@ -91,6 +97,7 @@
 
 .search-dropdown-item:hover {
   background-color: var(--color-dark-mode-hover);
+  border-radius: 4px;
 }
 
 .dropdown-content {
@@ -103,6 +110,7 @@
 .dropdown-subject {
   font-weight: var(--font-weight-bold);
   margin: 0;
+  /* font-size: var(--font-size-regular); */
 }
 .dropdown-from {
   margin: 0;

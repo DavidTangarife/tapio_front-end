@@ -24,7 +24,7 @@ const ConnectEmails = () => {
         credentials: "include",
       });
 
-      if (!res.ok) throw new Error("Failed to refresh inbox");
+    if (!res.ok) throw new Error("Failed to refresh inbox");
 
       // Fetch updated inbox from DB
       const getRes = await fetch("http://localhost:3000/api/getemails", {

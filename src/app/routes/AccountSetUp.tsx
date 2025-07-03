@@ -67,6 +67,10 @@ const SetupForm = () => {
     isLastStep,
   } = useSetupForm(steps);
 
+  function getLocalMidnightISOString(dateStr: string): string {
+    return new Date(dateStr).toISOString();
+  }
+
   const handleSubmit = async () => {
     try {
       // send project name and start date to create a new project for the user

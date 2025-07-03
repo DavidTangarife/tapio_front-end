@@ -1,6 +1,5 @@
 import EmailItem from "../../components/ui/EmailItem";
 import "./Inbox.css";
-<<<<<<< HEAD
 import { Email, InboxProps } from "../../types/types";
 import { SearchBar } from "../../components/ui/SearchBar";
 import { useEffect, useRef, useState } from "react";
@@ -25,22 +24,6 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) =>
 
   useEffect(() => {
     const trimmed = inputValue.trim();
-=======
-import { InboxProps } from "../../types/types";
-
-const Inbox: React.FC<InboxProps> = ({
-  emails,
-  onTapUpdate,
-  onRefreshInbox,
-}) => {
-  if (!emails.length) return <p>No emails found</p>;
-
-  const readEmails = emails.filter((email) => email.isRead && !email.isTapped);
-  const unreadEmails = emails.filter(
-    (email) => !email.isRead && !email.isTapped
-  );
-  const tappedEmails = emails.filter((email) => email.isTapped);
->>>>>>> 7f43d474f22a62b584b267d36d5b0d1580c84f25
 
     if (trimmed.length === 0) {
       setSearchResults([]);
@@ -100,7 +83,6 @@ const Inbox: React.FC<InboxProps> = ({
   return (
     <>
       <div className="inbox-header">
-<<<<<<< HEAD
         <button onClick={onRefreshInbox} className="refresh-button"><Refresh /></button>
         <div className="search-wrapper" ref={wrapperRef}>
           <SearchBar onSearch={() => fetchSearchResults(inputValue.trim())} inputValue={inputValue} setInputValue={setInputValue}/>
@@ -108,7 +90,7 @@ const Inbox: React.FC<InboxProps> = ({
             <ul className="search-dropdown">
               {searchResults.length > 0 ? (
                 <>
-                  {searchResults.slice(0, 5).map((email) => (
+                  {searchResults.map((email) => (
                     <li
                       key={email._id}
                       className="search-dropdown-item"
@@ -128,16 +110,6 @@ const Inbox: React.FC<InboxProps> = ({
                       </div>
                     </li>
                   ))}
-                {searchResults.length > 5 && (
-                  <li
-                    className="search-dropdown-item view-all"
-                    onClick={() => navigate(`/emails?q=${searchQuery}`)}
-                  >
-                    <span className="view-all-text">
-                      All search results for <strong>"{searchQuery}"</strong> →
-                    </span>
-                  </li>
-                )}
                 </>
             ) : (
               <li className="search-dropdown-item no-result">
@@ -147,12 +119,6 @@ const Inbox: React.FC<InboxProps> = ({
             </ul>
           )}
         </div>
-=======
-        <h2>Inbox</h2>
-        <button onClick={onRefreshInbox} className="refresh-button">
-          Refresh Inbox
-        </button>
->>>>>>> 7f43d474f22a62b584b267d36d5b0d1580c84f25
       </div>
 
       <div className="email-section">
