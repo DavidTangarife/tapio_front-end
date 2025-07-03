@@ -1,5 +1,6 @@
 import EmailItem from "../../components/ui/EmailItem";
 import "./Inbox.css";
+<<<<<<< HEAD
 import { Email, InboxProps } from "../../types/types";
 import { SearchBar } from "../../components/ui/SearchBar";
 import { useEffect, useRef, useState } from "react";
@@ -24,6 +25,22 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) =>
 
   useEffect(() => {
     const trimmed = inputValue.trim();
+=======
+import { InboxProps } from "../../types/types";
+
+const Inbox: React.FC<InboxProps> = ({
+  emails,
+  onTapUpdate,
+  onRefreshInbox,
+}) => {
+  if (!emails.length) return <p>No emails found</p>;
+
+  const readEmails = emails.filter((email) => email.isRead && !email.isTapped);
+  const unreadEmails = emails.filter(
+    (email) => !email.isRead && !email.isTapped
+  );
+  const tappedEmails = emails.filter((email) => email.isTapped);
+>>>>>>> 7f43d474f22a62b584b267d36d5b0d1580c84f25
 
     if (trimmed.length === 0) {
       setSearchResults([]);
@@ -83,6 +100,7 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) =>
   return (
     <>
       <div className="inbox-header">
+<<<<<<< HEAD
         <button onClick={onRefreshInbox} className="refresh-button"><Refresh /></button>
         <div className="search-wrapper" ref={wrapperRef}>
           <SearchBar onSearch={() => fetchSearchResults(inputValue.trim())} inputValue={inputValue} setInputValue={setInputValue}/>
@@ -129,6 +147,12 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) =>
             </ul>
           )}
         </div>
+=======
+        <h2>Inbox</h2>
+        <button onClick={onRefreshInbox} className="refresh-button">
+          Refresh Inbox
+        </button>
+>>>>>>> 7f43d474f22a62b584b267d36d5b0d1580c84f25
       </div>
 
       <div className="email-section">
@@ -148,6 +172,7 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) =>
                   date={email.date}
                   isTapped={email.isTapped}
                   onTapUpdate={onTapUpdate}
+                  showTapIn={true}
                 />
               ))}
             </div>
@@ -155,24 +180,27 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) =>
         )}
 
         <h3 className="email-section-title">UNREAD</h3>
-        {unreadEmails.length > 0 ?
-        <div className="email-list">
-          {unreadEmails.map((email) => (
-            <EmailItem
-              key={email._id}
-              _id={email._id}
-              sender={email.from}
-              subject={email.subject}
-              senderAddress={email.senderAddress}
-              body={email.body}
-              isRead={email.isRead}
-              date={email.date}
-              isTapped={email.isTapped}
-              onTapUpdate={onTapUpdate}
-            />
-          ))}
-        </div> : <p className="no-new-emails-msg">No new emails</p>
-}
+        {unreadEmails.length > 0 ? (
+          <div className="email-list">
+            {unreadEmails.map((email) => (
+              <EmailItem
+                key={email._id}
+                _id={email._id}
+                sender={email.from}
+                subject={email.subject}
+                senderAddress={email.senderAddress}
+                body={email.body}
+                isRead={email.isRead}
+                date={email.date}
+                isTapped={email.isTapped}
+                onTapUpdate={onTapUpdate}
+                showTapIn={true}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="no-new-emails-msg">No new emails</p>
+        )}
         {readEmails.length > 0 && (
           <>
             <h3 className="email-section-title">READ</h3>
@@ -189,12 +217,14 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) =>
                   date={email.date}
                   isTapped={email.isTapped}
                   onTapUpdate={onTapUpdate}
+                  showTapIn={true}
                 />
               ))}
             </div>
-          </>)}
+          </>
+        )}
       </div>
     </>
-  )
+  );
 };
 export default Inbox;

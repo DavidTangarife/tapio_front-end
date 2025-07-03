@@ -25,6 +25,7 @@
 }
 
 .companyText {
+  display: inline-block;
   font-weight: 500;
   color: #f5f5f5;
   transition: color 0.2s ease;
@@ -32,7 +33,6 @@
 
 .companyText:hover {
   cursor: pointer;
-  color: limegreen;
 }
 
 .titleText {

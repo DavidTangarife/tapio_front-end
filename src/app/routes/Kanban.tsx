@@ -1,30 +1,67 @@
 import { useLoaderData } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { DndContext, DragEndEvent } from "@dnd-kit/core";
+import { useEffect, useState, useRef } from "react";
+import {
+  DragOverlay,
+  DndContext,
+  DragStartEvent,
+  DragEndEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import type {
   Board as Bt,
   Opportunity,
   Opportunity as Ot,
 } from "../../types/types";
 import "./Kanban.css";
-import Header from "../../components/ui/Header";
-import Board_Card from "../../components/ui/Board";
+import BoardCard from "../../components/ui/Board";
+import OpportunityCard from "../../components/ui/Opportunity";
 import Opportunity_PopUp from "../../components/ui/OppPopUp";
+import { useHorizontalScroll } from "../../hooks/useHorizontalScroll";
+import AddBoard from "../../components/ui/AddBoard";
 
 export default function Kanban() {
   const data = useLoaderData();
   const [boards, setBoards] = useState<Bt[]>([]);
+  const [currentFocus, setCurrentFocus] = useState<HTMLInputElement | null>(
+    null
+  );
   const [selectedOpportunity, setSelectedOpportunity] = useState<Ot | null>(
     null
   );
+  const [activeOpportunityId, setActiveOpportunityId] = useState<string | null>(
+    ""
+  );
+  const isDragging = useRef(false);
+  const { elementRef, setActivator } = useHorizontalScroll();
 
   useEffect(() => {
     setBoards(data);
   }, [data]);
 
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event; // active -> Draggable Item that was move, over -> droppable board where item was dropped
+  useEffect(() => {
+    console.log('Updating Boards')
+  }, [boards])
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 2, // Only start dragging after moving 2px
+      },
+    })
+  );
+
+  function handleDragStart(event: DragStartEvent) {
+    setActiveOpportunityId(event.active.id as string);
+    isDragging.current = true;
+  }
+
+  function handleDragEnd(event: DragEndEvent) {
+    setActiveOpportunityId(null);
+    isDragging.current = false; // Reset after drag
+
+    const { active, over } = event; // active -> Draggable Item that was move, over -> droppable board where item was dropped
     if (!over) return; // If dropped in non valid area do nothing
 
     const OpportunityId = active.id as string; // We gotta manually typecast this two as there ir no way Dragevent can tell -> match opportunity._id
@@ -71,7 +108,15 @@ export default function Kanban() {
     });
   }
 
-  function editOpportunity(id: string, updatedData: Opportunity) {
+  const active = boards
+    .flatMap((b) => b.opportunities)
+    .find((op) => op._id === activeOpportunityId);
+
+  function editOpportunity(
+    id: string,
+    updatedData: Opportunity,
+    afterSave?: (updatedOpp: Opportunity) => void
+  ) {
     fetch(`http://localhost:3000/api/opportunity/${id}/full`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -100,7 +145,8 @@ export default function Kanban() {
           });
         });
         // After patching the changes we close the popup by deselecting the selectedopportunity
-        setSelectedOpportunity(null);
+        setSelectedOpportunity(updatedOpp);
+        if (afterSave) afterSave(updatedOpp); //Call back to opportunity pop up to handle the update inside the component (Making a faster changer)
       })
       .catch((err) => {
         console.error("Failed to update opportunity:", err);
@@ -116,6 +162,14 @@ export default function Kanban() {
         if (!res.ok) {
           throw new Error("Failed to delete opportunity");
         }
+
+        setBoards((prevBoards) =>
+          prevBoards.map((board) => ({
+            ...board,
+            opportunities: board.opportunities.filter((opp) => opp._id !== id),
+          }))
+        );
+
         return "Opportunity Deleted / Feedback to the user";
       })
       .catch((err) => {
@@ -125,23 +179,45 @@ export default function Kanban() {
 
   return (
     <div className="page">
-      <div className="header-wrapper">
-        <Header />
-      </div>
-      <div className="boardWrapper">
-        <DndContext onDragEnd={handleDragEnd}>
+      <div className="boardWrapper" ref={elementRef}>
+        <DndContext
+          sensors={sensors}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
           {boards.map((board) => {
             return (
-              <Board_Card
+              <BoardCard
                 key={board._id}
                 {...board}
+                isDraggingRef={isDragging}
                 onOpportunityClick={(opportunity) =>
                   setSelectedOpportunity(opportunity)
                 }
+                currentFocus={currentFocus}
+                setCurrentFocus={setCurrentFocus}
+                setActivator={setActivator}
               />
             );
           })}
+
+          <DragOverlay>
+            {activeOpportunityId ? (
+              <OpportunityCard
+                {...(active as Opportunity)}
+                isDraggingRef={isDragging}
+                onClick={() => {}}
+                style={{ opacity: 0.6 }}
+              />
+            ) : null}
+          </DragOverlay>
         </DndContext>
+        <AddBoard
+          currentFocus={currentFocus}
+          setCurrentFocus={setCurrentFocus}
+          setBoards={setBoards}
+          boards={boards}
+        />
       </div>
       {selectedOpportunity && (
         <Opportunity_PopUp
@@ -152,13 +228,11 @@ export default function Kanban() {
             deleteOpportunity(id);
             setSelectedOpportunity(null);
           }}
-          onEdit={(id, newdata) => {
-            editOpportunity(id, newdata);
+          onEdit={(id, newdata, afterSave) => {
+            editOpportunity(id, newdata, afterSave);
           }}
         />
       )}
     </div>
   );
 }
-
-

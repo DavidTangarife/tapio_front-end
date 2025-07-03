@@ -1,27 +1,62 @@
 import "./Board.css";
-import { Board as Bt, Opportunity as Ot } from "../../types/types";
-import Opportunity_Card from "./Opportunity";
+import OpportunityCard from "./Opportunity";
+import { Opportunity as Ot } from "../../types/types";
 import { useDroppable } from "@dnd-kit/core";
+import BoardHeading from "./BoardHeading";
 
-export default function Board_Card({
-  _id,
-  title,
-  opportunities,
-  onOpportunityClick,
-}: Bt & { onOpportunityClick: (op: Ot) => void }) {
+type BoardCardProps = {
+  _id: string;
+  title: string;
+  opportunities: Ot[];
+  currentFocus: HTMLInputElement | null;
+  setCurrentFocus: (e: HTMLInputElement) => void;
+  onOpportunityClick: (op: Ot) => void;
+  isDraggingRef: React.RefObject<boolean>;
+  setActivator: (bool: boolean) => void;
+};
+
+export default function BoardCard(props: BoardCardProps) {
+  const {
+    _id,
+    title,
+    opportunities,
+    currentFocus,
+    setCurrentFocus,
+    onOpportunityClick,
+    isDraggingRef,
+    setActivator,
+  } = props;
   const { setNodeRef } = useDroppable({
-    id: _id,
+    id: props._id,
   });
 
+  const mouseEntered = () => {
+    setActivator(false);
+  };
+
+  const mouseLeft = () => {
+    setActivator(true);
+  };
+
   return (
-    <div key={_id} className="boardContainer">
-      <h2 className="boardTitle">{title}</h2>
-      <div ref={setNodeRef} className="opportunityList">
-        {opportunities.map((op) => (
-          <Opportunity_Card
-            key={op._id}
-            {...op}
-            onClick={() => onOpportunityClick(op)}
+    <div key={_id} className="boardContainer" ref={setNodeRef}>
+      <BoardHeading
+        title={title}
+        setCurrentFocus={setCurrentFocus}
+        currentFocus={currentFocus}
+        columnId={_id}
+      />
+      <div
+        className="opportunityList"
+        onMouseEnter={mouseEntered}
+        onMouseLeave={mouseLeft}
+      >
+        {opportunities.map((opportunity: Ot) => (
+          <OpportunityCard
+            key={opportunity._id}
+            {...opportunity}
+            isDraggingRef={isDraggingRef}
+            onClick={() => onOpportunityClick(opportunity)}
           />
         ))}
       </div>

@@ -1,4 +1,3 @@
-import Header from "../../components/ui/Header";
 import Welcome from "../../components/ui/Welcome";
 import "./ConnectEmails.css";
 import { useNavigate } from "react-router-dom";
@@ -14,29 +13,29 @@ const ConnectEmails = () => {
   const [refreshTrigger, setRefreshTrigger] = useState(0); // used to re-fetch emails when project changes
   const navigate = useNavigate();
 
-/**
- * function to fetch new emails from Gmail and show new emails in database
- * It triggers when user clicks Refresh Inbox button
- */
+  /**
+   * function to fetch new emails from Gmail and show new emails in database
+   * It triggers when user clicks Refresh Inbox button
+   */
   const handleRefreshInbox = async () => {
-  try {
-    const res = await fetch("http://localhost:3000/api/direct-emails", {
-      method: "POST",
-      credentials: "include",
-    });
+    try {
+      const res = await fetch("http://localhost:3000/api/direct-emails", {
+        method: "POST",
+        credentials: "include",
+      });
 
-    if (!res.ok) throw new Error("Failed to refresh inbox");
+      if (!res.ok) throw new Error("Failed to refresh inbox");
 
-    // Fetch updated inbox from DB
-    const getRes = await fetch("http://localhost:3000/api/getemails", {
-      credentials: "include",
-    });
-    const data = await getRes.json();
-    setEmails(data.emails || []);
-  } catch (err) {
-    console.error("Error refreshing inbox:", err);
-  }
-};
+      // Fetch updated inbox from DB
+      const getRes = await fetch("http://localhost:3000/api/getemails", {
+        credentials: "include",
+      });
+      const data = await getRes.json();
+      setEmails(data.emails || []);
+    } catch (err) {
+      console.error("Error refreshing inbox:", err);
+    }
+  };
 
   /**
    * Sync showEmailSection with emails state
@@ -95,12 +94,13 @@ const ConnectEmails = () => {
       });
       const resData = await res.json()
       // console.log(resData)
+      navigate('/filter')
+      return
       setEmails(resData.emails || [])
       if (!res.ok) throw new Error("Failed to fetch and save emails");
     } catch (err) {
       console.log("Error Connecting email ", err);
     }
-    setLoading(false)
   };
 
   /**
@@ -134,7 +134,6 @@ const ConnectEmails = () => {
   return (
     <main>
       <>
-        <Header onProjectSwap={handleProjectSwap} />
         {!showEmailSection ? (
           <Welcome onConnectEmails={handleConnectEmails} />
         ) : (
@@ -142,7 +141,7 @@ const ConnectEmails = () => {
             {loading ? (
               <Spinner />
             ) : (
-              <Inbox emails={emails} onTapUpdate={handleTapUpdate} onRefreshInbox={handleRefreshInbox}/>
+              <Inbox emails={emails} onTapUpdate={handleTapUpdate} onRefreshInbox={handleRefreshInbox} />
             )}
           </>
         )}

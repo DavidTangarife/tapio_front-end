@@ -121,10 +121,12 @@ const ViewEmail = () => {
       <main>
         <section className="header-container">
           <Link to={`/inbox`} className="back-btn">
-            Back
+            Back to Inbox
           </Link>
           <TapioLogoDesktop className="logo" />
-          <div></div>
+          <Link to={`/board`} className="back-btn">
+            Back to Board
+          </Link>
         </section>
         <section className="email-view-container">
           <div className="email-view-sender-details">
