@@ -41,12 +41,6 @@ const router = createBrowserRouter([
           </Suspense>
         ),
         loader: async () => {
-          const res = await fetch("http://localhost:3000/api/direct-emails", {
-            method: "POST",
-            credentials: "include",
-          });
-
-          if (!res.ok) throw new Error("Failed to refresh inbox");
           const response = await fetch(
             `http://localhost:3000/api/unprocessed-emails`,
             {
@@ -93,7 +87,7 @@ const router = createBrowserRouter([
       {
         path: "/inbox", Component: ConnectEmails,
         loader: async () => {
-          const response = await fetch('http://localhost:3000/api/projects/emails', {
+          const response = await fetch('http://localhost:3000/api/getemails', {
             credentials: "include"
           });
           const data = await response.json();

@@ -4,7 +4,8 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 25px 0 50px 0;
+  margin: 50px auto;
+  max-width: 966px;
 }
 .logo {
   width: 120px;

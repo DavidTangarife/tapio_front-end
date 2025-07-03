@@ -1,6 +1,7 @@
 import Welcome from "../../components/ui/Welcome";
 import "./ConnectEmails.css";
 import { useLoaderData, useNavigate } from "react-router-dom";
+
 import Inbox from "./Inbox";
 import { Email } from "../../types/types"
 import { useEffect, useState } from "react";
@@ -11,8 +12,9 @@ const ConnectEmails = () => {
 
   const [showEmailSection, setShowEmailSection] = useState(loaderData.emails);
   const [loading, setLoading] = useState(false);
-  const [emails, setEmails] = useState<Email[]>(loaderData.emails || []);
+  const [emails, setEmails] = useState<Email[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0); // used to re-fetch emails when project changes
+  const [inboxConnected, setInboxConnected] = useState(Boolean);
   const navigate = useNavigate();
 
   /**
@@ -26,7 +28,7 @@ const ConnectEmails = () => {
         credentials: "include",
       });
 
-    if (!res.ok) throw new Error("Failed to refresh inbox");
+      if (!res.ok) throw new Error("Failed to refresh inbox");
 
       // Fetch updated inbox from DB
       const getRes = await fetch("http://localhost:3000/api/getemails", {
@@ -45,30 +47,8 @@ const ConnectEmails = () => {
    */
   useEffect(() => {
     setShowEmailSection(emails.length > 0);
+    setInboxConnected(true);
   }, [emails]);
-
-  /**
-   * Fetch emails when component mounts or refreshTrigger changes
-   */
-  useEffect(() => {
-    const fetchEmails = async () => {
-      const res = await fetch("http://localhost:3000/api/getemails", {
-        credentials: "include",
-      });
-      const data = await res.json();
-
-      if (data.error === "Unauthorized access: Please login") {
-        return navigate("/");
-      }
-      if (data.error === "No Project Found") {
-        return navigate("/setup");
-      }
-
-      setEmails(data.emails || []);
-    };
-
-    fetchEmails();
-  }, [navigate, refreshTrigger]);
 
   /**
    * Called by Header component after user swaps project.
@@ -136,7 +116,7 @@ const ConnectEmails = () => {
   return (
     <main>
       <>
-        {!showEmailSection ? (
+        {!showEmailSection && !inboxConnected ? (
           <Welcome onConnectEmails={handleConnectEmails} />
         ) : (
           <>
