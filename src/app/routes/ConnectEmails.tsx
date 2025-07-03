@@ -1,6 +1,6 @@
 import Welcome from "../../components/ui/Welcome";
 import "./ConnectEmails.css";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate} from "react-router-dom";
 
 import Inbox from "./Inbox";
 import { Email } from "../../types/types"
@@ -15,7 +15,9 @@ const ConnectEmails = () => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0); // used to re-fetch emails when project changes
   const [inboxConnected, setInboxConnected] = useState(Boolean);
+  const [refreshMessage, setRefreshMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+
 
   /**
    * function to fetch new emails from Gmail and show new emails in database
@@ -36,6 +38,16 @@ const ConnectEmails = () => {
       });
       const data = await getRes.json();
       setEmails(data.emails || []);
+      const unprocessedEmails = emails.filter((e) => !e.isProcessed).length
+      console.log(emails.length);
+      if (unprocessedEmails > 0) {
+        setRefreshMessage(`You have ${unprocessedEmails} new emails to filter`)
+      } else {
+        setRefreshMessage("No new emails")
+      }
+      setTimeout(() => {
+        setRefreshMessage(null);
+      }, 3000)
     } catch (err) {
       console.error("Error refreshing inbox:", err);
     }
@@ -49,6 +61,29 @@ const ConnectEmails = () => {
     setShowEmailSection(emails.length > 0);
     setInboxConnected(true);
   }, [emails]);
+
+    /**
+   * Fetch emails when component mounts or refreshTrigger changes
+   */
+  useEffect(() => {
+    const fetchEmails = async () => {
+      const res = await fetch("http://localhost:3000/api/getemails", {
+        credentials: "include",
+      });
+      const data = await res.json();
+
+      if (data.error === "Unauthorized access: Please login") {
+        return navigate("/");
+      }
+      if (data.error === "No Project Found") {
+        return navigate("/setup");
+      }
+
+      setEmails(data.emails || []);
+    };
+
+    fetchEmails();
+  }, [navigate, refreshTrigger]);
 
   /**
    * Called by Header component after user swaps project.
@@ -123,7 +158,12 @@ const ConnectEmails = () => {
             {loading ? (
               <Spinner />
             ) : (
-              <Inbox emails={emails} onTapUpdate={handleTapUpdate} onRefreshInbox={handleRefreshInbox} />
+              <Inbox emails={emails} 
+              onTapUpdate={handleTapUpdate} 
+              onRefreshInbox={handleRefreshInbox}
+              refreshMessage={refreshMessage}
+            
+               />
             )}
           </>
         )}

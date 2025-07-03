@@ -62,7 +62,17 @@ Inbox.css
   color: var(--color-font-dark);
   border: none;
 }
-
+.refresh-msg-email-present {
+  background-color: var(--color-primary);
+  color: var(--color-font-offwhite);
+  font-family: var(--font-bodycopy);
+  font-size: var(--font-size-regular);
+  padding: 10px 20px;
+  border-left: 6px solid var(--color-green-dark-mode);
+  border-radius: var(--border-radius);
+  margin: 8px;
+  animation: fadeInOut 4s ease-in-out forwards;
+}
 .search-wrapper {
   position: relative;
   width: 100%;
