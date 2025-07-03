@@ -54,7 +54,7 @@ const router = createBrowserRouter([
   {
     path: "/inbox", Component: ConnectEmails,
     loader: async () => {
-      const response = await fetch('http://localhost:3000/api/getemails', {
+      const response = await fetch('http://localhost:3000/api/projects/emails', {
         credentials: "include"
       });
       const data = await response.json();
