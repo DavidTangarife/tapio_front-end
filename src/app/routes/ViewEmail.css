@@ -59,7 +59,7 @@
   color: var(--color-font-primary);
 }
 .email-view-btn-panel {
-  margin-top: 50px;
+  margin: 50px 0 50px 0;
   display: flex;
   align-items: center;
   justify-content: center;
