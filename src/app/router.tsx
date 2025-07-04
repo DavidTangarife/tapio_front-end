@@ -5,7 +5,6 @@ import ConnectEmails from "./routes/ConnectEmails";
 import Kanban from "./routes/Kanban";
 import ViewEmail from "./routes/ViewEmail";
 import MainLayout from "../components/layouts/MainLayout";
-// import Filter from "./routes/Filter";
 import { lazy, Suspense } from "react";
 import Spinner from "../components/ui/Spinner";
 
@@ -64,7 +63,7 @@ const router = createBrowserRouter([
         Component: Filter,
         loader: async () => {
           const response = await fetch(
-            `http://localhost:3000/api/getemails`,
+            `http://localhost:3000/api/unprocessed-emails`,
             {
               credentials: "include",
             }

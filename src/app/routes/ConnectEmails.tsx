@@ -8,13 +8,12 @@ import { useEffect, useState } from "react";
 import Spinner from "../../components/ui/Spinner";
 
 const ConnectEmails = () => {
-  const loaderData = useLoaderData();
+  const loaderData = useLoaderData() as { emails: Email[]; inboxConnected: boolean };
 
-  const [showEmailSection, setShowEmailSection] = useState(loaderData.emails);
+  const [showEmailSection, setShowEmailSection] = useState( loaderData.inboxConnected || loaderData.emails.length > 0);
   const [loading, setLoading] = useState(false);
   const [emails, setEmails] = useState<Email[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0); // used to re-fetch emails when project changes
-  const [inboxConnected, setInboxConnected] = useState(Boolean);
   const [refreshMessage, setRefreshMessage] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -29,7 +28,7 @@ const ConnectEmails = () => {
         method: "POST",
         credentials: "include",
       });
-
+      const { count }= await res.json()
       if (!res.ok) throw new Error("Failed to refresh inbox");
 
       // Fetch updated inbox from DB
@@ -38,10 +37,9 @@ const ConnectEmails = () => {
       });
       const data = await getRes.json();
       setEmails(data.emails || []);
-      const unprocessedEmails = emails.filter((e) => !e.isProcessed).length
-      console.log(emails.length);
-      if (unprocessedEmails > 0) {
-        setRefreshMessage(`You have ${unprocessedEmails} new emails to filter`)
+
+      if (count > 0) {
+        setRefreshMessage(`You have ${count} new emails to filter`)
       } else {
         setRefreshMessage("No new emails")
       }
@@ -54,17 +52,8 @@ const ConnectEmails = () => {
   };
 
   /**
-   * Sync showEmailSection with emails state
-   * This toggles between Welcome and Inbox based on whether we have emails.
-   */
-  useEffect(() => {
-    setShowEmailSection(emails.length > 0);
-    setInboxConnected(true);
-  }, [emails]);
-
-    /**
    * Fetch emails when component mounts or refreshTrigger changes
-   */
+  */
   useEffect(() => {
     const fetchEmails = async () => {
       const res = await fetch("http://localhost:3000/api/getemails", {
@@ -151,7 +140,7 @@ const ConnectEmails = () => {
   return (
     <main>
       <>
-        {!showEmailSection && !inboxConnected ? (
+        {!showEmailSection ? (
           <Welcome onConnectEmails={handleConnectEmails} />
         ) : (
           <>
