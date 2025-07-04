@@ -21,10 +21,17 @@ const Filter = () => {
   >("new");
 
   function extractEmailAddress(from: string): string {
-    if (!from) return "";
-    const match = from.match(/<(.+)>/);
-    return (match ? match[1] : from).trim().toLowerCase();
-  }
+  if (!from) return "";
+
+  // First, try to match email in angle brackets
+  const angleMatch = from.match(/<([^<>]+)>/);
+  if (angleMatch) return angleMatch[1].trim().toLowerCase();
+
+  // Otherwise, try to extract standalone email
+  const emailMatch = from.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+  return (emailMatch ? emailMatch[0] : "").trim().toLowerCase();
+}
+
 
   function getUnprocessedEmails(emails: SenderData[]) {
     return emails.filter((email) => !email.isProcessed);

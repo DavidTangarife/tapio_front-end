@@ -74,10 +74,10 @@ const BoardHeading = (props: BoardHeadingProps) => {
         <form onSubmit={e => submitTitle(e)} onKeyDown={e => handleKey(e)}>
           <TextField
             inputRef={inputRef}
-            size={'small'}
+            // fontSize={'20px'}
             variant="standard"
             className="editField"
-            sx={{ input: { color: '#f5f5f5' } }}
+            sx={{ input: { color: '#f5f5f5', fontSize: '24px', fontFamily: 'var(--font-stylised)' , fontWeight: '600'} }}
             InputProps={{
               disableUnderline: true, // <== added this
               defaultValue: title
