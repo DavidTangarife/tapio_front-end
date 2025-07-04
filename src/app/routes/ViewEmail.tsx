@@ -126,7 +126,7 @@ const ViewEmail = () => {
           </Link>
           <TapioLogoDesktop className="logo" />
           <Link to={`/board`} className="back-btn">
-            Back to Board
+            Go to Board
           </Link>
         </section>
          

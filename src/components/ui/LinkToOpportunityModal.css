@@ -1,5 +1,6 @@
 .opportunity-modal {
-  max-width: 18.75rem;
+  /* max-width: 18.75rem; */
+  min-width: 16rem;
   position: absolute;
   bottom: 110%;
   right: -50%;
@@ -8,6 +9,8 @@
   border-radius: var(--border-radius);
   background-color: var(--color-primary);
   padding: 0.625rem;
+  max-height: 18rem;
+  overflow-y: auto;
 }
 .modal-backdrop {
   position: fixed;
@@ -23,14 +26,15 @@
 .my-opportunities-title {
   font-size: var(--font-size-title);
   padding: 0.3125rem 1.25rem 0.625rem;
+  text-align: center;
 }
 
 .opportunity-btns {
   width: 100%;
   padding: 8px;
-  text-align: center;
+  text-align: left;
   border: none;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: var(--font-weight-medium);
   font-family: var(--font-stylised);
   color: var(--color-font-offwhite);
@@ -46,4 +50,37 @@
 .opportunity-btns:active {
   transform: scale(1.1);
   background-color: var(--color-dark-mode-hover);
+}
+
+.search {
+  padding: 0.5rem 1rem 0.75rem;
+}
+
+/* Search input field */
+.search-input-opp {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--border-radius);
+  background-color: var(--color-input-bg);
+  color: var(--color-font-offwhite);
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--color-font-muted);
+  font-style: italic;
+}
+
+.search-input-opp:focus {
+  border: 1px solid #828282;
+  
+}
+
+.no-results-text {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--color-font-muted, #ccc);
+  font-style: italic;
 }
