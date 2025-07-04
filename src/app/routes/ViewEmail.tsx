@@ -11,6 +11,7 @@ import {
   DeleteOutlined,
 } from "@mui/icons-material";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
+import SnippetsTags from "../../components/ui/snippets";
 
 interface EmailDetails {
   subject?: string;
@@ -102,7 +103,8 @@ const ViewEmail = () => {
     if (!iframe) return;
 
     const updateHeight = () => {
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      const iframeDoc =
+        iframe.contentDocument || iframe.contentWindow?.document;
       if (iframeDoc && iframeDoc.body) {
         iframe.style.height = iframeDoc.body.scrollHeight + "px";
       }
@@ -110,12 +112,15 @@ const ViewEmail = () => {
 
     // Wait for iframe content to load
     const onLoad = () => {
-      updateHeight()
+      updateHeight();
     };
 
     iframe.addEventListener("load", onLoad);
     return () => iframe.removeEventListener("load", onLoad);
   }, [emailBodyHtml]);
+
+  // Snippets fucntionality
+
   return (
     <>
       <main>
@@ -134,11 +139,17 @@ const ViewEmail = () => {
             <h4 className="email-view-sender">{emailDetails?.from}</h4>
           </div>
           <section className="email-view-body">
+            <SnippetsTags />
             <iframe
-            ref={iframeRef}
-            className="iframe"
+              ref={iframeRef}
+              className="iframe"
               title="email-content"
-              style={{ width: "100%", minHeight: "500px", border: "none", overflow: "hidden"  }}
+              style={{
+                width: "100%",
+                minHeight: "500px",
+                border: "none",
+                overflow: "hidden",
+              }}
               srcDoc={emailBodyHtml}
             />
           </section>

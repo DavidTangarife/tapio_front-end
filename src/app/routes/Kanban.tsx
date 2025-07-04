@@ -41,8 +41,8 @@ export default function Kanban() {
   }, [data]);
 
   useEffect(() => {
-    console.log('Updating Boards')
-  }, [boards])
+    console.log("Updating Boards");
+  }, [boards]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {

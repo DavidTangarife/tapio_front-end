@@ -1,0 +1,17 @@
+.snippets-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-stylised);
+  color: var(--color-font-primary);
+  font-size: var(--button-font-size);
+  border: 1px solid #1f1f1f;
+  border-radius: var(--border-radius);
+  background-color: var(--color-primary);
+  border: var(--border-green-dark-mode);
+  cursor: pointer;
+}
