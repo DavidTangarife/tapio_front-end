@@ -1,6 +1,7 @@
 import Welcome from "../../components/ui/Welcome";
 import "./ConnectEmails.css";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate} from "react-router-dom";
+
 import Inbox from "./Inbox";
 import { Email } from "../../types/types"
 import { useEffect, useState } from "react";
@@ -11,9 +12,12 @@ const ConnectEmails = () => {
 
   const [showEmailSection, setShowEmailSection] = useState(loaderData.emails);
   const [loading, setLoading] = useState(false);
-  const [emails, setEmails] = useState<Email[]>(loaderData.emails || []);
+  const [emails, setEmails] = useState<Email[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0); // used to re-fetch emails when project changes
+  const [inboxConnected, setInboxConnected] = useState(Boolean);
+  const [refreshMessage, setRefreshMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+
 
   /**
    * function to fetch new emails from Gmail and show new emails in database
@@ -26,7 +30,7 @@ const ConnectEmails = () => {
         credentials: "include",
       });
 
-    if (!res.ok) throw new Error("Failed to refresh inbox");
+      if (!res.ok) throw new Error("Failed to refresh inbox");
 
       // Fetch updated inbox from DB
       const getRes = await fetch("http://localhost:3000/api/getemails", {
@@ -34,6 +38,16 @@ const ConnectEmails = () => {
       });
       const data = await getRes.json();
       setEmails(data.emails || []);
+      const unprocessedEmails = emails.filter((e) => !e.isProcessed).length
+      console.log(emails.length);
+      if (unprocessedEmails > 0) {
+        setRefreshMessage(`You have ${unprocessedEmails} new emails to filter`)
+      } else {
+        setRefreshMessage("No new emails")
+      }
+      setTimeout(() => {
+        setRefreshMessage(null);
+      }, 3000)
     } catch (err) {
       console.error("Error refreshing inbox:", err);
     }
@@ -45,9 +59,10 @@ const ConnectEmails = () => {
    */
   useEffect(() => {
     setShowEmailSection(emails.length > 0);
+    setInboxConnected(true);
   }, [emails]);
 
-  /**
+    /**
    * Fetch emails when component mounts or refreshTrigger changes
    */
   useEffect(() => {
@@ -136,14 +151,19 @@ const ConnectEmails = () => {
   return (
     <main>
       <>
-        {!showEmailSection ? (
+        {!showEmailSection && !inboxConnected ? (
           <Welcome onConnectEmails={handleConnectEmails} />
         ) : (
           <>
             {loading ? (
               <Spinner />
             ) : (
-              <Inbox emails={emails} onTapUpdate={handleTapUpdate} onRefreshInbox={handleRefreshInbox} />
+              <Inbox emails={emails} 
+              onTapUpdate={handleTapUpdate} 
+              onRefreshInbox={handleRefreshInbox}
+              refreshMessage={refreshMessage}
+            
+               />
             )}
           </>
         )}

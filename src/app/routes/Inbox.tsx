@@ -2,12 +2,12 @@ import EmailItem from "../../components/ui/EmailItem";
 import "./Inbox.css";
 import { Email, InboxProps } from "../../types/types";
 import { SearchBar } from "../../components/ui/SearchBar";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { Refresh } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 
-const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) => {
+const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox, refreshMessage }) => {
   const [searchResults, setSearchResults] = useState<Email[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -82,6 +82,7 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox }) =>
   
   return (
     <>
+    {refreshMessage && <p className="refresh-msg-email-present">{refreshMessage}</p>}
       <div className="inbox-header">
         <button onClick={onRefreshInbox} className="refresh-button"><Refresh /></button>
         <div className="search-wrapper" ref={wrapperRef}>

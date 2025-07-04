@@ -9,6 +9,7 @@ import {
   TouchAppOutlined,
   Reply,
   DeleteOutlined,
+  AddLink
 } from "@mui/icons-material";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
 
@@ -128,6 +129,7 @@ const ViewEmail = () => {
             Back to Board
           </Link>
         </section>
+         
         <section className="email-view-container">
           <div className="email-view-sender-details">
             <h3 className="email-view-subject">{emailDetails?.subject}</h3>
@@ -143,7 +145,8 @@ const ViewEmail = () => {
             />
           </section>
           {/* <section className="email-view-body" dangerouslySetInnerHTML={{ __html: emailBodyHtml }} /> */}
-          <div className="email-view-btn-panel">
+        </section>
+         <div className="email-view-btn-panel">
             <ViewEmailActionButton
               icon={Reply}
               text="Reply"
@@ -182,8 +185,8 @@ const ViewEmail = () => {
             </div>
             <div className="add-to-board-container">
               <ViewEmailActionButton
-                icon={ViewKanbanOutlined}
-                text="LinkOpp"
+                icon={AddLink}
+                text="Link Opp"
                 value={modalData}
                 onClick={() => setOpenModalAdd(true)}
               />
@@ -201,7 +204,6 @@ const ViewEmail = () => {
               //onClick={handleDelete}
             />
           </div>
-        </section>
       </main>
     </>
   );

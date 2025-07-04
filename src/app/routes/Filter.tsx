@@ -145,7 +145,7 @@ const Filter = () => {
       setTimeout(() => {
         setStatusMessage(null);
         setStatusType(null);
-      }, 2000);
+      }, 3000);
     } catch (err) {
       console.error("Error saving filters:", err);
     }
@@ -171,13 +171,13 @@ const Filter = () => {
           <Spinner />
         ) : (
           <>
-            {statusMessage && (
+            <section className="filter-container">
+              <div className="wrapper-filter-btns-status-msg">
+                  {statusMessage && (
               <div className={`status-banner ${statusType}`}>
                 {statusMessage}
               </div>
             )}
-            <section className="filter-container">
-              <div className="filter-btn-save-container">
                 <div className="filter-btn-container">
                   <button
                     className={`filter-btn new ${filteredSenders === "new" ? "active" : ""

@@ -1,8 +1,8 @@
 .opportunity-modal {
   max-width: 300px;
   position: absolute;
-  bottom: 110%;
-  right: -50%;
+  bottom: -110%;
+  right: 50%;
   z-index: 100;
   border: var(--border-green-dark-mode);
   border-radius: var(--border-radius);
