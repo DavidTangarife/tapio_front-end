@@ -3,7 +3,7 @@ import { AddToBoardModalProps, Board } from "../../types/types";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
-const AddToBoardModal = ({ closeModal }: AddToBoardModalProps) => {
+const AddToBoardModal = ({ closeModal, updateButtonTitle }: AddToBoardModalProps) => {
   const modalInputRef = useRef<HTMLFormElement | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [statuses, setStatuses] = useState<Board[]>([]);
@@ -45,6 +45,7 @@ const AddToBoardModal = ({ closeModal }: AddToBoardModalProps) => {
       };
 
       try {
+        //Create an opportunity
         const res = await fetch(
           "http://localhost:3000/api/opportunity/from-email",
           {
@@ -60,8 +61,28 @@ const AddToBoardModal = ({ closeModal }: AddToBoardModalProps) => {
         if (res.ok) {
           const result = await res.json();
           console.log("Opportunity created:", result);
+
+          //Add OpportnityId to Email Object
+          const opportunityId = result._id;
+          
+          const updateEmail = await fetch(
+            `http://localhost:3000/api/emails/${emailId}/opportunity`,
+            {
+              method: "PATCH",
+              credentials: "include",
+              body: JSON.stringify({emailId, opportunityId}),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          )
+          if (!updateEmail.ok) throw new Error("Failed to update OpportunityId in Email");
+          
           setIsSubmitted(true);
+          //Call this function from ViewEmail
+          updateButtonTitle();
           modalInputRef.current.reset();
+
         } else {
           const err = await res.json();
           console.error("Failed to create opportunity:", err.error);

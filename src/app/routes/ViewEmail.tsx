@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import "./ViewEmail.css";
 import ViewEmailActionButton from "../../components/ui/ViewEmailActionButton";
@@ -18,6 +18,7 @@ interface EmailDetails {
   from?: string;
   isTapped?: boolean;
   projectId?: string;
+  opportunityId?: string;
 }
 
 const ViewEmail = () => {
@@ -29,6 +30,8 @@ const ViewEmail = () => {
   const modalData = "";
   const [confirmTappedUp, setConfirmTappedUp] = useState(false);
   const [tapMessage, setTapMessage] = useState<string>("");
+  const [buttonTitle, setButtonTitle] = useState<string>("Add to Board");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmailInfo = async () => {
@@ -38,6 +41,7 @@ const ViewEmail = () => {
         });
         const data = await res.json();
         setEmailDetails(data);
+        setButtonTitle(data.opportunityId ? "Go to Board" : "Add to Board")
       } catch (err) {
         console.error("Failed to fetch email info:", err);
       }
@@ -117,6 +121,12 @@ const ViewEmail = () => {
     iframe.addEventListener("load", onLoad);
     return () => iframe.removeEventListener("load", onLoad);
   }, [emailBodyHtml]);
+
+  //Change "Add to Board" to "Go to Board" after submiting opportunity
+  const updateButtonTitle = () => {
+    setButtonTitle("Go to Board");
+  }
+
   return (
     <>
       <main>
@@ -175,12 +185,20 @@ const ViewEmail = () => {
             <div className="add-to-board-container">
               <ViewEmailActionButton
                 icon={ViewKanbanOutlined}
-                text="Add to Board"
+                text={buttonTitle}
                 value={modalData}
-                onClick={() => setOpenModalCreate(true)}
+                onClick={() => {
+                  if (buttonTitle === "Go to Board") {
+                    navigate("/board")
+                  } else {
+                  setOpenModalCreate(true)
+                  }
+                }}
               />
               {openModalCreate && (
-                <AddToBoardModal closeModal={() => setOpenModalCreate(false)} />
+                <AddToBoardModal 
+                  closeModal={() => setOpenModalCreate(false)}
+                   updateButtonTitle={updateButtonTitle} />
               )}
             </div>
             <div className="add-to-board-container">
