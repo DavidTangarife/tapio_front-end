@@ -45,6 +45,7 @@ export interface ViewEmailActionButtonProps {
 
 export interface AddToBoardModalProps {
   closeModal: () => void;
+  updateButtonTitle: () => void;
 }
 export interface linkToOppModalProps {
   closeModal: () => void;

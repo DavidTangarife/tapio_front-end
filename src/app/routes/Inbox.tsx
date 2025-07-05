@@ -2,7 +2,7 @@ import EmailItem from "../../components/ui/EmailItem";
 import "./Inbox.css";
 import { Email, InboxProps } from "../../types/types";
 import { SearchBar } from "../../components/ui/SearchBar";
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Refresh } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 

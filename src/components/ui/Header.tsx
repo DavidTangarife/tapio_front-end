@@ -193,6 +193,7 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
                       onClick={() => {
                         setProjectToDelete(pro);
                         setOpenDeleteModal(true);
+                        setProjectOpen(false);
                       }}
                     />
                   </div>
@@ -224,14 +225,16 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
             <div className="delete-modal-btn-container">
               <button
                 className="delete-modal-btn yes"
-                onClick={handleDeleteProject}
-              >
+                onClick={() => {
+                  handleDeleteProject();
+                  setProjectOpen(true)}}>
                 Yes
               </button>
               <button
                 className="delete-modal-btn no"
-                onClick={() => setOpenDeleteModal(false)}
-              >
+                onClick={() => {
+                  setOpenDeleteModal(false)
+                  setProjectOpen(true)}}>
                 No
               </button>
             </div>

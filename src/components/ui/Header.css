@@ -97,11 +97,14 @@
   z-index: 99;
 }
 .confirm-delete-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   position: absolute;
-  top: 15%;
-  left: 40%;
-  width: 300px;
-  height: 150px;
+  top: 50%;
+  left: 50%;
+  width: 400px;
+  height: 200px;
   z-index: 100;
   padding: 20px;
   background-color: var(--color-font-dark);
