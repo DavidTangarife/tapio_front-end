@@ -98,13 +98,14 @@ const AddToBoardModal = ({ closeModal, updateButtonTitle }: AddToBoardModalProps
   return (
     <>
       <div className="modal-backdrop" onClick={closeModal} />
-      <aside className="opportunity-modal">
+      
         {isSubmitted ? (
-          <div>
+          <aside className="added-to-board-msg-wrapper">
             <h3 className="add-opp-success-msg">Added to Board</h3>
-          </div>
+            </aside>
         ) : (
-          <>
+        
+          <aside className="opportunity-modal">
             <h3 className="create-opp-title">Create opportunity</h3>
             <div className="form-container">
               <form ref={modalInputRef} onSubmit={handleSubmit}>
@@ -139,9 +140,11 @@ const AddToBoardModal = ({ closeModal, updateButtonTitle }: AddToBoardModalProps
                 </button>
               </form>
             </div>
-          </>
+        </aside>
         )}
-      </aside>
+       
+     
+       
     </>
   );
 };

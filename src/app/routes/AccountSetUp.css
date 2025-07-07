@@ -3,6 +3,7 @@
   height: 100vh;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 .form-container {
     padding: 10px;
@@ -11,12 +12,14 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+    position: relative;
+    max-width: 100%;
+    max-height: 100%;
 }
 .logo-setup {
     width: 120px;
     height: auto;
 }
-
 .setup-form.animate {
     animation: slidein 0.2s ease-out forwards;
 }
@@ -57,6 +60,24 @@
 .setup-btn.setup-btn-final:hover {
     background: #21950c;
     border: none;
+}
+.setup-cancel-btn {
+  font-family: var(--font-stylised);
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-weight-bold);
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--border-radius);
+  position: absolute;
+  top: -100px;
+  left: 5px;
+
+}
+.setup-cancel-btn:hover {
+  cursor: pointer;
+  background-color: var(--color-dark-mode-hover);
 }
 @media (max-width: 480px) {
     .form-container {

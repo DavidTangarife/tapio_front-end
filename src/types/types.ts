@@ -69,6 +69,7 @@ export interface InboxProps {
   onTapUpdate: (emailId: string, newTapped: boolean) => void;
   onRefreshInbox: () => void;
   refreshMessage: string | null;
+  refreshLoadingIcon: boolean;
 }
 
 export type SenderData = {

@@ -1,11 +1,12 @@
 import Welcome from "../../components/ui/Welcome";
 import "./ConnectEmails.css";
-import { useLoaderData, useNavigate} from "react-router-dom";
+import { useLoaderData, useNavigate, useOutletContext } from "react-router-dom";
 
 import Inbox from "./Inbox";
 import { Email } from "../../types/types"
 import { useEffect, useState } from "react";
 import Spinner from "../../components/ui/Spinner";
+
 
 const ConnectEmails = () => {
   const loaderData = useLoaderData() as { emails: Email[]; inboxConnected: boolean };
@@ -15,8 +16,9 @@ const ConnectEmails = () => {
   const [emails, setEmails] = useState<Email[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState(0); // used to re-fetch emails when project changes
   const [refreshMessage, setRefreshMessage] = useState<string | null>(null);
+  const [refreshLoadingIcon, setRefreshLoadingIcon] = useState(false);
   const navigate = useNavigate();
-
+  const { currentProjectId } = useOutletContext<{ currentProjectId: string | null }>();
 
   /**
    * function to fetch new emails from Gmail and show new emails in database
@@ -24,6 +26,7 @@ const ConnectEmails = () => {
    */
   const handleRefreshInbox = async () => {
     try {
+      setRefreshLoadingIcon(true);
       const res = await fetch("http://localhost:3000/api/direct-emails", {
         method: "POST",
         credentials: "include",
@@ -37,6 +40,7 @@ const ConnectEmails = () => {
       });
       const data = await getRes.json();
       setEmails(data.emails || []);
+      setRefreshLoadingIcon(false);
 
       if (count > 0) {
         setRefreshMessage(`You have ${count} new emails to filter`)
@@ -52,7 +56,7 @@ const ConnectEmails = () => {
   };
 
   /**
-   * Fetch emails when component mounts or refreshTrigger changes
+   * Fetch emails when component mounts and when refreshTrigger or projectId changes
   */
   useEffect(() => {
     const fetchEmails = async () => {
@@ -67,12 +71,11 @@ const ConnectEmails = () => {
       if (data.error === "No Project Found") {
         return navigate("/setup");
       }
-
       setEmails(data.emails || []);
     };
 
     fetchEmails();
-  }, [navigate, refreshTrigger]);
+  }, [navigate, refreshTrigger, currentProjectId]);
 
   /**
    * Called by Header component after user swaps project.
@@ -151,6 +154,7 @@ const ConnectEmails = () => {
               onTapUpdate={handleTapUpdate} 
               onRefreshInbox={handleRefreshInbox}
               refreshMessage={refreshMessage}
+              refreshLoadingIcon={refreshLoadingIcon}
             
                />
             )}
