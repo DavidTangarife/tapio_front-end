@@ -5,23 +5,27 @@ import { SearchBar } from "../../components/ui/SearchBar";
 import { useEffect, useRef, useState } from "react";
 import { Refresh } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import EmailPagination from "../../components/ui/EmailPagination";
 
-
-const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox, refreshMessage }) => {
+const Inbox: React.FC<InboxProps> = ({
+  unreadEmails,
+  readEmails, 
+  tappedEmails, 
+  onTapUpdate, 
+  onRefreshInbox, 
+  refreshMessage, 
+  setReadPage,
+  setUnreadPage,
+  readPage, 
+  unreadPage 
+}) => {
   const [searchResults, setSearchResults] = useState<Email[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [inputValue, setInputValue] = useState("");
-  const navigate = useNavigate();
+ 
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const navigate = useNavigate();
   
-  // if (!emails.length) return <p>No emails found</p>;
-
-  const readEmails = emails.filter(email =>
-    email.isRead && !email.isTapped)
-  const unreadEmails = emails.filter(email =>
-    !email.isRead && !email.isTapped)
-  const tappedEmails = emails.filter(email => email.isTapped)
-
   useEffect(() => {
     const trimmed = inputValue.trim();
 
@@ -123,11 +127,11 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox, refr
       </div>
 
       <div className="email-section">
-        {tappedEmails.length > 0 && (
+        {tappedEmails && tappedEmails.length > 0 && (
           <>
-            <h3 className="email-section-title">TAPPED UP</h3>
+            <h3 className="email-section-title tap">TAPPED UP</h3>
             <div className="email-list">
-              {tappedEmails.map((email) => (
+              {tappedEmails?.map((email) => (
                 <EmailItem
                   key={email._id}
                   _id={email._id}
@@ -145,11 +149,18 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox, refr
             </div>
           </>
         )}
-
-        <h3 className="email-section-title">UNREAD</h3>
-        {unreadEmails.length > 0 ? (
+        <div className="email-section-heading">
+          <h3 className="email-section-title">UNREAD</h3>
+          <EmailPagination
+            currentPage={unreadPage}
+            setCurrentPage={setUnreadPage}
+            totalPages={unreadEmails?.pages || 1}
+          />
+        </div>
+        
+        {unreadEmails && unreadEmails?.emails.length > 0 ? (
           <div className="email-list">
-            {unreadEmails.map((email) => (
+            {unreadEmails.emails.map((email) => (
               <EmailItem
                 key={email._id}
                 _id={email._id}
@@ -168,11 +179,18 @@ const Inbox: React.FC<InboxProps> = ({ emails, onTapUpdate, onRefreshInbox, refr
         ) : (
           <p className="no-new-emails-msg">No new emails</p>
         )}
-        {readEmails.length > 0 && (
+        {readEmails && readEmails?.emails.length > 0 && (
           <>
-            <h3 className="email-section-title">READ</h3>
+            <div className="email-section-heading">
+              <h3 className="email-section-title">READ</h3>
+              <EmailPagination
+                currentPage={readPage}
+                setCurrentPage={setReadPage}
+                totalPages={readEmails?.pages || 1}
+              />
+            </div>
             <div className="email-list">
-              {readEmails.map((email) => (
+              {readEmails.emails.map((email) => (
                 <EmailItem
                   key={email._id}
                   _id={email._id}

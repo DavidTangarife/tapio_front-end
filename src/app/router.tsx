@@ -50,43 +50,10 @@ const router = createBrowserRouter([
         }
       },
       {
-        path: "/home", Component: ConnectEmails, loader: async () => {
-          const response = await fetch(`http://localhost:3000/api/getemails`, {
-            credentials: "include"
-          });
-          const data = await response.json();
-          return data
-        }
-      },
-      {
-        path: "/filter",
-        Component: Filter,
-        loader: async () => {
-          const response = await fetch(
-            `http://localhost:3000/api/unprocessed-emails`,
-            {
-              credentials: "include",
-            }
-          );
-          const data = await response.json();
-          return data;
-        },
-      },
-      {
         path: "/board",
         Component: Kanban,
         loader: async () => {
           const response = await fetch('http://localhost:3000/api/board', {
-            credentials: "include"
-          });
-          const data = await response.json();
-          return data;
-        },
-      },
-      {
-        path: "/inbox", Component: ConnectEmails,
-        loader: async () => {
-          const response = await fetch('http://localhost:3000/api/getemails', {
             credentials: "include"
           });
           const data = await response.json();

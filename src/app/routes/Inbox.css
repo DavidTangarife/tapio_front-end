@@ -10,13 +10,23 @@ Inbox.css
 .email-list {
   margin-bottom: 24px;
 }
-.email-section-title {
-  margin-left: 20px;
-  margin-bottom: 10px;
+.email-section-heading {
+  display: flex;
+  flex-direction: row;
   border-bottom: var(--border-grey-dark-mode);
+  margin-bottom: 10px;
+  justify-content: space-between;
+  margin-left: 20px;
+}
+.email-section-title {
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-regular);
   font-family: var(--font-stylised);
+}
+.tap {
+  border-bottom: var(--border-grey-dark-mode);
+  margin-left: 20px;
+   margin-bottom: 10px;
 }
 .spin-loader {
   width: 70px;

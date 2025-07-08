@@ -149,9 +149,9 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
         <div className="tgl-btn-container">
           <Button
             className={`tgl-btn inbox-tgl-btn ${
-              location.pathname === "/inbox" ? "active" : ""
+              location.pathname === "/home" ? "active" : ""
             }`}
-            onClick={() => navigate("/inbox")}
+            onClick={() => navigate("/home")}
             buttonText="Inbox"
           />
           <Button

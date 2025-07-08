@@ -131,7 +131,7 @@ const ViewEmail = () => {
     <>
       <main>
         <section className="header-container">
-          <Link to={`/inbox`} className="back-btn">
+          <Link to={`/home`} className="back-btn">
             Back to Inbox
           </Link>
           <TapioLogoDesktop className="logo" />

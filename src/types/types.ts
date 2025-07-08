@@ -64,11 +64,25 @@ export interface Email {
   date: Date;
 }
 
-export interface InboxProps {
+export type paginatedEmails ={
   emails: Email[];
+  total: number;
+  page: number;
+  pages: number;
+}
+export interface InboxProps {
+  unreadPage: number;
+  readPage: number;
+  tappedPage: number;
+  unreadEmails: paginatedEmails | null;
+  readEmails: paginatedEmails | null;
+  tappedEmails: Email[];
   onTapUpdate: (emailId: string, newTapped: boolean) => void;
   onRefreshInbox: () => void;
   refreshMessage: string | null;
+  setUnreadPage: (page: number) => void;
+  setReadPage: (page: number) => void;
+  setTappedPage: (page: number) => void;
 }
 
 export type SenderData = {
@@ -78,4 +92,10 @@ export type SenderData = {
   subject: string;
   isApproved?: boolean;
   isProcessed?: boolean;
+}
+
+export interface EmailPaginationProps {
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
+  totalPages: number;
 }
