@@ -56,14 +56,17 @@ Inbox.css
   justify-content: start;
   width: 100%;
   max-width: 966px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 12px 8px;
+  position: relative;
 }
 .refresh-button {
   padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: center;
   border-radius: var(--border-radius);;
   background-color: var(--color-primary);
-  color: white;
+  color: var(--color-font-primary);
   border: none;
   cursor: pointer;
 }
@@ -82,6 +85,14 @@ Inbox.css
   border-radius: var(--border-radius);
   margin: 8px;
   animation: fadeInOut 4s ease-in-out forwards;
+  position: absolute;
+  top: -70%;
+  left: 0%;
+  z-index: 100;
+}
+
+.refresh-icon-spin-on-loading {
+  animation: spin 1s linear infinite;
 }
 .search-wrapper {
   position: relative;
@@ -141,4 +152,8 @@ Inbox.css
   font-weight: var(--font-weight-regular);
   margin-right: 20px;
   align-self: center;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
 }

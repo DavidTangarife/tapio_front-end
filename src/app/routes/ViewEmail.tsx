@@ -139,24 +139,8 @@ const ViewEmail = () => {
             Go to Board
           </Link>
         </section>
-         
-        <section className="email-view-container">
-          <div className="email-view-sender-details">
-            <h3 className="email-view-subject">{emailDetails?.subject}</h3>
-            <h4 className="email-view-sender">{emailDetails?.from}</h4>
-          </div>
-          <section className="email-view-body">
-            <iframe
-            ref={iframeRef}
-            className="iframe"
-              title="email-content"
-              style={{ width: "100%", minHeight: "500px", border: "none", overflow: "hidden"  }}
-              srcDoc={emailBodyHtml}
-            />
-          </section>
-          {/* <section className="email-view-body" dangerouslySetInnerHTML={{ __html: emailBodyHtml }} /> */}
-        </section>
-         <div className="email-view-btn-panel">
+
+           <div className="email-view-btn-panel">
             <ViewEmailActionButton
               icon={Reply}
               text="Reply"
@@ -222,6 +206,24 @@ const ViewEmail = () => {
               //onClick={handleDelete}
             />
           </div>
+         
+        <section className="email-view-container">
+          <div className="email-view-sender-details">
+            <h3 className="email-view-subject">{emailDetails?.subject}</h3>
+            <h4 className="email-view-sender">{emailDetails?.from}</h4>
+          </div>
+          <section className="email-view-body">
+            <iframe
+            ref={iframeRef}
+            className="iframe"
+              title="email-content"
+              style={{ width: "100%", minHeight: "500px", border: "none", overflow: "hidden"  }}
+              srcDoc={emailBodyHtml}
+            />
+          </section>
+          {/* <section className="email-view-body" dangerouslySetInnerHTML={{ __html: emailBodyHtml }} /> */}
+        </section>
+      
       </main>
     </>
   );

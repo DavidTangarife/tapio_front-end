@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import "./Filter.css";
 import { ThumbUpOutlined, ThumbDownOutlined } from "@mui/icons-material";
 import { SenderData } from "../../types/types";
@@ -16,9 +16,8 @@ const Filter = () => {
   // State to store emails
   const [emails, setEmails] = useState<SenderData[] | null>(null);
   const [allEmails, setAllEmails] = useState(initialEmails);
-  const [filteredSenders, setFilteredSenders] = useState<
-    "new" | "allowed" | "blocked"
-  >("new");
+  const [filteredSenders, setFilteredSenders] = useState<"new" | "allowed" | "blocked">("new");
+    const { currentProjectId } = useOutletContext<{ currentProjectId: string | null }>();
 
   function extractEmailAddress(from: string): string {
   if (!from) return "";
@@ -64,7 +63,7 @@ const Filter = () => {
     };
 
     fetchByTab();
-  }, [filteredSenders, allEmails]);
+  }, [filteredSenders, allEmails, currentProjectId]);
 
   // Toggle approval and update filters
   const handleToggle = async (emailId: string, isApproved: boolean) => {

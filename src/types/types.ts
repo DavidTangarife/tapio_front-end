@@ -83,6 +83,7 @@ export interface InboxProps {
   setUnreadPage: (page: number) => void;
   setReadPage: (page: number) => void;
   setTappedPage: (page: number) => void;
+  refreshLoadingIcon: boolean;
 }
 
 export type SenderData = {

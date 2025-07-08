@@ -17,8 +17,11 @@ const Inbox: React.FC<InboxProps> = ({
   setReadPage,
   setUnreadPage,
   readPage, 
-  unreadPage 
+  unreadPage,
+  refreshLoadingIcon
 }) => {
+
+
   const [searchResults, setSearchResults] = useState<Email[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -86,9 +89,10 @@ const Inbox: React.FC<InboxProps> = ({
   
   return (
     <>
-    {refreshMessage && <p className="refresh-msg-email-present">{refreshMessage}</p>}
+    
       <div className="inbox-header">
-        <button onClick={onRefreshInbox} className="refresh-button"><Refresh /></button>
+        {refreshMessage && <p className="refresh-msg-email-present">{refreshMessage}</p>}
+        <button onClick={onRefreshInbox} className="refresh-button"><Refresh className={refreshLoadingIcon ? "refresh-icon-spin-on-loading" : "" } /></button>
         <div className="search-wrapper" ref={wrapperRef}>
           <SearchBar onSearch={() => fetchSearchResults(inputValue.trim())} inputValue={inputValue} setInputValue={setInputValue}/>
           {searchQuery && (

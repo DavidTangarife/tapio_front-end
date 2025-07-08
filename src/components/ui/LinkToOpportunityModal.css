@@ -2,8 +2,8 @@
   /* max-width: 18.75rem; */
   min-width: 16rem;
   position: absolute;
-  bottom: 110%;
-  right: -50%;
+  bottom: -375%;
+  right: -70%;
   z-index: 100;
   border: var(--border-green-dark-mode);
   border-radius: var(--border-radius);

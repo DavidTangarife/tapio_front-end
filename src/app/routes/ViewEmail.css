@@ -94,7 +94,7 @@
   width: 180px;
   padding: 10px;
   position: absolute;
-  bottom: 110%;
+  bottom: -70%;
   right: -40%;
   z-index: 100;
   background-color: var(--color-primary-dark);
