@@ -15,7 +15,7 @@ export default function Opportunity_PopUp({
   onDelete: (opportuinityId: string) => void;
   onEdit: (
     opportuinityId: string,
-    newdata: Opportunity,
+    newdata: Opportunity & { snippFlag?: boolean },
     afterSave?: (updatedOpp: Opportunity) => void
   ) => void;
   onClose: () => void;
@@ -33,6 +33,7 @@ export default function Opportunity_PopUp({
   // Retrieve emails from the opportunity
   const fetchEmailsFromOpp = async () => {
     try {
+      console.log("fetching emails from ID:", opportunity._id);
       const res = await fetch(
         `http://localhost:3000/api/getemails/${opportunity._id}`,
         {
@@ -80,17 +81,37 @@ export default function Opportunity_PopUp({
     }));
   }
 
-  // Handle snippets editing - for simplicity, let's make it a textarea with comma-separated values
-  // function SnippetsChange(value: string) {
-  //   const arr = value
-  //     .split(",")
-  //     .map((s) => s.trim())
-  //     .filter((s) => s.length > 0);
-  //   setEditableData((prev) => ({
-  //     ...prev,
-  //     snippets: arr,
-  //   }));
-  // }
+  // Handle Snippets creation and deletion
+
+  function handleAddSnippet(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter") {
+      const value = (event.target as HTMLInputElement).value.trim();
+      if (value.length === 0) return;
+
+      const [key, ...rest] = value.split(":"); // Split my string by the character ":", an creates and array of my values.
+      // Then it uses array destructuring to set the first value of my array to the key and the rest of the values in a new array
+      const val = rest.join(":").trim(); // joins and trims the spaces of this second array to get the value of my object
+
+      if (!key || !val) return; // Validate that key an value exist
+
+      // Create my object with key and value
+      const snippetObj = { [key.trim()]: val };
+
+      setEditableData((prev) => ({
+        ...prev,
+        snippets: [...(prev.snippets || []), snippetObj],
+      }));
+
+      (event.target as HTMLInputElement).value = ""; // Clear input
+    }
+  }
+
+  function removeSnippet(index: number) {
+    setEditableData((prev) => ({
+      ...prev,
+      snippets: (prev.snippets || []).filter((_, i) => i !== index),
+    }));
+  }
 
   function onDeleteOpp() {
     onDelete(opportunity._id);
@@ -98,8 +119,17 @@ export default function Opportunity_PopUp({
   }
 
   function handleSave() {
+    const finalSnippets = editableData.snippets?.filter(
+      (s) => Object.keys(s).length > 0
+    );
+
+    const payload = {
+      ...editableData,
+      snippFlag: true,
+      snippets: finalSnippets,
+    };
     //So when handle the save my editable data will receive my updated opportunity as a prop to display on editableData
-    onEdit(opportunity._id, editableData, (updatedOpp) => {
+    onEdit(opportunity._id, payload, (updatedOpp) => {
       setEditableData(updatedOpp);
       setEditing(false);
     });
@@ -198,19 +228,52 @@ export default function Opportunity_PopUp({
             </div>
 
             {/* Work on snippets from an email */}
-            {/* <div className="popupBox">
+            <div className="popupBox snippets">
               <span className="label">Snippets:</span>
               {editing ? (
-                <textarea
-                  rows={3}
-                  value={editableData.snippets?.join(", ")}
-                  onChange={(e) => SnippetsChange(e.target.value)}
-                  placeholder="Please add your Keywords seprated by a ,"
-                />
+                <>
+                  <div className="snippet-tags">
+                    {editableData.snippets?.map((snippet, index) => {
+                      const key = Object.keys(snippet)[0];
+                      const value = snippet[key];
+                      return (
+                        <div className="snippet-tag" key={index}>
+                          <span>{`${key} : ${value}`}</span>
+                          <span
+                            className="delete-x"
+                            onClick={() => removeSnippet(index)}
+                            title="Remove"
+                          >
+                            X
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Name : Value, & hit enter"
+                    onKeyDown={handleAddSnippet}
+                    className="snippet-input"
+                  />
+                </>
               ) : (
-                <p>{editableData.snippets?.join(", ") || ""}</p>
+                <div className="snippet-tags">
+                  {editableData.snippets?.map((snippet, index) => {
+                    const key = Object.keys(snippet)[0];
+                    const value = snippet[key];
+                    return (
+                      <div className="snippet-tag" key={index}>
+                        <span>
+                          <span className="snippet-key">{key}</span> :{" "}
+                          <span className="snippet-value">{value}</span>
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               )}
-            </div> */}
+            </div>
           </div>
 
           <div className="popup right">
@@ -304,14 +367,3 @@ export default function Opportunity_PopUp({
     </div>
   );
 }
-
-// Fix the snippets to save information as well (work on the snippets of Opportunity)
-// fix the title so the space where clicking is smaller (cause now you can click on empty space and stil popup will show up)
-
-// Changing Dropdown CSS to match the projects one for opportunities (max)
-// jumpin into an email start the scroll form the bottom, when it should start from the top
-// Maybe functionality of alredady added to the board
-// this email domain is already an oppotunity would you like to link it
-
-// when swapping projects -> Board and filter should re render as well
-// redirect to fiter page (jacob)

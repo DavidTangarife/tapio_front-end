@@ -11,13 +11,14 @@ import {
   DeleteOutlined,
 } from "@mui/icons-material";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
-import SnippetsTags from "../../components/ui/snippets";
+import SnippetButton from "../../components/ui/snippets";
 
 interface EmailDetails {
   subject?: string;
   from?: string;
   isTapped?: boolean;
   projectId?: string;
+  opportunityId?: string;
 }
 
 const ViewEmail = () => {
@@ -30,6 +31,10 @@ const ViewEmail = () => {
   const [confirmTappedUp, setConfirmTappedUp] = useState(false);
   const [tapMessage, setTapMessage] = useState<string>("");
 
+  // Snippets section
+  const [selection, setSelection] = useState<string>();
+  const [position, setPosition] = useState<Record<string, number>>(); //Object where Key -> type String, and Values -> type number
+
   useEffect(() => {
     const fetchEmailInfo = async () => {
       try {
@@ -37,6 +42,7 @@ const ViewEmail = () => {
           credentials: "include",
         });
         const data = await res.json();
+        console.log(data);
         setEmailDetails(data);
       } catch (err) {
         console.error("Failed to fetch email info:", err);
@@ -102,24 +108,55 @@ const ViewEmail = () => {
     const iframe = iframeRef.current;
     if (!iframe) return;
 
+    const getIframeDoc = () =>
+      iframe?.contentDocument || iframe?.contentWindow?.document || null;
+
     const updateHeight = () => {
-      const iframeDoc =
-        iframe.contentDocument || iframe.contentWindow?.document;
+      const iframeDoc = getIframeDoc();
       if (iframeDoc && iframeDoc.body) {
         iframe.style.height = iframeDoc.body.scrollHeight + "px";
       }
     };
 
+    // Handle snippets selection
+    const handleSelection = () => {
+      const iframeDoc = getIframeDoc();
+      if (!iframeDoc) return;
+
+      const activeSelection = iframeDoc.getSelection();
+      if (!activeSelection) return;
+
+      const text = activeSelection?.toString();
+      if (!text) {
+        setSelection(undefined);
+        return;
+      }
+      const rect = activeSelection?.getRangeAt(0).getBoundingClientRect();
+      setSelection(text);
+      setPosition({
+        x: rect.left,
+        y: rect.top,
+        width: rect.width,
+        height: rect.height,
+      });
+    };
+
     // Wait for iframe content to load
     const onLoad = () => {
       updateHeight();
+      const iframeDoc = getIframeDoc();
+      iframeDoc?.addEventListener("mouseup", handleSelection); // if iframedoc exist
     };
 
     iframe.addEventListener("load", onLoad);
-    return () => iframe.removeEventListener("load", onLoad);
-  }, [emailBodyHtml]);
 
-  // Snippets fucntionality
+    return () => {
+      // react Callback function to clean every eventlistener that could be store, if there is a reload
+      iframe.removeEventListener("load", onLoad);
+      const iframeDoc = getIframeDoc();
+      iframeDoc?.removeEventListener("mouseup", handleSelection);
+    };
+  }, [emailBodyHtml]);
 
   return (
     <>
@@ -139,7 +176,6 @@ const ViewEmail = () => {
             <h4 className="email-view-sender">{emailDetails?.from}</h4>
           </div>
           <section className="email-view-body">
-            <SnippetsTags />
             <iframe
               ref={iframeRef}
               className="iframe"
@@ -152,6 +188,13 @@ const ViewEmail = () => {
               }}
               srcDoc={emailBodyHtml}
             />
+            {selection && position && (
+              <SnippetButton
+                selection={selection}
+                position={position}
+                opportunityId={emailDetails?.opportunityId || "nope"}
+              />
+            )}
           </section>
           {/* <section className="email-view-body" dangerouslySetInnerHTML={{ __html: emailBodyHtml }} /> */}
           <div className="email-view-btn-panel">

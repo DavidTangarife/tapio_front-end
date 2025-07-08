@@ -1,4 +1,4 @@
-.snippets-button {
+.snippets-wrapper {
   position: absolute;
   top: 0;
   left: 0;
@@ -14,4 +14,39 @@
   background-color: var(--color-primary);
   border: var(--border-green-dark-mode);
   cursor: pointer;
+}
+
+.snippets-button {
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-stylised);
+  font-size: var(--button-font-size);
+  border: none;
+  background-color: var(--color-primary);
+  cursor: pointer;
+}
+
+.snippets-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-8px) rotate(180deg);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 8px solid #77c90b;
+}
+
+.snip {
+  height: 1.5rem;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-stylised);
+  font-size: 1rem;
+  color: inherit;
+  outline: none;
+  width: 100%;
+  text-align: center;
 }

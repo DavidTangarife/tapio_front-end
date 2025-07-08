@@ -32,6 +32,7 @@
 }
 
 .companyText:hover {
+  color: #86dd14;
   cursor: pointer;
 }
 

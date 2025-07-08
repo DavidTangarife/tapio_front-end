@@ -53,6 +53,7 @@
   margin-left: 10px;
 }
 .email-view-body {
+  position: relative;
   font-size: var(--font-size-regular);
   font-family: var(--font-bodycopy);
   font-weight: var(--font-weight-light);
@@ -87,7 +88,8 @@
   cursor: pointer;
   border: var(--border-green-dark-mode);
 }
-.add-to-board-container, .tapup-btn-modal-container {
+.add-to-board-container,
+.tapup-btn-modal-container {
   position: relative;
 }
 .tapup-confirmation-msg {
