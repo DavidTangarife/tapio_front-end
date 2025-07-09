@@ -12,7 +12,7 @@ export type Opportunity = {
     salary: string;
     posted: string;
   };
-  snippets: string[];
+  snippets: Record<string, string>[];
   statusId: string;
 };
 
