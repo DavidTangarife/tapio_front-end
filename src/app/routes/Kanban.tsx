@@ -9,6 +9,8 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { DragDropProvider } from "@dnd-kit/react";
+import { move } from "@dnd-kit/helpers"
 import type {
   Board as Bt,
   Opportunity,
@@ -35,6 +37,7 @@ export default function Kanban() {
   );
   const isDragging = useRef(false);
   const { elementRef, setActivator } = useHorizontalScroll();
+  const [boardMap, setBoardMap] = useState({})
 
   useEffect(() => {
     setBoards(data);
@@ -42,7 +45,11 @@ export default function Kanban() {
 
   useEffect(() => {
     console.log('Updating Boards')
+    let boardHash = {}
+    boardHash = Object.fromEntries(boards.map((element, index) => [index, element.opportunities]))
+    setBoardMap(boardHash)
   }, [boards])
+
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -179,17 +186,18 @@ export default function Kanban() {
 
   return (
     <div className="page">
-      <div className="boardWrapper" ref={elementRef}>
-        <DndContext
-          sensors={sensors}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        >
-          {boards.map((board) => {
+      <DragDropProvider onDragEnd={(event) => {
+        //setBoardMap((boardMap) => move(boardMap, event))
+        console.log(boardMap)
+      }}>
+        <div className="boardWrapper" ref={elementRef}>
+          {Object.entries(boardMap).map(([ind, board], index) => {
+            console.log(board)
             return (
               <BoardCard
-                key={board._id}
-                {...board}
+                key={ind}
+                boardMap={boardMap}
+                {...boards[ind]}
                 isDraggingRef={isDragging}
                 onOpportunityClick={(opportunity) =>
                   setSelectedOpportunity(opportunity)
@@ -197,6 +205,7 @@ export default function Kanban() {
                 currentFocus={currentFocus}
                 setCurrentFocus={setCurrentFocus}
                 setActivator={setActivator}
+                index={index}
               />
             );
           })}
@@ -206,33 +215,35 @@ export default function Kanban() {
               <OpportunityCard
                 {...(active as Opportunity)}
                 isDraggingRef={isDragging}
-                onClick={() => {}}
+                onClick={() => { }}
                 style={{ opacity: 0.6 }}
               />
             ) : null}
           </DragOverlay>
-        </DndContext>
-        <AddBoard
-          currentFocus={currentFocus}
-          setCurrentFocus={setCurrentFocus}
-          setBoards={setBoards}
-          boards={boards}
-        />
-      </div>
-      {selectedOpportunity && (
-        <Opportunity_PopUp
-          opportunity={selectedOpportunity}
-          boards={boards}
-          onClose={() => setSelectedOpportunity(null)}
-          onDelete={(id) => {
-            deleteOpportunity(id);
-            setSelectedOpportunity(null);
-          }}
-          onEdit={(id, newdata, afterSave) => {
-            editOpportunity(id, newdata, afterSave);
-          }}
-        />
-      )}
-    </div>
+          <AddBoard
+            currentFocus={currentFocus}
+            setCurrentFocus={setCurrentFocus}
+            setBoards={setBoards}
+            boards={boards}
+          />
+        </div>
+      </DragDropProvider>
+      {
+        selectedOpportunity && (
+          <Opportunity_PopUp
+            opportunity={selectedOpportunity}
+            boards={boards}
+            onClose={() => setSelectedOpportunity(null)}
+            onDelete={(id) => {
+              deleteOpportunity(id);
+              setSelectedOpportunity(null);
+            }}
+            onEdit={(id, newdata, afterSave) => {
+              editOpportunity(id, newdata, afterSave);
+            }}
+          />
+        )
+      }
+    </div >
   );
 }

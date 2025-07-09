@@ -1,47 +1,56 @@
 import "./Opportunity.css";
+import { CSS } from "@dnd-kit/utilities"
+import { useSortable } from "@dnd-kit/sortable";
+import { Dispatch, SetStateAction } from "react";
 import { Opportunity } from "../../types/types";
-import { useDraggable } from "@dnd-kit/core";
 
-export default function OpportunityCard({
-  _id,
-  title,
-  company,
-  onClick,
-  isDraggingRef,
-  style,
-}: Opportunity & {
-  onClick: () => void;
-  isDraggingRef: React.RefObject<boolean>;
-  style?: React.CSSProperties;
-}) {
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: _id,
-    });
+type OpportunityCardProps = {
+  _id: string
+  title: string
+  company: string
+  opportunityList: Opportunity[]
+  setOpportunityList: Dispatch<SetStateAction<Opportunity[]>>
+  onClick: unknown
+}
 
+export default function OpportunityCard(props: OpportunityCardProps & { onClick: () => void; }) {
+  const { _id, title, company, onClick, opportunityList, setOpportunityList } = props
+
+  const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
+    id: _id,
+    data: {
+      type: "Opportunity",
+      opportunity: props,
+      opportunityList,
+      opportunityListSetter: ((input: Opportunity[]) => setOpportunityList(input))
+    },
+  })
+
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform)
+  }
   const handleTitleClick = (event: React.MouseEvent) => {
     // Only handle click on title if drag wasn't activated
     event.stopPropagation();
-    if (!isDraggingRef.current) {
-      onClick();
-    }
-  };
-
-  const observe_drag = {
-    transform: transform
-      ? `translate(${transform.x}px, ${transform.y}px)`
-      : undefined,
-    opacity: isDragging ? 0.6 : 1,
+    onClick();
   };
 
   const LOGO_PUB = import.meta.env.VITE_LOGO_PUB;
 
+  if (isDragging) {
+    return <div className="draggingOpportunity"
+      ref={setNodeRef}
+      style={style}
+    ></div>
+  }
+
   return (
     <div
-      ref={setNodeRef}
       className="opportunityContainer"
       data-testid="opportunity"
-      style={{ ...observe_drag, ...style }}
+      ref={setNodeRef}
+      style={style}
       {...attributes}
       {...listeners}
     >
@@ -55,7 +64,7 @@ export default function OpportunityCard({
           src={`${company.logoUrl}?token=${LOGO_PUB}`}
         />
       </div>
-    </div>
+    </div >
   );
 }
 
