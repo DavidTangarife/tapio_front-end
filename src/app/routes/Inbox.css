@@ -15,6 +15,7 @@ Inbox.css
   flex-direction: row;
   border-bottom: var(--border-grey-dark-mode);
   margin-bottom: 10px;
+  padding-bottom: 5px;
   justify-content: space-between;
   margin-left: 20px;
 }
@@ -27,6 +28,7 @@ Inbox.css
   border-bottom: var(--border-grey-dark-mode);
   margin-left: 20px;
    margin-bottom: 10px;
+   padding-bottom: 5px;
 }
 .spin-loader {
   width: 70px;

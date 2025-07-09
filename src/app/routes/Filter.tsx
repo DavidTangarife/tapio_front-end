@@ -17,19 +17,17 @@ const Filter = () => {
   const [emails, setEmails] = useState<SenderData[] | null>(null);
   const [allEmails, setAllEmails] = useState(initialEmails);
   const [filteredSenders, setFilteredSenders] = useState<"new" | "allowed" | "blocked">("new");
-    const { currentProjectId } = useOutletContext<{ currentProjectId: string | null }>();
+  const { currentProjectId } = useOutletContext<{ currentProjectId: string | null }>();
 
   function extractEmailAddress(from: string): string {
-  if (!from) return "";
+    if (!from) return "";
+    
+    const angleMatch = from.match(/<([^<>]+)>/);
+    if (angleMatch) return angleMatch[1].trim().toLowerCase();
 
-  // First, try to match email in angle brackets
-  const angleMatch = from.match(/<([^<>]+)>/);
-  if (angleMatch) return angleMatch[1].trim().toLowerCase();
-
-  // Otherwise, try to extract standalone email
-  const emailMatch = from.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
-  return (emailMatch ? emailMatch[0] : "").trim().toLowerCase();
-}
+    const emailMatch = from.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+    return (emailMatch ? emailMatch[0] : "").trim().toLowerCase();
+  }
 
 
   function getUnprocessedEmails(emails: SenderData[]) {

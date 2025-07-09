@@ -1,11 +1,7 @@
 import Welcome from "../../components/ui/Welcome";
 import "./ConnectEmails.css";
-<<<<<<< HEAD
-import { useLoaderData, useNavigate} from "react-router-dom";
-=======
 import { useLoaderData, useNavigate, useOutletContext } from "react-router-dom";
 
->>>>>>> main
 import Inbox from "./Inbox";
 import { Email } from "../../types/types"
 import { useEffect, useState } from "react";
@@ -23,14 +19,11 @@ const ConnectEmails = () => {
   const [refreshMessage, setRefreshMessage] = useState<string | null>(null);
   const [refreshLoadingIcon, setRefreshLoadingIcon] = useState(false);
   const navigate = useNavigate();
-<<<<<<< HEAD
   const [unreadPage, setUnreadPage] = useState(1);
   const [readPage, setReadPage] = useState(1);
   const [tappedPage, setTappedPage] = useState(1);
 
-=======
   const { currentProjectId } = useOutletContext<{ currentProjectId: string | null }>();
->>>>>>> main
 
   /**
    * function to fetch new emails from Gmail and show new emails in database
@@ -51,12 +44,7 @@ const ConnectEmails = () => {
         credentials: "include",
       });
       const data = await getRes.json();
-<<<<<<< HEAD
-      // setEmails(data.emails || []);
-=======
-      setEmails(data.emails || []);
       setRefreshLoadingIcon(false);
->>>>>>> main
 
       setRefreshMessage(count > 0 ? `You have ${count} new emails to filter` : "No new emails");
       setTimeout(() => {
@@ -68,12 +56,9 @@ const ConnectEmails = () => {
   };
 
   /**
-<<<<<<< HEAD
    * helper function to fetch paginated read and unread emails and
    * tapped emails
-=======
    * Fetch emails when component mounts and when refreshTrigger or projectId changes
->>>>>>> main
   */
   const fetchEmails = async () => {
     try {
@@ -90,7 +75,6 @@ const ConnectEmails = () => {
         navigate("/setup");
         return;
       }
-<<<<<<< HEAD
 
       setUnreadEmails(data.unread ?? { emails: [], total: 0, page: 1, pages: 1 });
       setReadEmails(data.read ?? { emails: [], total: 0, page: 1, pages: 1 });
@@ -98,26 +82,14 @@ const ConnectEmails = () => {
     } catch (err) {
       console.error("Failed to fetch emails:", err);
     }
-=======
-      setEmails(data.emails || []);
     };
 
-    fetchEmails();
-  }, [navigate, refreshTrigger, currentProjectId]);
-
-  /**
-   * Called by Header component after user swaps project.
-   * Triggers useEffect to refetch emails.
-   */
-  const handleProjectSwap = () => {
-    setRefreshTrigger(Date.now());
->>>>>>> main
-  };
-
+  
   // Initial fetch on mount
   useEffect(() => {
     fetchEmails();
-  }, [unreadPage, readPage, navigate]);
+    
+  }, [unreadPage, readPage, navigate, currentProjectId]);
   
   /**
    * Called when user clicks "Connect Emails" button in Welcome screen.
@@ -180,7 +152,6 @@ const ConnectEmails = () => {
             {loading ? (
               <Spinner />
             ) : (
-<<<<<<< HEAD
               <Inbox 
                 unreadEmails={unreadEmails}
                 readEmails={readEmails}
@@ -194,14 +165,7 @@ const ConnectEmails = () => {
                 setReadPage={setReadPage}
                 tappedPage={tappedPage}
                 setTappedPage={setTappedPage}
-=======
-              <Inbox emails={emails} 
-              onTapUpdate={handleTapUpdate} 
-              onRefreshInbox={handleRefreshInbox}
-              refreshMessage={refreshMessage}
-              refreshLoadingIcon={refreshLoadingIcon}
-            
->>>>>>> main
+                refreshLoadingIcon={refreshLoadingIcon}
                />
             )}
           </>

@@ -102,7 +102,7 @@ const AddToBoardModal = ({ closeModal, updateButtonTitle }: AddToBoardModalProps
         {isSubmitted ? (
           <aside className="added-to-board-msg-wrapper">
             <h3 className="add-opp-success-msg">Added to Board</h3>
-            </aside>
+          </aside>
         ) : (
         
           <aside className="opportunity-modal">

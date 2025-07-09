@@ -72,13 +72,15 @@ const LinkToOppModal = ({
   return (
     <>
       <div className="modal-backdrop" onClick={closeModal} />
-      <aside className="opportunity-modal">
+      
         {added ? (
-          <div>
+            <div className="added-op-msg-wrapper">
             <h3 className="add-opp-success-msg">Email linked</h3>
           </div>
+
         ) : (
           <>
+          <aside className="opportunity-modal">
             <h3 className="my-opportunities-title">Opportunities</h3>
              <div className="search">
               <input
@@ -103,9 +105,10 @@ const LinkToOppModal = ({
             ) : (
               <p className="no-results-text">No matching opportunities</p>
             )}
+          
+      </aside>
           </>
         )}
-      </aside>
     </>
   );
 };

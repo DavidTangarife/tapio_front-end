@@ -84,3 +84,23 @@
   color: var(--color-font-muted, #ccc);
   font-style: italic;
 }
+
+.add-opp-success-msg {
+  font-family: var(--font-stylised);
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-font-primary);
+  width: 180px;
+  text-align: center;
+  background-color: var(--color-primary);
+  border: var(--border-green-dark-mode);
+  border-radius: 10px;
+  padding: 10px 20px;
+  
+}
+.added-op-msg-wrapper {
+  position: absolute;
+  bottom: -60%;
+  right: -40%;
+  z-index: 100;
+}
