@@ -27,6 +27,11 @@
   padding: 8px 0;
 }
 
+.search-input::placeholder {
+  font-size:small;
+  color: #828282 !important;
+  opacity: 0.7;
+}
 
 .search-icon-button {
   background: var(--color-primary);

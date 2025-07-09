@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import {
   DragOverlay,
@@ -22,7 +22,8 @@ import { useHorizontalScroll } from "../../hooks/useHorizontalScroll";
 import AddBoard from "../../components/ui/AddBoard";
 
 export default function Kanban() {
-  const data = useLoaderData();
+  const initialData = useLoaderData(); //Initial Data from loader
+  const { currentProjectId } = useOutletContext<{ currentProjectId: string | null }>(); //Get the project Id from the Outlet context
   const [boards, setBoards] = useState<Bt[]>([]);
   const [currentFocus, setCurrentFocus] = useState<HTMLInputElement | null>(
     null
@@ -35,10 +36,41 @@ export default function Kanban() {
   );
   const isDragging = useRef(false);
   const { elementRef, setActivator } = useHorizontalScroll();
+  
+  //Fetch boards for the current project
+  const fetchBoardsForProject = async (projectId: string) => {
+    try {
+      console.log("Fetch boards for this project:", projectId);
+      const response = await fetch(`http://localhost:3000/api/board`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setBoards(data);
+      } else {
+        console.error("Failed to fetch boards");
+      }
+    } catch (err) {
+      console.error("Error fetching boards:", err);
+    }
+  };
 
+  //For initial load
   useEffect(() => {
-    setBoards(data);
-  }, [data]);
+    setBoards(initialData);
+  }, [initialData]);
+
+  //Re-fetch when the project changes from the header
+  useEffect(() => {
+    if (currentProjectId) {
+      fetchBoardsForProject(currentProjectId);
+    }
+  }, [currentProjectId]);
 
   useEffect(() => {
     console.log("Updating Boards");

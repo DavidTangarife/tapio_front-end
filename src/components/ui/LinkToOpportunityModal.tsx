@@ -12,6 +12,7 @@ const LinkToOppModal = ({
 }) => {
   const [opportunities, setopportunities] = useState<Opportunity[]>([]);
   const [added, setAdded] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const { emailId } = useParams();
 
   useEffect(() => {
@@ -64,30 +65,50 @@ const LinkToOppModal = ({
       console.error("Error assigning opportunity:", err);
     }
   };
+  const filteredOpportunities = opportunities.filter((opp) =>
+    `${opp.title} ${opp.company.name}`.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <>
       <div className="modal-backdrop" onClick={closeModal} />
-      <aside className="opportunity-modal">
+      
         {added ? (
-          <div>
+            <div className="added-op-msg-wrapper">
             <h3 className="add-opp-success-msg">Email linked</h3>
           </div>
+
         ) : (
           <>
+          <aside className="opportunity-modal">
             <h3 className="my-opportunities-title">Opportunities</h3>
-            {opportunities.map((opp) => (
-              <button
-                key={opp._id}
-                onClick={() => addToOpp(opp._id)}
-                className="opportunity-btns"
-              >
-                {opp.title}
-              </button>
-            ))}
+             <div className="search">
+              <input
+                type="text"
+                className="search-input-opp"
+                placeholder="Search opportunities..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            
+            {filteredOpportunities.length > 0 ? (
+              filteredOpportunities.map((opp) => (
+                <button
+                  key={opp._id}
+                  onClick={() => addToOpp(opp._id)}
+                  className="opportunity-btns"
+                >
+                  {opp.title} - {opp.company.name}
+                </button>
+              ))
+            ) : (
+              <p className="no-results-text">No matching opportunities</p>
+            )}
+          
+      </aside>
           </>
         )}
-      </aside>
     </>
   );
 };

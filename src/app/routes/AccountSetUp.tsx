@@ -139,10 +139,20 @@ const SetupForm = () => {
     }, 200);
   };
 
+  const onCancel = () => {
+    navigate("/inbox");
+  };
+
   return (
     <>
+      
     <div className="acct-setup-page">
-            <section className="form-container">
+      <section className="form-container">
+        {isCreateProject && (
+        <button className="setup-cancel-btn" type="button" onClick={onCancel}>
+          X
+        </button>
+      )}
         <TapioLogoDesktop className="logo-setup" />
         <form className={`setup-form ${animateClass}`} onSubmit={onNext}>
           <p className="setup-step-count">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import "./Filter.css";
 import { ThumbUpOutlined, ThumbDownOutlined } from "@mui/icons-material";
 import { SenderData } from "../../types/types";
@@ -16,15 +16,19 @@ const Filter = () => {
   // State to store emails
   const [emails, setEmails] = useState<SenderData[] | null>(null);
   const [allEmails, setAllEmails] = useState(initialEmails);
-  const [filteredSenders, setFilteredSenders] = useState<
-    "new" | "allowed" | "blocked"
-  >("new");
+  const [filteredSenders, setFilteredSenders] = useState<"new" | "allowed" | "blocked">("new");
+  const { currentProjectId } = useOutletContext<{ currentProjectId: string | null }>();
 
   function extractEmailAddress(from: string): string {
     if (!from) return "";
-    const match = from.match(/<(.+)>/);
-    return (match ? match[1] : from).trim().toLowerCase();
+    
+    const angleMatch = from.match(/<([^<>]+)>/);
+    if (angleMatch) return angleMatch[1].trim().toLowerCase();
+
+    const emailMatch = from.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+    return (emailMatch ? emailMatch[0] : "").trim().toLowerCase();
   }
+
 
   function getUnprocessedEmails(emails: SenderData[]) {
     return emails.filter((email) => !email.isProcessed);
@@ -57,7 +61,7 @@ const Filter = () => {
     };
 
     fetchByTab();
-  }, [filteredSenders, allEmails]);
+  }, [filteredSenders, allEmails, currentProjectId]);
 
   // Toggle approval and update filters
   const handleToggle = async (emailId: string, isApproved: boolean) => {
@@ -138,7 +142,7 @@ const Filter = () => {
       setTimeout(() => {
         setStatusMessage(null);
         setStatusType(null);
-      }, 2000);
+      }, 3000);
     } catch (err) {
       console.error("Error saving filters:", err);
     }
@@ -164,13 +168,13 @@ const Filter = () => {
           <Spinner />
         ) : (
           <>
-            {statusMessage && (
+            <section className="filter-container">
+              <div className="wrapper-filter-btns-status-msg">
+                  {statusMessage && (
               <div className={`status-banner ${statusType}`}>
                 {statusMessage}
               </div>
             )}
-            <section className="filter-container">
-              <div className="filter-btn-save-container">
                 <div className="filter-btn-container">
                   <button
                     className={`filter-btn new ${filteredSenders === "new" ? "active" : ""

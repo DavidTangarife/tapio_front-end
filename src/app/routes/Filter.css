@@ -4,6 +4,7 @@ main {
 .filter-container {
     width: 100%;
     padding: 4px;
+    margin-top: 20px;
 }
 .filter-btn-save-container {
     display: flex;
@@ -200,7 +201,11 @@ main {
         height: 30px;
     }
 }
-
+/* wrapper for filter button and status msg: 
+status msg has absoloute positioning relative to wrapper */
+.wrapper-filter-btns-status-msg {
+    position: relative;
+}
 .status-banner {
     background-color: var(--color-primary);
     color: var(--color-font-offwhite);
@@ -211,4 +216,8 @@ main {
     border-left: 6px solid var(--color-green-dark-mode);
     border-radius: var(--border-radius);
     animation: fadeInOut 4s ease-in-out forwards;
+    position: absolute;
+    top: -128%;
+    left: 0%;
+    z-index: 100;
 }

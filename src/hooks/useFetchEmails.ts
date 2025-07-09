@@ -1,31 +1,42 @@
 import { useEffect, useState } from "react";
 
-const useFetch = (url: string) => {
-  const [data, setData] = useState([])
-  const [error, setError] = useState('')
-  const [activate, setActivate] = useState(false)
+const useFetchEmails = <T = any>(url: string) => {
+  const [data, setData] = useState<T | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [refetchTrigger, setRefetchTrigger] = useState(false);
+
+  const refetch = () => setRefetchTrigger((prev) => !prev);
 
   useEffect(() => {
-    console.log('In hook')
     const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+
       try {
         const response = await fetch(url, {
-          credentials: "include"
+          credentials: "include",
         });
+
         if (!response.ok) {
-          throw new Error('Unable to fetch data from ' + url)
+          throw new Error(`Unable to fetch data from ${url}`);
         }
+
         const jsonData = await response.json();
-        setData(jsonData)
-        setActivate(false)
-      } catch (error) {
-        setError(error);
+        setData(jsonData);
+      } catch (err: any) {
+        setError(err.message || "Unknown error");
+      } finally {
+        setLoading(false);
       }
+    };
+
+    if (url) {
+      fetchData();
     }
-    fetchData();
-  }, [activate])
+  }, [url, refetchTrigger]);
 
-  return { data, error, setActivate }
-}
+  return { data, error, loading, refetch };
+};
 
-export default useFetch;
+export default useFetchEmails;

@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import "./ViewEmail.css";
 import ViewEmailActionButton from "../../components/ui/ViewEmailActionButton";
@@ -9,15 +9,17 @@ import {
   TouchAppOutlined,
   Reply,
   DeleteOutlined,
+  AddLink,
 } from "@mui/icons-material";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
-import SnippetsTags from "../../components/ui/snippets";
+// import SnippetsTags from "../../components/ui/snippets";
 
 interface EmailDetails {
   subject?: string;
   from?: string;
   isTapped?: boolean;
   projectId?: string;
+  opportunityId?: string;
 }
 
 const ViewEmail = () => {
@@ -29,6 +31,8 @@ const ViewEmail = () => {
   const modalData = "";
   const [confirmTappedUp, setConfirmTappedUp] = useState(false);
   const [tapMessage, setTapMessage] = useState<string>("");
+  const [buttonTitle, setButtonTitle] = useState<string>("Add to Board");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmailInfo = async () => {
@@ -38,6 +42,7 @@ const ViewEmail = () => {
         });
         const data = await res.json();
         setEmailDetails(data);
+        setButtonTitle(data.opportunityId ? "Go to Board" : "Add to Board");
       } catch (err) {
         console.error("Failed to fetch email info:", err);
       }
@@ -119,27 +124,98 @@ const ViewEmail = () => {
     return () => iframe.removeEventListener("load", onLoad);
   }, [emailBodyHtml]);
 
-  // Snippets fucntionality
+  //Change "Add to Board" to "Go to Board" after submiting opportunity
+  const updateButtonTitle = () => {
+    setButtonTitle("Go to Board");
+  };
 
   return (
     <>
       <main>
         <section className="header-container">
-          <Link to={`/inbox`} className="back-btn">
+          <Link to={`/home`} className="back-btn">
             Back to Inbox
           </Link>
           <TapioLogoDesktop className="logo" />
           <Link to={`/board`} className="back-btn">
-            Back to Board
+            Go to Board
           </Link>
         </section>
+
+        <div className="email-view-btn-panel">
+          <ViewEmailActionButton
+            icon={Reply}
+            text="Reply"
+            value={modalData}
+            //onClick={handleReply}
+          />
+          <ViewEmailActionButton
+            icon={Reply}
+            text="Forward"
+            value={modalData}
+            iconSx={{ transform: "scaleX(-1)" }}
+            //onClick={handleForward}
+          />
+          <div className="tapup-btn-modal-container">
+            <ViewEmailActionButton
+              icon={TouchAppOutlined}
+              text="Tap up"
+              value={modalData}
+              onClick={handleTapUp}
+            />
+            {confirmTappedUp && (
+              <div className="tapup-confirmation-msg">{tapMessage}</div>
+            )}
+          </div>
+
+          <div className="add-to-board-container">
+            <ViewEmailActionButton
+              icon={ViewKanbanOutlined}
+              text={buttonTitle}
+              value={modalData}
+              onClick={() => {
+                if (buttonTitle === "Go to Board") {
+                  navigate("/board");
+                } else {
+                  setOpenModalCreate(true);
+                }
+              }}
+            />
+            {openModalCreate && (
+              <AddToBoardModal
+                closeModal={() => setOpenModalCreate(false)}
+                updateButtonTitle={updateButtonTitle}
+              />
+            )}
+          </div>
+          <div className="add-to-board-container">
+            <ViewEmailActionButton
+              icon={AddLink}
+              text="Link Opp"
+              value={modalData}
+              onClick={() => setOpenModalAdd(true)}
+            />
+            {openModalAdd && (
+              <LinkToOppModal
+                closeModal={() => setOpenModalAdd(false)}
+                projectId={emailDetails?.projectId}
+              />
+            )}
+          </div>
+          <ViewEmailActionButton
+            icon={DeleteOutlined}
+            text="Delete"
+            value={modalData}
+            //onClick={handleDelete}
+          />
+        </div>
+
         <section className="email-view-container">
           <div className="email-view-sender-details">
             <h3 className="email-view-subject">{emailDetails?.subject}</h3>
             <h4 className="email-view-sender">{emailDetails?.from}</h4>
           </div>
           <section className="email-view-body">
-            <SnippetsTags />
             <iframe
               ref={iframeRef}
               className="iframe"
@@ -154,64 +230,6 @@ const ViewEmail = () => {
             />
           </section>
           {/* <section className="email-view-body" dangerouslySetInnerHTML={{ __html: emailBodyHtml }} /> */}
-          <div className="email-view-btn-panel">
-            <ViewEmailActionButton
-              icon={Reply}
-              text="Reply"
-              value={modalData}
-              //onClick={handleReply}
-            />
-            <ViewEmailActionButton
-              icon={Reply}
-              text="Forward"
-              value={modalData}
-              iconSx={{ transform: "scaleX(-1)" }}
-              //onClick={handleForward}
-            />
-            <div className="tapup-btn-modal-container">
-              <ViewEmailActionButton
-                icon={TouchAppOutlined}
-                text="Tap up"
-                value={modalData}
-                onClick={handleTapUp}
-              />
-              {confirmTappedUp && (
-                <div className="tapup-confirmation-msg">{tapMessage}</div>
-              )}
-            </div>
-
-            <div className="add-to-board-container">
-              <ViewEmailActionButton
-                icon={ViewKanbanOutlined}
-                text="Add to Board"
-                value={modalData}
-                onClick={() => setOpenModalCreate(true)}
-              />
-              {openModalCreate && (
-                <AddToBoardModal closeModal={() => setOpenModalCreate(false)} />
-              )}
-            </div>
-            <div className="add-to-board-container">
-              <ViewEmailActionButton
-                icon={ViewKanbanOutlined}
-                text="LinkOpp"
-                value={modalData}
-                onClick={() => setOpenModalAdd(true)}
-              />
-              {openModalAdd && (
-                <LinkToOppModal
-                  closeModal={() => setOpenModalAdd(false)}
-                  projectId={emailDetails?.projectId}
-                />
-              )}
-            </div>
-            <ViewEmailActionButton
-              icon={DeleteOutlined}
-              text="Delete"
-              value={modalData}
-              //onClick={handleDelete}
-            />
-          </div>
         </section>
       </main>
     </>
