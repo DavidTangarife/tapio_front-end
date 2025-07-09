@@ -1,28 +1,29 @@
 import "./Opportunity.css";
 import { CSS } from "@dnd-kit/utilities"
 import { useSortable } from "@dnd-kit/sortable";
-import { Dispatch, SetStateAction } from "react";
-import { Opportunity } from "../../types/types";
+import { Board, Opportunity } from "../../types/types";
 
 type OpportunityCardProps = {
   _id: string
   title: string
   company: string
+  opportunities: Opportunity[]
   opportunityList: Opportunity[]
-  setOpportunityList: Dispatch<SetStateAction<Opportunity[]>>
-  onClick: unknown
+  board: Board
+  onOpportunityClick: (opportunity: Opportunity) => void;
+  self: Opportunity
 }
 
-export default function OpportunityCard(props: OpportunityCardProps & { onClick: () => void; }) {
-  const { _id, title, company, onClick, opportunityList, setOpportunityList } = props
+export default function OpportunityCard(props: OpportunityCardProps) {
+  const { _id, title, company, onOpportunityClick, opportunities, board, opportunityList, self } = props
 
   const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
     id: _id,
     data: {
       type: "Opportunity",
       opportunity: props,
-      opportunityList,
-      opportunityListSetter: ((input: Opportunity[]) => setOpportunityList(input))
+      opportunityList: opportunityList,
+      board: board
     },
   })
 
@@ -33,7 +34,7 @@ export default function OpportunityCard(props: OpportunityCardProps & { onClick:
   const handleTitleClick = (event: React.MouseEvent) => {
     // Only handle click on title if drag wasn't activated
     event.stopPropagation();
-    onClick();
+    onOpportunityClick(self)
   };
 
   const LOGO_PUB = import.meta.env.VITE_LOGO_PUB;

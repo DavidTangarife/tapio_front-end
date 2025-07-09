@@ -2,16 +2,17 @@ import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from '@dnd-kit/utilities'
 import BoardCard from "./Board";
 import { Board, Opportunity } from "../../types/types";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 type SortableBoardContainerProps = {
   board: Board;
   dragging: boolean;
   setActivator: Dispatch<SetStateAction<boolean>>
+  onOpportunityClick: (opportunity: Opportunity) => void;
 }
 
 const SortableBoardContainer = (props: SortableBoardContainerProps) => {
-  const { board, dragging, setActivator } = props
+  const { board, dragging, setActivator, onOpportunityClick } = props
   const [opportunityList, setOpportunityList] = useState(board.opportunities.sort((a, b) => a.position - b.position))
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging, node } = useSortable({
@@ -24,6 +25,14 @@ const SortableBoardContainer = (props: SortableBoardContainerProps) => {
     }
 
   })
+
+  /*useEffect(() => {
+    console.log(board.title)
+    console.log('opplist', opportunityList)
+    console.log('boardList', board.opportunities)
+    setOpportunityList(board.opportunities.sort((a, b) => a.position - b.position))
+  }, [board.opportunities])*/
+
   const style = {
     transition,
     transform: CSS.Translate.toString(transform)
@@ -47,6 +56,7 @@ const SortableBoardContainer = (props: SortableBoardContainerProps) => {
         setActivator={setActivator}
         opportunityList={opportunityList}
         setOpportunityList={setOpportunityList}
+        onOpportunityClick={onOpportunityClick}
       />
     </div>
   )

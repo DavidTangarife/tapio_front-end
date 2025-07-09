@@ -11,11 +11,12 @@ import { Board, Opportunity } from "../../types/types";
 import OpportunityCard from "./Opportunity";
 import '../../app/routes/Kanban.css'
 import SortableBoardContainer from "./SortableBoardContainer";
+import DeleteContainer from "./DeleteContainer";
 
 const DragTest = () => {
   const [boards, setBoards] = useState<Board[]>(useLoaderData().sort((a: Board, b: Board) => a.order - b.order));
-  const [activeColumn, setActiveColumn] = useState(null)
-  const [activeOpportunity, setActiveOpportunity] = useState(null)
+  const [activeColumn, setActiveColumn] = useState<Board | null>(null)
+  const [activeOpportunity, setActiveOpportunity] = useState<Opportunity | null>(null)
   const [firstMount, setFirstMount] = useState(false)
   const { elementRef, setActivator } = useHorizontalScroll()
   const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
@@ -67,6 +68,9 @@ const DragTest = () => {
                   board={board}
                   setActivator={setActivator}
                   dragging={dragging}
+                  onOpportunityClick={(opportunity) =>
+                    setSelectedOpportunity(opportunity)
+                  }
                 />
               )
             })}
@@ -78,22 +82,22 @@ const DragTest = () => {
           {activeColumn && <SortableBoardContainer board={activeColumn} />}
           {activeOpportunity && <OpportunityCard {...activeOpportunity} />}
         </DragOverlay>, document.body)}
+        {selectedOpportunity && (
+          <Opportunity_PopUp
+            opportunity={selectedOpportunity}
+            boards={boards}
+            onClose={() => setSelectedOpportunity(null)}
+            onDelete={(id) => {
+              deleteOpportunity(id);
+              setSelectedOpportunity(null);
+            }}
+            onEdit={(id, newdata, afterSave) => {
+              editOpportunity(id, newdata, boards, afterSave);
+            }}
+          />
+        )}
+        {dragging && <DeleteContainer />}
       </DndContext >
-      {selectedOpportunity && (
-        <Opportunity_PopUp
-          opportunity={selectedOpportunity}
-          boards={boards}
-          onClose={() => setSelectedOpportunity(null)}
-          onDelete={(id) => {
-            deleteOpportunity(id);
-            setSelectedOpportunity(null);
-          }}
-          onEdit={(id, newdata, afterSave) => {
-            editOpportunity(id, newdata, boards, afterSave);
-          }}
-        />
-      )}
-      {dragging && <div className={'deleteContainer'}> DELETE </div>}
     </div>
   )
 
@@ -119,44 +123,67 @@ const DragTest = () => {
     setDragging(false)
 
     if (activeColumn) {
+      if (over.id === 'delete') {
+        const boardIndex = boards.findIndex((ele) => ele._id === activeColumn._id)
+        boards.splice(boardIndex, 1)
+        deleteColumn(activeColumn._id)
+        return
+      }
       const activeColumnId = active.id;
       const overColumnId = over.id;
 
       if (activeColumnId === overColumnId) return;
+      return
     }
 
     if (activeOpportunity) {
-      const opportunityListSetter = active.data.current?.opportunity.setOpportunityList
-      const opportunities = active.data.current?.opportunity.opportunityList
-      const activeOpportunityIndex = opportunities.findIndex(ele => ele._id === active.id)
+      const opportunities: Opportunity[] = over.data.current?.board.opportunities
+      const currentOpportunities: Opportunity[] = active.data.current!.board.opportunities
+      const activeOpportunityIndex = currentOpportunities.findIndex(ele => ele._id === active.id)
+      if (over.id === 'delete') {
+        currentOpportunities.splice(activeOpportunityIndex, 1)
+        deleteOpportunity(activeOpportunity._id)
+        return
+      }
       if (active.id === over.id) return;
 
       if (over.data.current?.type === "Column") {
-        const opportunity = JSON.parse(JSON.stringify(opportunities[activeOpportunityIndex]))
+        const opportunity = JSON.parse(JSON.stringify(active.data.current?.board.opportunities[activeOpportunityIndex]))
         opportunity.statusId = over.data.current?.board._id
-        opportunities.splice(activeOpportunityIndex, 1)
-        console.log(event)
-        const destinationOpportunityList = over.data.current?.opportunityList
-        const destinationOpportunityListSetter = over.data.current?.opportunityListSetter;
-        console.log(destinationOpportunityListSetter)
-        const res = destinationOpportunityListSetter(() => {
-          return [...destinationOpportunityList, opportunity]
-        })
+        currentOpportunities.splice(activeOpportunityIndex, 1)
+        opportunity.position = opportunities.length + 1
+        over.data.current.board.opportunities = [...over.data.current.board.opportunities, opportunity]
         return
+      }
+      if (over.data.current?.type === "Opportunity") {
+        const activeOpportunityId = active.id;
+        const overOpportunityId = over.id;
+        if (activeOpportunityId === overOpportunityId) return;
+        const activeOpportunityIndex = opportunities.findIndex(ele => ele._id === activeOpportunityId)
+        const overOpportunityIndex = opportunities.findIndex(ele => ele._id === overOpportunityId)
+        const newArray = arrayMove(opportunities, activeOpportunityIndex, overOpportunityIndex)
+        newArray.map((ele, index) => {
+          ele.position = index + 1
+          return ele
+        })
+        over.data.current.board.opportunities = [...newArray]
+        /* console.log(event)
+         * 
+
+        const newArray = arrayMove(opportunities, activeOpportunityIndex, overOpportunityIndex)
+        over.data.current.board.opportunities = newArray
+        console.log(newArray)*/
       }
 
 
-      const overOpportunityIndex = opportunities.findIndex(ele => ele._id === over.id)
-      console.log(overOpportunityIndex, activeOpportunityIndex)
-      const res = opportunityListSetter(() => {
-        return arrayMove(opportunities, activeOpportunityIndex, overOpportunityIndex)
-      })
+      return
     }
   }
 
   function dragOver(event: DragOverEvent) {
     const { active, over } = event;
     if (!over) return;
+    console.log(event)
 
     const activeId = active.id;
     const overId = over.id;
@@ -169,21 +196,8 @@ const DragTest = () => {
         return arrayMove(boards, activeIndex, overIndex)
       })
     }
-    /*if (active.data.current?.type === "Opportunity") {
-      const activeOpportunityId = active.id;
-      const overOpportunityId = over.id;
-
-      if (activeOpportunityId === overOpportunityId) return;
-      const opportunityListSetter = active.data.current?.opportunity.setOpportunityList
-      const opportunities = active.data.current?.opportunity.opportunityList
-
-      const activeOpportunityIndex = opportunities.findIndex(ele => ele._id === activeOpportunityId)
-      const overOpportunityIndex = opportunities.findIndex(ele => ele._id === overOpportunityId)
-      const res = opportunityListSetter(() => {
-        return arrayMove(opportunities, activeOpportunityIndex, overOpportunityIndex)
-      })
-    }*/
   }
+
 
   function editOpportunity(
     id: string,
@@ -253,6 +267,15 @@ const DragTest = () => {
       .catch((err) => {
         console.error("Error deleting opportunity:", err.message);
       });
+  }
+
+  function deleteColumn(_id: string) {
+    fetch('http://localhost:3000/api/status', {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ _id })
+    })
   }
 }
 

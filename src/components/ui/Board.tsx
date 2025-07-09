@@ -11,21 +11,19 @@ type BoardCardProps = {
   setActivator: Dispatch<SetStateAction<boolean>>
   opportunityList: Opportunity[]
   setOpportunityList: Dispatch<SetStateAction<Opportunity[]>>
+  onOpportunityClick: (opportunity: Opportunity) => void;
 };
 
 const BoardCard = memo((props: BoardCardProps) => {
-  const { _id, title } = props.board
-  const { dragging, setActivator, opportunityList, setOpportunityList } = props
+  const { _id, title, opportunities } = props.board
+  const { dragging, setActivator, opportunityList, setOpportunityList, board, onOpportunityClick } = props
   const [firstMount, setFirstMount] = useState(false)
-  const opportunityIds = useMemo(() => opportunityList.map((ele) => ele._id), [opportunityList])
+  const opportunityIds = useMemo(() => opportunities.map((ele) => ele._id), [opportunities])
 
   useEffect(() => {
-    console.log('State of opps changed')
-    console.log(opportunityList)
+    console.log('Opps Upps', opportunities, opportunityIds)
     if (firstMount) {
-      const updateOrder = opportunityList.map((element) => {
-        const currentPosition = Number(opportunityList.findIndex(ele => ele._id === element._id)) + 1
-        element.position = currentPosition
+      const updateOrder = opportunities.map((element) => {
         return [element._id, element.position, _id]
       })
       fetch('http://localhost:3000/api/update-opportunity-order', {
@@ -74,14 +72,17 @@ const BoardCard = memo((props: BoardCardProps) => {
         onMouseLeave={mouseLeft}
       >
         <SortableContext items={opportunityIds}>
-          {opportunityList.map((opportunity) => {
+          {opportunities.map((opportunity) => {
             {
               return (
-                < OpportunityCard
+                <OpportunityCard
                   key={opportunity._id}
                   {...opportunity}
+                  opportunities={opportunities}
                   opportunityList={opportunityList}
-                  setOpportunityList={setOpportunityList}
+                  board={board}
+                  onOpportunityClick={onOpportunityClick}
+                  self={opportunity}
                 />)
             }
           })}
