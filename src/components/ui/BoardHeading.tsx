@@ -68,10 +68,10 @@ const BoardHeading = (props: BoardHeadingProps) => {
           <TextField
             name="BoardName"
             inputRef={inputRef}
-            size={'small'}
+            // fontSize={'20px'}
             variant="standard"
             className="editField"
-            sx={{ input: { color: '#f5f5f5' } }}
+            sx={{ input: { color: '#f5f5f5', fontSize: '24px', fontFamily: 'var(--font-stylised)' , fontWeight: '600'} }}
             InputProps={{
               disableUnderline: true,
               defaultValue: title

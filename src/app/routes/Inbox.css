@@ -1,3 +1,5 @@
+Inbox.css
+
 .email-section {
   display: block;
   margin-bottom: 50px;
@@ -8,13 +10,25 @@
 .email-list {
   margin-bottom: 24px;
 }
-.email-section-title {
-  margin-left: 20px;
-  margin-bottom: 10px;
+.email-section-heading {
+  display: flex;
+  flex-direction: row;
   border-bottom: var(--border-grey-dark-mode);
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  justify-content: space-between;
+  margin-left: 20px;
+}
+.email-section-title {
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-regular);
   font-family: var(--font-stylised);
+}
+.tap {
+  border-bottom: var(--border-grey-dark-mode);
+  margin-left: 20px;
+   margin-bottom: 10px;
+   padding-bottom: 5px;
 }
 .spin-loader {
   width: 70px;
@@ -37,16 +51,111 @@
   color: var(--color-font-offwhite);
   margin-left: 20px;
 }
+
+.inbox-header {
+  display: flex;
+  gap: 15px;
+  justify-content: start;
+  width: 100%;
+  max-width: 966px;
+  margin: 20px auto;
+  padding: 12px 8px;
+  position: relative;
+}
 .refresh-button {
-  margin-left: auto;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  border-radius: var(--border-radius);;
   background-color: var(--color-primary);
-  color: white;
+  color: var(--color-font-primary);
   border: none;
   cursor: pointer;
 }
 .refresh-button:hover {
-  background-color:var(--color-green-dark-mode);
-  color: var(--color-font-offwhite)
+  background: var(--color-grad-green-dark-mode);
+  color: var(--color-font-dark);
+  border: none;
+}
+.refresh-msg-email-present {
+  background-color: var(--color-primary);
+  color: var(--color-font-offwhite);
+  font-family: var(--font-bodycopy);
+  font-size: var(--font-size-regular);
+  padding: 10px 20px;
+  border-left: 6px solid var(--color-green-dark-mode);
+  border-radius: var(--border-radius);
+  margin: 8px;
+  animation: fadeInOut 4s ease-in-out forwards;
+  position: absolute;
+  top: -70%;
+  left: 0%;
+  z-index: 100;
+}
+
+.refresh-icon-spin-on-loading {
+  animation: spin 1s linear infinite;
+}
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  /* max-width: 900px; */
+}
+
+.search-dropdown {
+  position: absolute;
+  top: 93%;
+  background-color: var(--color-primary);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+  /* max-width: 800px; */
+  width: 100%;
+  border-radius: 4px;
+  z-index:100;
+  margin-top: 4px;
+  max-height: 450px;
+  list-style:none;
+  overflow: auto;
+}
+
+.inbox-header:has(.search-dropdown:not(:empty)) + .email-section {
+  filter: blur(4px);
+}
+
+.search-dropdown-item {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border-radius);
+  text-decoration: none;
+}
+
+.search-dropdown-item:hover {
+  background-color: var(--color-dark-mode-hover);
+  border-radius: 4px;
+}
+
+.dropdown-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+}
+
+.dropdown-subject {
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  /* font-size: var(--font-size-regular); */
+}
+.dropdown-from {
+  margin: 0;
+  font-weight: var(--font-weight-regular);
+}
+
+.dropdown-date {
+  font-weight: var(--font-weight-regular);
+  margin-right: 20px;
+  align-self: center;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
 }

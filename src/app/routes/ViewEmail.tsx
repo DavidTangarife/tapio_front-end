@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import "./ViewEmail.css";
 import ViewEmailActionButton from "../../components/ui/ViewEmailActionButton";
@@ -9,6 +9,7 @@ import {
   TouchAppOutlined,
   Reply,
   DeleteOutlined,
+  AddLink
 } from "@mui/icons-material";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
 
@@ -17,6 +18,7 @@ interface EmailDetails {
   from?: string;
   isTapped?: boolean;
   projectId?: string;
+  opportunityId?: string;
 }
 
 const ViewEmail = () => {
@@ -28,6 +30,8 @@ const ViewEmail = () => {
   const modalData = "";
   const [confirmTappedUp, setConfirmTappedUp] = useState(false);
   const [tapMessage, setTapMessage] = useState<string>("");
+  const [buttonTitle, setButtonTitle] = useState<string>("Add to Board");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchEmailInfo = async () => {
@@ -37,6 +41,7 @@ const ViewEmail = () => {
         });
         const data = await res.json();
         setEmailDetails(data);
+        setButtonTitle(data.opportunityId ? "Go to Board" : "Add to Board")
       } catch (err) {
         console.error("Failed to fetch email info:", err);
       }
@@ -116,34 +121,26 @@ const ViewEmail = () => {
     iframe.addEventListener("load", onLoad);
     return () => iframe.removeEventListener("load", onLoad);
   }, [emailBodyHtml]);
+
+  //Change "Add to Board" to "Go to Board" after submiting opportunity
+  const updateButtonTitle = () => {
+    setButtonTitle("Go to Board");
+  }
+
   return (
     <>
       <main>
         <section className="header-container">
-          <Link to={`/inbox`} className="back-btn">
+          <Link to={`/home`} className="back-btn">
             Back to Inbox
           </Link>
           <TapioLogoDesktop className="logo" />
           <Link to={`/board`} className="back-btn">
-            Back to Board
+            Go to Board
           </Link>
         </section>
-        <section className="email-view-container">
-          <div className="email-view-sender-details">
-            <h3 className="email-view-subject">{emailDetails?.subject}</h3>
-            <h4 className="email-view-sender">{emailDetails?.from}</h4>
-          </div>
-          <section className="email-view-body">
-            <iframe
-            ref={iframeRef}
-            className="iframe"
-              title="email-content"
-              style={{ width: "100%", minHeight: "500px", border: "none", overflow: "hidden"  }}
-              srcDoc={emailBodyHtml}
-            />
-          </section>
-          {/* <section className="email-view-body" dangerouslySetInnerHTML={{ __html: emailBodyHtml }} /> */}
-          <div className="email-view-btn-panel">
+
+           <div className="email-view-btn-panel">
             <ViewEmailActionButton
               icon={Reply}
               text="Reply"
@@ -172,18 +169,26 @@ const ViewEmail = () => {
             <div className="add-to-board-container">
               <ViewEmailActionButton
                 icon={ViewKanbanOutlined}
-                text="Add to Board"
+                text={buttonTitle}
                 value={modalData}
-                onClick={() => setOpenModalCreate(true)}
+                onClick={() => {
+                  if (buttonTitle === "Go to Board") {
+                    navigate("/board")
+                  } else {
+                  setOpenModalCreate(true)
+                  }
+                }}
               />
               {openModalCreate && (
-                <AddToBoardModal closeModal={() => setOpenModalCreate(false)} />
+                <AddToBoardModal 
+                  closeModal={() => setOpenModalCreate(false)}
+                   updateButtonTitle={updateButtonTitle} />
               )}
             </div>
             <div className="add-to-board-container">
               <ViewEmailActionButton
-                icon={ViewKanbanOutlined}
-                text="LinkOpp"
+                icon={AddLink}
+                text="Link Opp"
                 value={modalData}
                 onClick={() => setOpenModalAdd(true)}
               />
@@ -201,7 +206,24 @@ const ViewEmail = () => {
               //onClick={handleDelete}
             />
           </div>
+         
+        <section className="email-view-container">
+          <div className="email-view-sender-details">
+            <h3 className="email-view-subject">{emailDetails?.subject}</h3>
+            <h4 className="email-view-sender">{emailDetails?.from}</h4>
+          </div>
+          <section className="email-view-body">
+            <iframe
+            ref={iframeRef}
+            className="iframe"
+              title="email-content"
+              style={{ width: "100%", minHeight: "500px", border: "none", overflow: "hidden"  }}
+              srcDoc={emailBodyHtml}
+            />
+          </section>
+          {/* <section className="email-view-body" dangerouslySetInnerHTML={{ __html: emailBodyHtml }} /> */}
         </section>
+      
       </main>
     </>
   );

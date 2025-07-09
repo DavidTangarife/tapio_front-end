@@ -1,13 +1,19 @@
 .opportunity-modal {
   max-width: 300px;
   position: absolute;
-  bottom: 110%;
-  right: -50%;
+  bottom: -110%;
+  right: 50%;
   z-index: 100;
   border: var(--border-green-dark-mode);
   border-radius: var(--border-radius);
   background-color: var(--color-primary);
   padding: 16px;
+}
+.added-to-board-msg-wrapper {
+  position: absolute;
+  bottom: -60%;
+  right: -40%;
+  z-index: 100;
 }
 .modal-backdrop {
   position: fixed;
@@ -81,8 +87,12 @@ label {
   font-size: var(--font-size-medium);
   font-weight: var(--font-weight-bold);
   color: var(--color-font-primary);
-  width: 150px;
+  width: 180px;
   text-align: center;
+  background-color: var(--color-primary);
+  border: var(--border-green-dark-mode);
+  border-radius: 10px;;
+  padding: 10px 20px;
 }
 
 /* animation to mask the loading time of fetch opportunites */

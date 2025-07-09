@@ -248,6 +248,7 @@ export default function Opportunity_PopUp({
 
           {editing ? (
             <select
+              className="change-opp-status"
               value={editableData.statusId}
               onChange={(e) => {
                 setEditableData({
