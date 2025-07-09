@@ -281,10 +281,6 @@ option::checkmark {
   color: white;
 }
 
-span .snippet-key {
-  color: ;
-}
-
 .snippet-input {
   font-size: 0.8rem;
   margin-top: 0.5rem;
@@ -295,4 +291,50 @@ span .snippet-key {
   color: white;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
+}
+
+.warning-msg {
+  position: absolute;
+  left: 105%;
+  top: 0%;
+  min-width: 15rem;
+  background-color: var(--color-primary);
+  color: var(--color-font-offwhite);
+  font-family: var(--font-bodycopy);
+  font-size: 1rem;
+  border-left: 6px solid var(--color-green-dark-mode);
+  border-radius: var(--border-radius);
+  margin-top: 6px;
+  padding: 8px;
+  animation: fadeInOut 3s ease-in-out forwards;
+}
+
+.warning-msg::after {
+  content: "";
+  position: absolute;
+  top: 35%;
+  left: -10%;
+  transform: translateX(5px) rotate(270deg);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 8px solid #77c90b;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
 }

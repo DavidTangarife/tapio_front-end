@@ -23,7 +23,9 @@ import AddBoard from "../../components/ui/AddBoard";
 
 export default function Kanban() {
   const initialData = useLoaderData(); //Initial Data from loader
-  const { currentProjectId } = useOutletContext<{ currentProjectId: string | null }>(); //Get the project Id from the Outlet context
+  const { currentProjectId } = useOutletContext<{
+    currentProjectId: string | null;
+  }>(); //Get the project Id from the Outlet context
   const [boards, setBoards] = useState<Bt[]>([]);
   const [currentFocus, setCurrentFocus] = useState<HTMLInputElement | null>(
     null
@@ -36,7 +38,7 @@ export default function Kanban() {
   );
   const isDragging = useRef(false);
   const { elementRef, setActivator } = useHorizontalScroll();
-  
+
   //Fetch boards for the current project
   const fetchBoardsForProject = async (projectId: string) => {
     try {
@@ -48,7 +50,7 @@ export default function Kanban() {
         },
         credentials: "include",
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setBoards(data);
@@ -63,6 +65,7 @@ export default function Kanban() {
   //For initial load
   useEffect(() => {
     setBoards(initialData);
+    window.scroll(0, 0);
   }, [initialData]);
 
   //Re-fetch when the project changes from the header

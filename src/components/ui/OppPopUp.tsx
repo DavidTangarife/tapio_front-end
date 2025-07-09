@@ -29,6 +29,7 @@ export default function Opportunity_PopUp({
     boards.find((b) => b._id === editableData.statusId)?.title || "Unknown";
   const LOGO_PUB = import.meta.env.VITE_LOGO_PUB;
   const popupRef = useRef<HTMLDivElement | null>(null);
+  const [titleError, setTitleError] = useState<Boolean>(false);
 
   // Retrieve emails from the opportunity
   const fetchEmailsFromOpp = async () => {
@@ -128,6 +129,15 @@ export default function Opportunity_PopUp({
       snippFlag: true,
       snippets: finalSnippets,
     };
+
+    if (editableData.title.trim() === "") {
+      setTitleError(true);
+      setTimeout(() => setTitleError(false), 3000);
+      return;
+    } else {
+      setTitleError(false);
+    }
+
     //So when handle the save my editable data will receive my updated opportunity as a prop to display on editableData
     onEdit(opportunity._id, payload, (updatedOpp) => {
       setEditableData(updatedOpp);
@@ -141,13 +151,21 @@ export default function Opportunity_PopUp({
         <div className="popupHeader">
           <div className="popupTitleSection">
             {editing ? (
-              <input
-                value={editableData.title}
-                onChange={(e) =>
-                  setEditableData({ ...editableData, title: e.target.value })
-                }
-                autoFocus
-              />
+              <div style={{ position: "relative" }}>
+                <input
+                  value={editableData.title}
+                  onChange={(e) =>
+                    setEditableData({ ...editableData, title: e.target.value })
+                  }
+                  placeholder=" Positon / Role"
+                  autoFocus
+                />
+                {titleError && (
+                  <div className="warning-msg">
+                    <p>Please fill out this field</p>
+                  </div>
+                )}
+              </div>
             ) : (
               <h1>{opportunity.title}</h1>
             )}
@@ -342,7 +360,7 @@ export default function Opportunity_PopUp({
               <div className="delete-modal-overlay"></div>
               <aside className="confirm-delete-modal">
                 <p className="confirm-delete-msg">
-                  Are you sure you want to delete
+                  Are you sure you want to delete this opportunity
                 </p>
                 <p className="project-to-delete"> {editableData?.title} ?</p>
                 <div className="delete-modal-btn-container">

@@ -16,15 +16,6 @@
   cursor: pointer;
 }
 
-.snippets-button {
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-stylised);
-  font-size: var(--button-font-size);
-  border: none;
-  background-color: var(--color-primary);
-  cursor: pointer;
-}
-
 .snippets-wrapper::after {
   content: "";
   position: absolute;

@@ -39,6 +39,7 @@ const ViewEmail = () => {
   const [position, setPosition] = useState<Record<string, number>>(); //Object where Key -> type String, and Values -> type number
 
   useEffect(() => {
+    window.scroll(0, 0);
     const fetchEmailInfo = async () => {
       try {
         const res = await fetch(`http://localhost:3000/api/emails/${emailId}`, {
@@ -264,7 +265,7 @@ const ViewEmail = () => {
               }}
               srcDoc={emailBodyHtml}
             />
-            {selection && position && (
+            {selection && position && emailDetails?.opportunityId && (
               <SnippetButton
                 selection={selection}
                 position={position}

@@ -9,26 +9,24 @@ import EmailPagination from "../../components/ui/EmailPagination";
 
 const Inbox: React.FC<InboxProps> = ({
   unreadEmails,
-  readEmails, 
-  tappedEmails, 
-  onTapUpdate, 
-  onRefreshInbox, 
-  refreshMessage, 
+  readEmails,
+  tappedEmails,
+  onTapUpdate,
+  onRefreshInbox,
+  refreshMessage,
   setReadPage,
   setUnreadPage,
-  readPage, 
+  readPage,
   unreadPage,
-  refreshLoadingIcon
+  refreshLoadingIcon,
 }) => {
-
-
   const [searchResults, setSearchResults] = useState<Email[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [inputValue, setInputValue] = useState("");
- 
+
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const trimmed = inputValue.trim();
 
@@ -43,14 +41,16 @@ const Inbox: React.FC<InboxProps> = ({
     }, 300);
     // cleanup on unmount
     return () => clearTimeout(timeout);
-
   }, [inputValue]);
 
   async function fetchSearchResults(query: string) {
     try {
-      const res = await fetch(`http://localhost:3000/api/search?q=${encodeURIComponent(query)}`, {
-        credentials: "include",
-      });
+      const res = await fetch(
+        `http://localhost:3000/api/search?q=${encodeURIComponent(query)}`,
+        {
+          credentials: "include",
+        }
+      );
       const data = await res.json();
       setSearchResults(data.emails ?? []);
       setSearchQuery(query);
@@ -62,39 +62,47 @@ const Inbox: React.FC<InboxProps> = ({
 
   useEffect(() => {
     const handleClickOrEscape = (event: MouseEvent | KeyboardEvent) => {
-    // Close on outside click
-    if (
-      event instanceof MouseEvent &&
-      wrapperRef.current &&
-      !wrapperRef.current.contains(event.target as Node)
-    ) {
-      setSearchResults([]);
-      setSearchQuery("");  
-    }
-    // Close on Escape key
-    if (event instanceof KeyboardEvent && event.key === "Escape") {
-      setSearchResults([]);
-      setSearchQuery("");
-    }
-  };
-  document.addEventListener("mousedown", handleClickOrEscape);
-  document.addEventListener("keydown", handleClickOrEscape);
+      // Close on outside click
+      if (
+        event instanceof MouseEvent &&
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
+        setSearchResults([]);
+        setSearchQuery("");
+      }
+      // Close on Escape key
+      if (event instanceof KeyboardEvent && event.key === "Escape") {
+        setSearchResults([]);
+        setSearchQuery("");
+      }
+    };
+    document.addEventListener("mousedown", handleClickOrEscape);
+    document.addEventListener("keydown", handleClickOrEscape);
 
-  return () => {
-    document.removeEventListener("mousedown", handleClickOrEscape);
-    document.removeEventListener("keydown", handleClickOrEscape);
-  };
+    return () => {
+      document.removeEventListener("mousedown", handleClickOrEscape);
+      document.removeEventListener("keydown", handleClickOrEscape);
+    };
   }, []);
 
-  
   return (
     <>
-    
       <div className="inbox-header">
-        {refreshMessage && <p className="refresh-msg-email-present">{refreshMessage}</p>}
-        <button onClick={onRefreshInbox} className="refresh-button"><Refresh className={refreshLoadingIcon ? "refresh-icon-spin-on-loading" : "" } /></button>
+        {refreshMessage && (
+          <p className="refresh-msg-email-present">{refreshMessage}</p>
+        )}
+        <button onClick={onRefreshInbox} className="refresh-button">
+          <Refresh
+            className={refreshLoadingIcon ? "refresh-icon-spin-on-loading" : ""}
+          />
+        </button>
         <div className="search-wrapper" ref={wrapperRef}>
-          <SearchBar onSearch={() => fetchSearchResults(inputValue.trim())} inputValue={inputValue} setInputValue={setInputValue}/>
+          <SearchBar
+            onSearch={() => fetchSearchResults(inputValue.trim())}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+          />
           {searchQuery && (
             <ul className="search-dropdown">
               {searchResults.length > 0 ? (
@@ -120,11 +128,11 @@ const Inbox: React.FC<InboxProps> = ({
                     </li>
                   ))}
                 </>
-            ) : (
-              <li className="search-dropdown-item no-result">
-                No results for <strong>{searchQuery}</strong>
-              </li>
-            )}
+              ) : (
+                <li className="search-dropdown-item no-result">
+                  No results for <strong>{searchQuery}</strong>
+                </li>
+              )}
             </ul>
           )}
         </div>
@@ -161,7 +169,7 @@ const Inbox: React.FC<InboxProps> = ({
             totalPages={unreadEmails?.pages || 1}
           />
         </div>
-        
+
         {unreadEmails && unreadEmails?.emails.length > 0 ? (
           <div className="email-list">
             {unreadEmails.emails.map((email) => (

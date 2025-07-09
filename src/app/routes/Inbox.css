@@ -1,6 +1,4 @@
-Inbox.css
-
-.email-section {
+Inbox.css .email-section {
   display: block;
   margin-bottom: 50px;
   max-width: 966px;
@@ -27,8 +25,8 @@ Inbox.css
 .tap {
   border-bottom: var(--border-grey-dark-mode);
   margin-left: 20px;
-   margin-bottom: 10px;
-   padding-bottom: 5px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
 }
 .spin-loader {
   width: 70px;
@@ -66,7 +64,7 @@ Inbox.css
   padding: 0.5rem 1rem;
   display: flex;
   justify-content: center;
-  border-radius: var(--border-radius);;
+  border-radius: var(--border-radius);
   background-color: var(--color-primary);
   color: var(--color-font-primary);
   border: none;
@@ -87,10 +85,7 @@ Inbox.css
   border-radius: var(--border-radius);
   margin: 8px;
   animation: fadeInOut 4s ease-in-out forwards;
-  position: absolute;
-  top: -70%;
-  left: 0%;
-  z-index: 100;
+  z-index: 1000000;
 }
 
 .refresh-icon-spin-on-loading {
@@ -110,10 +105,10 @@ Inbox.css
   /* max-width: 800px; */
   width: 100%;
   border-radius: 4px;
-  z-index:100;
+  z-index: 100;
   margin-top: 4px;
   max-height: 450px;
-  list-style:none;
+  list-style: none;
   overflow: auto;
 }
 
@@ -157,5 +152,7 @@ Inbox.css
 }
 
 @keyframes spin {
-  100% { transform: rotate(360deg); }
+  100% {
+    transform: rotate(360deg);
+  }
 }
