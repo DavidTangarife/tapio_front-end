@@ -30,7 +30,6 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
         });
         const projectData = await res.json();
         if (res.ok) {
-          // The issue is that we were trying to work from a Patch or function that only works when clickin on the dropdown, when it should be setup on the use effect and just a get project ID
           setProjects(projectData.projects);
           const current_res = await fetch(
             "http://localhost:3000/api/session-project",

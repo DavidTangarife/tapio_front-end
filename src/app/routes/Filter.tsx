@@ -4,83 +4,97 @@ import "./Filter.css";
 import { ThumbUpOutlined, ThumbDownOutlined } from "@mui/icons-material";
 import { SenderData } from "../../types/types";
 import Spinner from "../../components/ui/Spinner";
+import { SearchBar } from "../../components/ui/SearchBar";
 
 const Filter = () => {
-  // Return an array of emails
   const initialEmails = useLoaderData() as SenderData[];
-  // Show message states
+  const { currentProjectId } = useOutletContext<{ currentProjectId: string | null }>();
+
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
-  const [statusType, setStatusType] = useState<"allowed" | "blocked" | null>(
-    null
-  );
-  // State to store emails
+  const [statusType, setStatusType] = useState<"allowed" | "blocked" | null>(null);
   const [emails, setEmails] = useState<SenderData[] | null>(null);
   const [allEmails, setAllEmails] = useState(initialEmails);
   const [filteredSenders, setFilteredSenders] = useState<"new" | "allowed" | "blocked">("new");
-  const { currentProjectId } = useOutletContext<{ currentProjectId: string | null }>();
+  const [query, setQuery] = useState("");
 
   function extractEmailAddress(from: string): string {
     if (!from) return "";
-    
     const angleMatch = from.match(/<([^<>]+)>/);
     if (angleMatch) return angleMatch[1].trim().toLowerCase();
-
     const emailMatch = from.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
     return (emailMatch ? emailMatch[0] : "").trim().toLowerCase();
   }
 
-
   function getUnprocessedEmails(emails: SenderData[]) {
     return emails.filter((email) => !email.isProcessed);
   }
+
+  async function fetchFilteredEmails(tab: "allowed" | "blocked"): Promise<SenderData[]> {
+    const endpoint = tab === "allowed" ? "allowed-emails" : "blocked-emails";
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/${endpoint}`, {
+        credentials: "include",
+      });
+      const data = await res.json();
+      return data.emails ?? [];
+    } catch (err) {
+      console.error(`Error fetching ${tab} emails:`, err);
+      return [];
+    }
+  };
+
+  const fetchInitialEmails = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/api/unprocessed-emails`, {
+        credentials: "include",
+      });
+      const data = await res.json();
+      setAllEmails(data);
+      setEmails(getUnprocessedEmails(data));
+      setFilteredSenders("new");
+      setQuery("");
+    } catch (err) {
+      console.error("Failed to fetch unprocessed emails:", err);
+    }
+  };
+  
   useEffect(() => {
-    setEmails(initialEmails);
-  }, [initialEmails]);
+    if (currentProjectId) fetchInitialEmails();
+  }, [currentProjectId]);
 
   useEffect(() => {
     if (filteredSenders === "new") {
       setEmails(getUnprocessedEmails(allEmails));
-      return;
+    } else {
+      fetchFilteredEmails(filteredSenders).then(setEmails);
     }
-    const fetchByTab = async () => {
-      let endpoint = "";
-      if (filteredSenders === "allowed") {
-        endpoint = "allowed-emails";
-      } else if (filteredSenders === "blocked") {
-        endpoint = "blocked-emails";
-      }
-      try {
-        const res = await fetch(`http://localhost:3000/api/${endpoint}`, {
-          credentials: "include",
-        });
-        const data = await res.json();
-        setEmails(data.emails ?? []);
-      } catch (err) {
-        console.error("Error fetching emails in tabs", err);
-      }
-    };
-
-    fetchByTab();
+    setQuery("")
   }, [filteredSenders, allEmails, currentProjectId]);
+
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (!trimmed) {
+      setQuery("");
+      filteredSenders === "new"
+        ? setEmails(getUnprocessedEmails(allEmails))
+        : fetchFilteredEmails(filteredSenders).then(setEmails);
+    }
+  }, [query]);
 
   // Toggle approval and update filters
   const handleToggle = async (emailId: string, isApproved: boolean) => {
     try {
       const emailObj = emails?.find((email) => email._id === emailId);
       if (!emailObj) throw new Error("Email not found");
+
       const sender = extractEmailAddress(emailObj.from);
-      console.log("sender", sender);
       const affectedEmails = allEmails.filter(
         (email) => extractEmailAddress(email.from) === sender
       );
       const updatedCount = affectedEmails.length;
-      console.log(
-        "Sending PATCH for emailId:",
-        emailId,
-        "isApproved:",
-        isApproved
-      );
-      const res = await fetch(
+
+      await fetch(
         `http://localhost:3000/api/emails/${emailId}/process`,
         {
           method: "PATCH",
@@ -89,16 +103,12 @@ const Filter = () => {
             "Content-type": "application/json",
           },
           body: JSON.stringify({
-            isApproved: isApproved,
+            isApproved,
           }),
         }
       );
 
-      if (!res.ok) {
-        throw new Error("Failed to update email properties");
-      }
-
-      const filterRes = await fetch(
+      await fetch(
         `http://localhost:3000/api/projects/filters`,
         {
           method: "PATCH",
@@ -112,11 +122,7 @@ const Filter = () => {
           }),
         }
       );
-
-      if (!filterRes.ok) {
-        throw new Error("Failed to save filters");
-      }
-
+   
       const updatedAllEmails = allEmails.map((email) =>
         extractEmailAddress(email.from) === sender
           ? { ...email, isApproved, isProcessed: true }
@@ -124,16 +130,13 @@ const Filter = () => {
       );
       setAllEmails(updatedAllEmails);
 
-      // Update visible emails if in "new" tab
       if (filteredSenders === "new") {
         setEmails(getUnprocessedEmails(updatedAllEmails));
       } else {
-        // re-fetch allowed/blocked
         setFilteredSenders((prev) =>
           prev === "allowed" ? "allowed" : "blocked"
         );
       }
-      console.log(updatedCount);
       setStatusMessage(
         `${updatedCount} email${updatedCount > 1 ? "s" : ""} from ${sender} ${isApproved ? "allowed" : "blocked"
         }.`
@@ -150,14 +153,36 @@ const Filter = () => {
 
   //Filter senders by allowed and blocked
   const getFilteredSenders = () => {
-    if (filteredSenders === "allowed") {
-      return emails?.filter((email) => email.isProcessed && email.isApproved);
-    }
-    if (filteredSenders === "blocked") {
-      return emails?.filter((email) => email.isProcessed && !email.isApproved);
-    }
-    return emails?.filter((email) => !email.isProcessed);
+    if (!emails) return [];
+    if (filteredSenders === "allowed") return emails.filter(e => e.isProcessed && e.isApproved);
+    if (filteredSenders === "blocked") return emails.filter(e => e.isProcessed && !e.isApproved);
+    return emails.filter(e => !e.isProcessed);
   };
+
+  const handleSearch = async (query: string) => {
+   const trimmed = query.trim();
+  setQuery(query);
+
+  if (!trimmed) {
+    setEmails(allEmails);
+    return;
+  }
+
+  try {
+    const url = new URL("http://localhost:3000/api/search");
+    url.searchParams.append("q", trimmed);
+    url.searchParams.append("filterType", filteredSenders); // send "new", "allowed", or "blocked"
+
+    const res = await fetch(url.toString(), {
+      credentials: "include",
+    });
+    const data = await res.json();
+    setEmails(data.emails ?? []);
+  } catch (error) {
+    console.error("Search error:", error);
+    setEmails([]);
+  }
+};
 
   const today = new Date().toLocaleDateString("en-GB");
 
@@ -171,10 +196,10 @@ const Filter = () => {
             <section className="filter-container">
               <div className="wrapper-filter-btns-status-msg">
                   {statusMessage && (
-              <div className={`status-banner ${statusType}`}>
-                {statusMessage}
-              </div>
-            )}
+                    <div className={`status-banner ${statusType}`}>
+                      {statusMessage}
+                    </div>
+                  )}
                 <div className="filter-btn-container">
                   <button
                     className={`filter-btn new ${filteredSenders === "new" ? "active" : ""
@@ -199,6 +224,7 @@ const Filter = () => {
                   >
                     <ThumbDownOutlined />
                   </button>
+                  <SearchBar onSearch={handleSearch} inputValue={query} setInputValue={setQuery} variant="minimal" className="search-bar"/>
                 </div>
               </div>
               <h3 className="filter-date-title">{today}</h3>

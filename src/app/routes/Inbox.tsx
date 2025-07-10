@@ -45,12 +45,18 @@ const Inbox: React.FC<InboxProps> = ({
 
   async function fetchSearchResults(query: string) {
     try {
+<<<<<<< HEAD
       const res = await fetch(
         `http://localhost:3000/api/search?q=${encodeURIComponent(query)}`,
         {
           credentials: "include",
         }
       );
+=======
+      const res = await fetch(`http://localhost:3000/api/search?q=${encodeURIComponent(query)}&onlyApproved=true`, {
+        credentials: "include",
+      });
+>>>>>>> search-filter
       const data = await res.json();
       setSearchResults(data.emails ?? []);
       setSearchQuery(query);
