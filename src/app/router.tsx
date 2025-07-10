@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, useOutletContext } from "react-router";
 import Landing from "./routes/Landing";
 import SetupForm from "./routes/AccountSetUp";
 import ConnectEmails from "./routes/ConnectEmails";
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
         path: "/filter",
         element: (
           <Suspense fallback={<Spinner />}>
-            <Filter />
+            <Filter  />
           </Suspense>
         ),
         loader: async () => {

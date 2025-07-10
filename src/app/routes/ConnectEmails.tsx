@@ -18,11 +18,10 @@ const ConnectEmails = () => {
   const [tappedEmails, setTappedEmails] = useState<Email[]>([]);
   const [refreshMessage, setRefreshMessage] = useState<string | null>(null);
   const [refreshLoadingIcon, setRefreshLoadingIcon] = useState(false);
-  const navigate = useNavigate();
   const [unreadPage, setUnreadPage] = useState(1);
   const [readPage, setReadPage] = useState(1);
   const [tappedPage, setTappedPage] = useState(1);
-
+  const navigate = useNavigate();
   const { currentProjectId } = useOutletContext<{ currentProjectId: string | null }>();
 
   /**
@@ -43,9 +42,8 @@ const ConnectEmails = () => {
       const getRes = await fetch("http://localhost:3000/api/getemails", {
         credentials: "include",
       });
-      const data = await getRes.json();
+      await getRes.json();
       setRefreshLoadingIcon(false);
-
       setRefreshMessage(count > 0 ? `You have ${count} new emails to filter` : "No new emails");
       setTimeout(() => {
         setRefreshMessage(null);
@@ -139,9 +137,6 @@ const ConnectEmails = () => {
     }
   };
 
-  const handleUnreadPageChange = (newPage: number) => {
-    setUnreadPage(newPage);
-  };
   return (
     <main>
       <>

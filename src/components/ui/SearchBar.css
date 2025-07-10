@@ -1,3 +1,4 @@
+/* default variant styles*/
 .search-bar {
   display: flex;
   flex-direction: row;
@@ -48,5 +49,25 @@
 
 .search-icon-button:hover {
   scale: 1.2;
+}
 
+/* minimal variant*/ 
+.search-bar.minimal {
+  max-width: 100px;
+  border-radius: 20px;
+  border: 1px solid var(--color-dark-mode-hover);
+  background-color: transparent;
+  
+}
+.search-bar.minimal:focus-within {
+  border: 1px solid rgb(130, 130, 130,0.4); 
+}
+.search-bar.minimal .search-icon-button {
+  display: none;
+}
+.search-bar.minimal .search-input {
+  font-size: 0.9rem;
+  color: var(--color-font-primary);
+  padding: 8px 0;
+  font-family: var(--font-bodycopy);
 }

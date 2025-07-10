@@ -6,9 +6,16 @@ type SearchBarProps = {
   onSearch: (query:string) => void;
   inputValue: string;
   setInputValue: (value: string) => void;
+  variant?: "default" | "minimal" | "light";
+  className?: string;
 }
 
-export const SearchBar = ({ onSearch, inputValue, setInputValue }: SearchBarProps) => {
+export const SearchBar = ({ 
+  onSearch, 
+  inputValue, 
+  setInputValue,
+  variant="default"
+}: SearchBarProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,14 +27,14 @@ export const SearchBar = ({ onSearch, inputValue, setInputValue }: SearchBarProp
   }
 
   return (
-    <form className="search-bar" onSubmit={handleSubmit}>
+    <form className={`search-bar ${variant}`}  onSubmit={handleSubmit}>
       <input 
         type="text"
         className="search-input"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         placeholder="Search subjct/email address"
-        autoFocus
+        
       />
       <button type="submit" className="search-icon-button" >
         <Search />

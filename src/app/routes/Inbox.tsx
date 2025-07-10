@@ -20,8 +20,6 @@ const Inbox: React.FC<InboxProps> = ({
   unreadPage,
   refreshLoadingIcon
 }) => {
-
-
   const [searchResults, setSearchResults] = useState<Email[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [inputValue, setInputValue] = useState("");
@@ -48,7 +46,7 @@ const Inbox: React.FC<InboxProps> = ({
 
   async function fetchSearchResults(query: string) {
     try {
-      const res = await fetch(`http://localhost:3000/api/search?q=${encodeURIComponent(query)}`, {
+      const res = await fetch(`http://localhost:3000/api/search?q=${encodeURIComponent(query)}&onlyApproved=true`, {
         credentials: "include",
       });
       const data = await res.json();

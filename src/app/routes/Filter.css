@@ -205,6 +205,7 @@ main {
 status msg has absoloute positioning relative to wrapper */
 .wrapper-filter-btns-status-msg {
     position: relative;
+    margin-bottom: 10px;
 }
 .status-banner {
     background-color: var(--color-primary);
@@ -220,4 +221,9 @@ status msg has absoloute positioning relative to wrapper */
     top: -128%;
     left: 0%;
     z-index: 100;
+}
+.filter-btn-container .search-bar {
+  margin-left: auto;
+  max-width: 300px;
+  align-self: center;
 }

@@ -3,12 +3,14 @@
   min-width: 16rem;
   position: absolute;
   bottom: -375%;
+  top:100%;
   right: -70%;
   z-index: 100;
   border: var(--border-green-dark-mode);
   border-radius: var(--border-radius);
   background-color: var(--color-primary);
   padding: 0.625rem;
+  min-height: 10rem;
   max-height: 18rem;
   overflow-y: auto;
 }
