@@ -12,6 +12,7 @@ import OpportunityCard from "./Opportunity";
 import '../../app/routes/Kanban.css'
 import SortableBoardContainer from "./SortableBoardContainer";
 import DeleteContainer from "./DeleteContainer";
+import SuccessBoard from "./SuccessBoard";
 
 const DragTest = () => {
   const [boards, setBoards] = useState<Board[]>(useLoaderData().sort((a: Board, b: Board) => a.order - b.order));
@@ -74,6 +75,7 @@ const DragTest = () => {
                 />
               )
             })}
+            <SuccessBoard />
             <AddBoard
               setBoards={setBoards} boards={boards} />
           </div>
@@ -137,14 +139,22 @@ const DragTest = () => {
     }
 
     if (activeOpportunity) {
-      const opportunities: Opportunity[] = over.data.current?.board.opportunities
       const currentOpportunities: Opportunity[] = active.data.current!.board.opportunities
       const activeOpportunityIndex = currentOpportunities.findIndex(ele => ele._id === active.id)
+      if (over.id === 'success') {
+        over.data.current!.opportunitiesSetter(activeOpportunity);
+        currentOpportunities.splice(activeOpportunityIndex, 1);
+        successConfetti()
+        return
+      }
+      const opportunities: Opportunity[] = over.data.current?.board.opportunities
       if (over.id === 'delete') {
         currentOpportunities.splice(activeOpportunityIndex, 1)
         deleteOpportunity(activeOpportunity._id)
         return
       }
+
+
       if (active.id === over.id) return;
 
       if (over.data.current?.type === "Column") {
@@ -276,6 +286,10 @@ const DragTest = () => {
       credentials: "include",
       body: JSON.stringify({ _id })
     })
+  }
+
+  function successConfetti() {
+    console.log('Confetti')
   }
 }
 
