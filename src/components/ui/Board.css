@@ -1,11 +1,41 @@
+.outerContainer {
+  height: 70vh;
+}
+
 .boardContainer {
   display: flex;
   flex-direction: column;
   min-width: 18rem;
-  max-height: 25 rem;
+  max-height: 70vh;
   border-radius: 0.5rem;
   background-color: #27272a;
   padding: 1rem;
+}
+
+.draggingBoard {
+  display: flex;
+  min-height: 70vh;
+  flex-direction: column;
+  min-width: 18rem;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: solid pink 1px;
+  border-color: pink;
+  background-color: #3f3f46;
+  opacity: 20%;
+}
+
+.dragger {
+  height: 8px;
+  margin-bottom: 7px;
+}
+
+.dragger:hover {
+  background-color: red;
+  background-color: lightgray;
+  opacity: 30%;
+  border-radius: 30px;
 }
 
 .boardTitle {

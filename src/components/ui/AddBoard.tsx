@@ -3,21 +3,18 @@ import './AddBoard.css'
 import { TextField } from '@mui/material';
 
 type AddBoardProps = {
-  currentFocus: HTMLInputElement | null;
-  setCurrentFocus: (e: HTMLInputElement) => void;
   setBoards: (e) => void;
   boards: unknown[]
 }
 
 const AddBoard = (props: AddBoardProps) => {
-  const { currentFocus, setCurrentFocus, setBoards, boards } = props
+  const { setBoards, boards } = props
   const [creatingNew, setCreatingNew] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus()
-      setCurrentFocus(inputRef.current)
     }
   }, [creatingNew])
 
@@ -33,7 +30,7 @@ const AddBoard = (props: AddBoardProps) => {
         credentials: 'include',
         method: 'POST',
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: newStageTitle })
+        body: JSON.stringify({ title: newStageTitle, order: boards.length + 1 })
       })
       if (response.status === 200) {
         const result = await response.json()

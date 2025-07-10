@@ -305,7 +305,7 @@ export default function Opportunity_PopUp({
                     subject={email.subject}
                     date={email.date}
                     _id={email._id}
-                    onTapUpdate={() => {}}
+                    onTapUpdate={() => { }}
                     showTapIn={false}
                   />
                 ))}

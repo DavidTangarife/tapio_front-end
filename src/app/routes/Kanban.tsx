@@ -9,6 +9,8 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { DragDropProvider } from "@dnd-kit/react";
+import { move } from "@dnd-kit/helpers";
 import type {
   Board as Bt,
   Opportunity,
@@ -77,6 +79,11 @@ export default function Kanban() {
 
   useEffect(() => {
     console.log("Updating Boards");
+    let boardHash = {};
+    boardHash = Object.fromEntries(
+      boards.map((element, index) => [index, element.opportunities])
+    );
+    setBoardMap(boardHash);
   }, [boards]);
 
   const sensors = useSensors(
@@ -214,17 +221,20 @@ export default function Kanban() {
 
   return (
     <div className="page">
-      <div className="boardWrapper" ref={elementRef}>
-        <DndContext
-          sensors={sensors}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        >
-          {boards.map((board) => {
+      <DragDropProvider
+        onDragEnd={(event) => {
+          //setBoardMap((boardMap) => move(boardMap, event))
+          console.log(boardMap);
+        }}
+      >
+        <div className="boardWrapper" ref={elementRef}>
+          {Object.entries(boardMap).map(([ind, board], index) => {
+            console.log(board);
             return (
               <BoardCard
-                key={board._id}
-                {...board}
+                key={ind}
+                boardMap={boardMap}
+                {...boards[ind]}
                 isDraggingRef={isDragging}
                 onOpportunityClick={(opportunity) =>
                   setSelectedOpportunity(opportunity)
@@ -232,6 +242,7 @@ export default function Kanban() {
                 currentFocus={currentFocus}
                 setCurrentFocus={setCurrentFocus}
                 setActivator={setActivator}
+                index={index}
               />
             );
           })}
@@ -246,14 +257,14 @@ export default function Kanban() {
               />
             ) : null}
           </DragOverlay>
-        </DndContext>
-        <AddBoard
-          currentFocus={currentFocus}
-          setCurrentFocus={setCurrentFocus}
-          setBoards={setBoards}
-          boards={boards}
-        />
-      </div>
+          <AddBoard
+            currentFocus={currentFocus}
+            setCurrentFocus={setCurrentFocus}
+            setBoards={setBoards}
+            boards={boards}
+          />
+        </div>
+      </DragDropProvider>
       {selectedOpportunity && (
         <Opportunity_PopUp
           opportunity={selectedOpportunity}

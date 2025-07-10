@@ -7,6 +7,7 @@ import ViewEmail from "./routes/ViewEmail";
 import MainLayout from "../components/layouts/MainLayout";
 import { lazy, Suspense } from "react";
 import Spinner from "../components/ui/Spinner";
+import DragTest from "../components/ui/dragtest";
 
 const Filter = lazy(() => import("./routes/Filter"));
 
@@ -14,15 +15,6 @@ const Filter = lazy(() => import("./routes/Filter"));
 const router = createBrowserRouter([
   {
     Component: MainLayout, children: [
-      {
-        path: "/", Component: Landing, loader: async () => {
-          const response = await fetch(`http://localhost:3000/api/users/check`, {
-            credentials: "include"
-          })
-          const data = await response.json();
-          return data
-        }
-      },
       {
         path: "/home", Component: ConnectEmails, loader: async () => {
           const response = await fetch(`http://localhost:3000/api/getemails`, {
@@ -51,7 +43,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/board",
-        Component: Kanban,
+        Component: DragTest,
         loader: async () => {
           const response = await fetch('http://localhost:3000/api/board', {
             credentials: "include"
@@ -66,6 +58,16 @@ const router = createBrowserRouter([
     path: "/email/:emailId", Component: ViewEmail
   },
   { path: "/setup", Component: SetupForm },
+  {
+    path: "/", Component: Landing, loader: async () => {
+      const response = await fetch(`http://localhost:3000/api/users/check`, {
+        credentials: "include"
+      })
+      const data = await response.json();
+      return data
+    }
+  },
+  { path: "/dragtest", Component: DragTest }
 
 
   // work on the css for the buttoms inbox, kanban,  screener to look better places

@@ -1,65 +1,95 @@
 import "./Board.css";
 import OpportunityCard from "./Opportunity";
-import { Opportunity as Ot } from "../../types/types";
-import { useDroppable } from "@dnd-kit/core";
+import { Board, Opportunity } from "../../types/types";
 import BoardHeading from "./BoardHeading";
+import { SortableContext } from "@dnd-kit/sortable";
+import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "react";
 
 type BoardCardProps = {
-  _id: string;
-  title: string;
-  opportunities: Ot[];
-  currentFocus: HTMLInputElement | null;
-  setCurrentFocus: (e: HTMLInputElement) => void;
-  onOpportunityClick: (op: Ot) => void;
-  isDraggingRef: React.RefObject<boolean>;
-  setActivator: (bool: boolean) => void;
+  board: Board
+  dragging: boolean
+  setActivator: Dispatch<SetStateAction<boolean>>
+  opportunityList: Opportunity[]
+  setOpportunityList: Dispatch<SetStateAction<Opportunity[]>>
+  onOpportunityClick: (opportunity: Opportunity) => void;
 };
 
-export default function BoardCard(props: BoardCardProps) {
-  const {
-    _id,
-    title,
-    opportunities,
-    currentFocus,
-    setCurrentFocus,
-    onOpportunityClick,
-    isDraggingRef,
-    setActivator,
-  } = props;
-  const { setNodeRef } = useDroppable({
-    id: props._id,
-  });
+const BoardCard = memo((props: BoardCardProps) => {
+  const { _id, title, opportunities } = props.board
+  const { dragging, setActivator, opportunityList, setOpportunityList, board, onOpportunityClick } = props
+  const [firstMount, setFirstMount] = useState(false)
+  const opportunityIds = useMemo(() => opportunities.map((ele) => ele._id), [opportunities])
 
+  useEffect(() => {
+    console.log('Opps Upps', opportunities, opportunityIds)
+    if (firstMount) {
+      const updateOrder = opportunities.map((element) => {
+        return [element._id, element.position, _id]
+      })
+      fetch('http://localhost:3000/api/update-opportunity-order', {
+        credentials: 'include',
+        method: 'PATCH',
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: { updateOrder } })
+      })
+    } else {
+      setFirstMount(true)
+    }
+  }, [opportunityIds])
+
+
+  //=====================================================================================
+  // Makes the boards themselves sortable.
+  // Attach the attributes and listeners to the component to make it grabbable as below:
+  // <div {...attributes} {...listeners}>
+  //=====================================================================================
+
+
+  // This is for scrolling
   const mouseEntered = () => {
-    setActivator(false);
+    if (!dragging) {
+      setActivator(false);
+    }
   };
 
   const mouseLeft = () => {
-    setActivator(true);
+    if (!dragging) {
+      setActivator(true);
+    }
   };
 
+
   return (
-    <div key={_id} className="boardContainer" ref={setNodeRef}>
+    <div key={_id} >
       <BoardHeading
         title={title}
-        setCurrentFocus={setCurrentFocus}
-        currentFocus={currentFocus}
-        columnId={_id}
+        _id={_id}
+        dragging={dragging}
       />
       <div
         className="opportunityList"
         onMouseEnter={mouseEntered}
         onMouseLeave={mouseLeft}
       >
-        {opportunities.map((opportunity: Ot) => (
-          <OpportunityCard
-            key={opportunity._id}
-            {...opportunity}
-            isDraggingRef={isDraggingRef}
-            onClick={() => onOpportunityClick(opportunity)}
-          />
-        ))}
+        <SortableContext items={opportunityIds}>
+          {opportunities.map((opportunity) => {
+            {
+              return (
+                <OpportunityCard
+                  key={opportunity._id}
+                  {...opportunity}
+                  opportunities={opportunities}
+                  opportunityList={opportunityList}
+                  board={board}
+                  onOpportunityClick={onOpportunityClick}
+                  self={opportunity}
+                />)
+            }
+          })}
+        </SortableContext>
       </div>
     </div>
   );
-}
+})
+
+export default BoardCard

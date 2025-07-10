@@ -1,3 +1,5 @@
+import { UniqueIdentifier } from "@dnd-kit/core";
+
 export type Opportunity = {
   _id: string;
   title: string;
@@ -14,6 +16,10 @@ export type Opportunity = {
   };
   snippets: Record<string, string>[];
   statusId: string;
+  index: number;
+  position: number;
+  boardIndex: number;
+  opportunityGroup: UniqueIdentifier
 };
 
 export type Board = {
@@ -21,6 +27,7 @@ export type Board = {
   title: string;
   opportunities: Opportunity[];
   project_Id: string;
+  order: number;
 };
 
 // In case we are going to handle multiple Projects

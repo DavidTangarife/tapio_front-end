@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, MouseEvent } from "react";
+import { useRef, useEffect, useState, MouseEvent, useMemo } from "react";
 
 export function useHorizontalScroll() {
   const elementRef = useRef();
