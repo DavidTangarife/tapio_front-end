@@ -13,6 +13,8 @@ import {
 } from "@mui/icons-material";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
 import SnippetButton from "../../components/ui/snippets";
+import { TextField } from "@mui/material";
+import EmailReply from "../../components/ui/EmailReply";
 
 interface EmailDetails {
   subject?: string;
@@ -32,6 +34,7 @@ const ViewEmail = () => {
   const [confirmTappedUp, setConfirmTappedUp] = useState(false);
   const [tapMessage, setTapMessage] = useState<string>("");
   const [buttonTitle, setButtonTitle] = useState<string>("Add to Board");
+  const [replying, setReplying] = useState<boolean>(false);
   const navigate = useNavigate();
 
   // Snippets section
@@ -166,6 +169,11 @@ const ViewEmail = () => {
   const updateButtonTitle = () => {
     setButtonTitle("Go to Board");
   };
+
+  const handleReply = () => {
+
+  }
+
   return (
     <>
       <main>
@@ -184,14 +192,14 @@ const ViewEmail = () => {
             icon={Reply}
             text="Reply"
             value={modalData}
-            //onClick={handleReply}
+            onClick={handleReply}
           />
           <ViewEmailActionButton
             icon={Reply}
             text="Forward"
             value={modalData}
             iconSx={{ transform: "scaleX(-1)" }}
-            //onClick={handleForward}
+          //onClick={handleForward}
           />
           <div className="tapup-btn-modal-container">
             <ViewEmailActionButton
@@ -243,7 +251,7 @@ const ViewEmail = () => {
             icon={DeleteOutlined}
             text="Delete"
             value={modalData}
-            //onClick={handleDelete}
+          //onClick={handleDelete}
           />
         </div>
 
@@ -253,6 +261,7 @@ const ViewEmail = () => {
             <h4 className="email-view-sender">{emailDetails?.from}</h4>
           </div>
           <section className="email-view-body">
+            <EmailReply />
             <iframe
               ref={iframeRef}
               className="iframe"
