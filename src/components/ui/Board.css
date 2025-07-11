@@ -37,6 +37,10 @@
   opacity: 30%;
   border-radius: 30px;
 }
+.last {
+  height: 8px;
+  margin-bottom: 7px;
+}
 
 .boardTitle {
   margin-bottom: 1rem;

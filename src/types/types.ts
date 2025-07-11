@@ -29,6 +29,7 @@ export type Board = {
   opportunities: Opportunity[];
   project_Id: string;
   order: number;
+  deletable: boolean;
 };
 
 // In case we are going to handle multiple Projects

@@ -7,7 +7,7 @@ import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from "re
 
 type BoardCardProps = {
   board: Board
-  dragging: boolean
+  dragging?: boolean
   setActivator: Dispatch<SetStateAction<boolean>>
   opportunityList: Opportunity[]
   setOpportunityList: Dispatch<SetStateAction<Opportunity[]>>

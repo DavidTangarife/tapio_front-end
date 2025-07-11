@@ -19,15 +19,29 @@ const Filter = () => {
 
   function extractEmailAddress(from: string): string {
     if (!from) return "";
-    const angleMatch = from.match(/<([^<>]+)>/);
-    if (angleMatch) return angleMatch[1].trim().toLowerCase();
-    const emailMatch = from.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
-    return (emailMatch ? emailMatch[0] : "").trim().toLowerCase();
+
+  // Remove invisible characters (like zero-width spaces)
+  const cleanFrom = from.replace(/[\u200B-\u200D\uFEFF]/g, "").trim();
+
+  const angleMatch = cleanFrom.match(/<([^<>]+)>/);
+  if (angleMatch) return angleMatch[1].trim().toLowerCase();
+
+  const emailMatch = cleanFrom.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+  return (emailMatch ? emailMatch[0] : "").trim().toLowerCase();
   }
 
   function getUnprocessedEmails(emails: SenderData[]) {
     return emails.filter((email) => !email.isProcessed);
   }
+  useEffect(() => {
+  setAllEmails(initialEmails);
+}, [initialEmails]);
+
+useEffect(() => {
+  if (filteredSenders === "new") {
+    setEmails(getUnprocessedEmails(initialEmails));
+  }
+}, [initialEmails]);
 
   async function fetchFilteredEmails(tab: "allowed" | "blocked"): Promise<SenderData[]> {
     const endpoint = tab === "allowed" ? "allowed-emails" : "blocked-emails";
@@ -86,14 +100,23 @@ const Filter = () => {
   const handleToggle = async (emailId: string, isApproved: boolean) => {
     try {
       const emailObj = emails?.find((email) => email._id === emailId);
+      console.log("EmailObj:", emailObj);
       if (!emailObj) throw new Error("Email not found");
-
       const sender = extractEmailAddress(emailObj.from);
-      const affectedEmails = allEmails.filter(
-        (email) => extractEmailAddress(email.from) === sender
-      );
-      const updatedCount = affectedEmails.length;
+     allEmails.forEach((email) => {
+console.log('Comparing:', extractEmailAddress(email.from), '| Raw:', email.from);});
 
+const affectedEmails = allEmails.filter(
+  (email) => extractEmailAddress(email.from) === sender
+);
+  console.log("Matching email:", initialEmails.find(e => e.from.includes("richard.mckeon")));
+  console.log("Raw senders:", initialEmails.map(email => email.from));
+  console.log('Initial:', initialEmails.length, 'AllEmails:', allEmails.length);
+      const updatedCount = affectedEmails.length;
+const prospleEmail = initialEmails.find(email =>
+  email.subject.includes("Prosple")
+);
+console.log("🧪 Prosple sender raw:", prospleEmail?.from);
       await fetch(
         `http://localhost:3000/api/emails/${emailId}/process`,
         {

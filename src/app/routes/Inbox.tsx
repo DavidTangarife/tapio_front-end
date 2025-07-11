@@ -85,10 +85,12 @@ const Inbox: React.FC<InboxProps> = ({
 
   return (
     <>
+    <div className="inbox-wrapper">
+  {refreshMessage && (
+    <p className="refresh-msg-email-present">{refreshMessage}</p>
+  )}
       <div className="inbox-header">
-        {refreshMessage && (
-          <p className="refresh-msg-email-present">{refreshMessage}</p>
-        )}
+        
         <button onClick={onRefreshInbox} className="refresh-button">
           <Refresh
             className={refreshLoadingIcon ? "refresh-icon-spin-on-loading" : ""}
@@ -132,6 +134,7 @@ const Inbox: React.FC<InboxProps> = ({
               )}
             </ul>
           )}
+          </div>
         </div>
       </div>
 

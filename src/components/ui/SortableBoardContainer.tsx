@@ -9,10 +9,11 @@ type SortableBoardContainerProps = {
   dragging: boolean;
   setActivator: Dispatch<SetStateAction<boolean>>
   onOpportunityClick: (opportunity: Opportunity) => void;
+  length: number;
 }
 
 const SortableBoardContainer = (props: SortableBoardContainerProps) => {
-  const { board, dragging, setActivator, onOpportunityClick } = props
+  const { board, dragging, setActivator, onOpportunityClick, length } = props
   const [opportunityList, setOpportunityList] = useState(board.opportunities.sort((a, b) => a.position - b.position))
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging, node } = useSortable({
@@ -25,7 +26,7 @@ const SortableBoardContainer = (props: SortableBoardContainerProps) => {
     }
 
   })
-
+  const isDraggable = board.order < length + 1;
   /*useEffect(() => {
     console.log(board.title)
     console.log('opplist', opportunityList)
@@ -49,7 +50,7 @@ const SortableBoardContainer = (props: SortableBoardContainerProps) => {
 
   return (
     <div ref={setNodeRef} style={style} className={'boardContainer'} >
-      <div className="dragger" {...attributes} {...listeners}></div>
+      {isDraggable ? (<div className="dragger" {...attributes} {...listeners}></div>) : (<div className="last"></div>)}
       <BoardCard
         board={board}
         dragging={dragging}

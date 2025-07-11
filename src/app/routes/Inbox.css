@@ -60,6 +60,12 @@ Inbox.css .email-section {
   padding: 12px 8px;
   position: relative;
 }
+.inbox-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 966px;
+  margin: 0 auto;
+}
 .refresh-button {
   padding: 0.5rem 1rem;
   display: flex;
@@ -76,6 +82,8 @@ Inbox.css .email-section {
   border: none;
 }
 .refresh-msg-email-present {
+  position: absolute;
+  top: -70%;
   background-color: var(--color-primary);
   color: var(--color-font-offwhite);
   font-family: var(--font-bodycopy);

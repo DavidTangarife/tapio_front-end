@@ -13,6 +13,7 @@ import '../../app/routes/Kanban.css'
 import SortableBoardContainer from "./SortableBoardContainer";
 import DeleteContainer from "./DeleteContainer";
 import SuccessBoard from "./SuccessBoard";
+import Confetti from "./Confetti";
 
 const DragTest = () => {
   const [boards, setBoards] = useState<Board[]>(useLoaderData().sort((a: Board, b: Board) => a.order - b.order));
@@ -58,51 +59,6 @@ const DragTest = () => {
     }
   }, [boards])
 
-  return (
-    <div className="page">
-      <DndContext onDragStart={dragStart} onDragEnd={dragEnd} onDragOver={dragOver} sensors={sensors} collisionDetection={pointerWithin}>
-        <SortableContext items={columnsId} strategy={rectSwappingStrategy}>
-          <div className="boardWrapper" ref={elementRef}>
-            {boards.map((board) => {
-              return (
-                <SortableBoardContainer
-                  board={board}
-                  setActivator={setActivator}
-                  dragging={dragging}
-                  onOpportunityClick={(opportunity) =>
-                    setSelectedOpportunity(opportunity)
-                  }
-                />
-              )
-            })}
-            <SuccessBoard />
-            <AddBoard
-              setBoards={setBoards} boards={boards} />
-          </div>
-        </SortableContext>
-        {createPortal(<DragOverlay>
-          {activeColumn && <SortableBoardContainer board={activeColumn} />}
-          {activeOpportunity && <OpportunityCard {...activeOpportunity} />}
-        </DragOverlay>, document.body)}
-        {selectedOpportunity && (
-          <Opportunity_PopUp
-            opportunity={selectedOpportunity}
-            boards={boards}
-            onClose={() => setSelectedOpportunity(null)}
-            onDelete={(id) => {
-              deleteOpportunity(id);
-              setSelectedOpportunity(null);
-            }}
-            onEdit={(id, newdata, afterSave) => {
-              editOpportunity(id, newdata, boards, afterSave);
-            }}
-          />
-        )}
-        {dragging && <DeleteContainer />}
-      </DndContext >
-    </div>
-  )
-
   function dragStart(event: DragStartEvent) {
     setActiveColumn(null)
     setActiveOpportunity(null)
@@ -125,7 +81,7 @@ const DragTest = () => {
     setDragging(false)
 
     if (activeColumn) {
-      if (over.id === 'delete') {
+      if (over.id === 'delete' && activeColumn.deletable) {
         const boardIndex = boards.findIndex((ele) => ele._id === activeColumn._id)
         boards.splice(boardIndex, 1)
         deleteColumn(activeColumn._id)
@@ -144,7 +100,6 @@ const DragTest = () => {
       if (over.id === 'success') {
         over.data.current!.opportunitiesSetter(activeOpportunity);
         currentOpportunities.splice(activeOpportunityIndex, 1);
-        successConfetti()
         return
       }
       const opportunities: Opportunity[] = over.data.current?.board.opportunities
@@ -287,10 +242,65 @@ const DragTest = () => {
       body: JSON.stringify({ _id })
     })
   }
+  const length = boards.length - 1
+  console.log("borsds:", boards[length])
 
-  function successConfetti() {
-    console.log('Confetti')
+  return (
+    <div className="page">
+      <DndContext onDragStart={dragStart} onDragEnd={dragEnd} onDragOver={dragOver} sensors={sensors} collisionDetection={pointerWithin}>
+        <SortableContext items={columnsId} strategy={rectSwappingStrategy}>
+          <div className="boardWrapper" ref={elementRef}>
+            {boards.map((board) => (       
+              <SortableBoardContainer
+                board={board}
+                setActivator={setActivator}
+                dragging={dragging}
+                onOpportunityClick={(opportunity) =>
+                  setSelectedOpportunity(opportunity)
+                }
+                length={length}
+              />
+            ))}
+            <AddBoard
+              setBoards={setBoards} boards={boards} />
+          </div>
+        </SortableContext>
+        {createPortal(<DragOverlay>
+          {activeColumn && <SortableBoardContainer board={activeColumn} />}
+          {activeOpportunity && <OpportunityCard {...activeOpportunity} />}
+        </DragOverlay>, document.body)}
+        {selectedOpportunity && (
+          <Opportunity_PopUp
+            opportunity={selectedOpportunity}
+            boards={boards}
+            onClose={() => setSelectedOpportunity(null)}
+            onDelete={(id) => {
+              deleteOpportunity(id);
+              setSelectedOpportunity(null);
+            }}
+            onEdit={(id, newdata, afterSave) => {
+              editOpportunity(id, newdata, boards, afterSave);
+            }}
+          />
+        )}
+        {dragging && <DeleteContainer />}
+      </DndContext >
+      
+      {boards.map((board) => (
+        <div>
+          {board.opportunities.map((opp) => (
+            <div>
+              {opp.statusId === boards[length]._id && <Confetti />}
+            </div>
+          ))}
+        </div>
+      )
+      
+      )
+      }      
+     
+    </div>
+  )
+
   }
-}
-
 export default DragTest;

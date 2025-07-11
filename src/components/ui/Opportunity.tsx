@@ -7,7 +7,7 @@ type OpportunityCardProps = {
   _id: string
   title: string
   company: string
-  opportunities: Opportunity[]
+  // opportunities: Opportunity[]
   opportunityList: Opportunity[]
   board: Board
   onOpportunityClick: (opportunity: Opportunity) => void;
@@ -15,7 +15,7 @@ type OpportunityCardProps = {
 }
 
 export default function OpportunityCard(props: OpportunityCardProps) {
-  const { _id, title, company, onOpportunityClick, opportunities, board, opportunityList, self } = props
+  const { _id, title, company, onOpportunityClick, board, opportunityList, self } = props
 
   const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
     id: _id,
