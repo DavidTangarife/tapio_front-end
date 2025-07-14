@@ -227,3 +227,6 @@ status msg has absoloute positioning relative to wrapper */
   max-width: 300px;
   align-self: center;
 }
+.allowed-vs-blocked:disabled {
+  opacity: 0.5;
+}
