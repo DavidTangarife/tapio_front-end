@@ -6,7 +6,10 @@ import { Board, Opportunity } from "../../types/types";
 type OpportunityCardProps = {
   _id: string
   title: string
-  company: string
+  company: {
+    name: string;
+    logoUrl: string;
+  }
   // opportunities: Opportunity[]
   opportunityList: Opportunity[]
   board: Board
@@ -57,9 +60,9 @@ export default function OpportunityCard(props: OpportunityCardProps) {
     >
       <div key={_id} className="opportunityInner">
         <h2 className="companyText" onClick={handleTitleClick}>
-          {company.name}
+          {title}
         </h2>
-        <h3 className="titleText">{title}</h3>
+        <h3 className="titleText">{company.name}</h3>
         <img
           className="companyLogo"
           src={`${company.logoUrl}?token=${LOGO_PUB}`}

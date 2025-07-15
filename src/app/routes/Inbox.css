@@ -71,13 +71,13 @@ Inbox.css .email-section {
   display: flex;
   justify-content: center;
   border-radius: var(--border-radius);
-  background-color: var(--color-primary);
-  color: var(--color-font-primary);
+  background-image: var(--color-grad-green-dark-mode);
+  color: var(--color-font-dark);
   border: none;
   cursor: pointer;
 }
 .refresh-button:hover {
-  background: var(--color-grad-green-dark-mode);
+  background: #21950c;
   color: var(--color-font-dark);
   border: none;
 }

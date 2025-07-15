@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, useSensor, useSensors, PointerSensor, DragOverEvent, pointerWithin } from "@dnd-kit/core";
 import { arrayMove, rectSwappingStrategy, SortableContext } from "@dnd-kit/sortable";
 import "../../app/routes/Kanban.css"
@@ -23,6 +23,7 @@ const DragTest = () => {
   const { elementRef, setActivator } = useHorizontalScroll()
   const [selectedOpportunity, setSelectedOpportunity] = useState<Opportunity | null>(null);
   const [dragging, setDragging] = useState(false)
+  const { currentProjectId } = useOutletContext<{currentProjectId: string | null;}>(); //Get the project Id from the Outlet context
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -31,6 +32,35 @@ const DragTest = () => {
       }
     })
   )
+
+  //Fetch boards for the current project
+  const fetchBoardsForProject = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/board`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setBoards(data);
+      } else {
+        console.error("Failed to fetch boards");
+      }
+    } catch (err) {
+      console.error("Error fetching boards:", err);
+    }
+  };
+
+  //Re-fetch when the project changes from the header
+  useEffect(() => {
+    if (currentProjectId) {
+      fetchBoardsForProject();
+    }
+  }, [currentProjectId]);
 
   //=================================================================
   // Keeps track of the on page order of the boards
@@ -255,6 +285,7 @@ const DragTest = () => {
                 board={board}
                 setActivator={setActivator}
                 dragging={dragging}
+                key={0}
                 onOpportunityClick={(opportunity) =>
                   setSelectedOpportunity(opportunity)
                 }
