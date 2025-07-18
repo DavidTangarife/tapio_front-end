@@ -55,12 +55,12 @@
 .search-bar.minimal {
   max-width: 100px;
   border-radius: 20px;
-  border: 1px solid var(--color-dark-mode-hover);
+  border: 1px solid rgb(130, 130, 130,0.2);;
   background-color: transparent;
   
 }
 .search-bar.minimal:focus-within {
-  border: 1px solid rgb(130, 130, 130,0.4); 
+  border: 1px solid rgb(130, 130, 130,0.7); 
 }
 .search-bar.minimal .search-icon-button {
   display: none;

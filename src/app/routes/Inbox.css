@@ -60,22 +60,30 @@ Inbox.css .email-section {
   padding: 12px 8px;
   position: relative;
 }
+.inbox-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 966px;
+  margin: 0 auto;
+}
 .refresh-button {
   padding: 0.5rem 1rem;
   display: flex;
   justify-content: center;
   border-radius: var(--border-radius);
-  background-color: var(--color-primary);
-  color: var(--color-font-primary);
+  background-image: var(--color-grad-green-dark-mode);
+  color: var(--color-font-dark);
   border: none;
   cursor: pointer;
 }
 .refresh-button:hover {
-  background: var(--color-grad-green-dark-mode);
+  background: #21950c;
   color: var(--color-font-dark);
   border: none;
 }
 .refresh-msg-email-present {
+  position: absolute;
+  top: -70%;
   background-color: var(--color-primary);
   color: var(--color-font-offwhite);
   font-family: var(--font-bodycopy);

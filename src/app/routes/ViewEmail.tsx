@@ -34,8 +34,8 @@ const ViewEmail = () => {
   const modalData = "";
   const [confirmTappedUp, setConfirmTappedUp] = useState(false);
   const [tapMessage, setTapMessage] = useState<string>("");
-  const [buttonTitle, setButtonTitle] = useState<string>("Add to Board");
   const [replying, setReplying] = useState<boolean>(false);
+  const [buttonTitle, setButtonTitle] = useState<string>("Create Opportunity");
   const navigate = useNavigate();
 
   // Snippets section
@@ -52,7 +52,7 @@ const ViewEmail = () => {
         const data = await res.json();
         console.log(data);
         setEmailDetails(data);
-        setButtonTitle(data.opportunityId ? "Go to Board" : "Add to Board");
+        setButtonTitle(data.opportunityId ? "Go to Board" : "Create Opportunity");
       } catch (err) {
         console.error("Failed to fetch email info:", err);
       }
@@ -237,7 +237,7 @@ const ViewEmail = () => {
           <div className="add-to-board-container">
             <ViewEmailActionButton
               icon={AddLink}
-              text="Link Opp"
+              text="Link to Opportunity"
               value={modalData}
               onClick={() => setOpenModalAdd(true)}
             />

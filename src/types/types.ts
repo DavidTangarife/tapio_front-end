@@ -13,6 +13,7 @@ export type Opportunity = {
     type: string;
     salary: string;
     posted: string;
+    success?: boolean;
   };
   snippets: Record<string, string>[];
   statusId: string;
@@ -28,6 +29,7 @@ export type Board = {
   opportunities: Opportunity[];
   project_Id: string;
   order: number;
+  deletable: boolean;
 };
 
 // In case we are going to handle multiple Projects

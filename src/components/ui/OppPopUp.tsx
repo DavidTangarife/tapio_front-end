@@ -15,7 +15,7 @@ export default function Opportunity_PopUp({
   onDelete: (opportuinityId: string) => void;
   onEdit: (
     opportuinityId: string,
-    newdata: Opportunity & { snippFlag?: boolean },
+    newdata: Opportunity & { snippFlag?: boolean},
     afterSave?: (updatedOpp: Opportunity) => void
   ) => void;
   onClose: () => void;
@@ -123,6 +123,11 @@ export default function Opportunity_PopUp({
     const finalSnippets = editableData.snippets?.filter(
       (s) => Object.keys(s).length > 0
     );
+
+    if (editableData.statusId === "686cb639c1fdc7ba86851fb8") {
+      editableData.success = true;
+      console.log("updated data",editableData)
+    }
 
     const payload = {
       ...editableData,

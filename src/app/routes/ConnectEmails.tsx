@@ -44,7 +44,7 @@ const ConnectEmails = () => {
       });
       await getRes.json();
       setRefreshLoadingIcon(false);
-      setRefreshMessage(count > 0 ? `You have ${count} new emails to filter` : "No new emails");
+      setRefreshMessage(count > 0 ? `You have ${count} new email${count > 1 ? "s" : ""}` : "No new emails");
       setTimeout(() => {
         setRefreshMessage(null);
       }, 3000)

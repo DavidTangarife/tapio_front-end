@@ -140,7 +140,7 @@ const SetupForm = () => {
   };
 
   const onCancel = () => {
-    navigate("/inbox");
+    navigate("/home");
   };
 
   return (
