@@ -15,6 +15,7 @@ import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
 import SnippetButton from "../../components/ui/snippets";
 import { TextField } from "@mui/material";
 import EmailReply from "../../components/ui/EmailReply";
+import ReplyGap from "../../components/ui/ReplyGap";
 
 interface EmailDetails {
   subject?: string;
@@ -171,7 +172,7 @@ const ViewEmail = () => {
   };
 
   const handleReply = () => {
-
+    setReplying(true)
   }
 
   return (
@@ -261,7 +262,8 @@ const ViewEmail = () => {
             <h4 className="email-view-sender">{emailDetails?.from}</h4>
           </div>
           <section className="email-view-body">
-            <EmailReply />
+            {replying ? (<EmailReply emailData={emailDetails} emailBody={emailBodyHtml} />) : (null)
+            }
             <iframe
               ref={iframeRef}
               className="iframe"
@@ -284,7 +286,7 @@ const ViewEmail = () => {
           </section>
           {/* <section className="email-view-body" dangerouslySetInnerHTML={{ __html: emailBodyHtml }} /> */}
         </section>
-      </main>
+      </main >
     </>
   );
 };

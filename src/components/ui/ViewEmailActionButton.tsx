@@ -5,13 +5,14 @@ const ViewEmailActionButton = ({
   text,
   iconSx = {},
   onClick,
+  style
 }: ViewEmailActionButtonProps) => {
   return (
     <>
-      <button className="email-view-btn" onClick={onClick}>
+      <button className="email-view-btn" onClick={onClick} style={style}>
         <Icon sx={{ color: "#86DD14", ...iconSx }} />
         {text}
-      </button>
+      </button >
     </>
   );
 };
