@@ -71,9 +71,10 @@ export interface Email {
   isProcessed: boolean;
   isApproved: boolean;
   date: Date;
+  threadId: string;
 }
 
-export type paginatedEmails ={
+export type paginatedEmails = {
   emails: Email[];
   total: number;
   page: number;
