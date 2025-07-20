@@ -30,8 +30,8 @@
 
 .popupHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .popupTitleSection {
@@ -41,6 +41,8 @@
 }
 
 .popupLogo {
+  margin-top: 0.5rem;
+  margin-right: 1rem;
   width: 3.75rem;
   height: 3.75rem;
   border-radius: 50%;
@@ -91,6 +93,23 @@
   font-size: 0.9rem;
   flex: 1;
   max-width: 8rem;
+}
+
+.close-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  background-color: #1f1f1f;
+  align-items: center;
+}
+
+.close-btn:hover {
+  background-color: #d9363e;
 }
 
 /* Input and static span style */

@@ -15,7 +15,7 @@ export default function Opportunity_PopUp({
   onDelete: (opportuinityId: string) => void;
   onEdit: (
     opportuinityId: string,
-    newdata: Opportunity & { snippFlag?: boolean},
+    newdata: Opportunity & { snippFlag?: boolean },
     afterSave?: (updatedOpp: Opportunity) => void
   ) => void;
   onClose: () => void;
@@ -29,7 +29,7 @@ export default function Opportunity_PopUp({
     boards.find((b) => b._id === editableData.statusId)?.title || "Unknown";
   const LOGO_PUB = import.meta.env.VITE_LOGO_PUB;
   const popupRef = useRef<HTMLDivElement | null>(null);
-  const [titleError, setTitleError] = useState<Boolean>(false);
+  const [titleError, setTitleError] = useState<boolean>(false);
 
   // Retrieve emails from the opportunity
   const fetchEmailsFromOpp = async () => {
@@ -126,7 +126,7 @@ export default function Opportunity_PopUp({
 
     if (editableData.statusId === "686cb639c1fdc7ba86851fb8") {
       editableData.success = true;
-      console.log("updated data",editableData)
+      console.log("updated data", editableData);
     }
 
     const payload = {
@@ -154,6 +154,10 @@ export default function Opportunity_PopUp({
     <div className="popupOverlay">
       <div className="popupContent" ref={popupRef}>
         <div className="popupHeader">
+          <img
+            src={`${opportunity.company.logoUrl}?token=${LOGO_PUB}`}
+            className="popupLogo"
+          />
           <div className="popupTitleSection">
             {editing ? (
               <div style={{ position: "relative" }}>
@@ -176,10 +180,9 @@ export default function Opportunity_PopUp({
             )}
             <h2>{opportunity.company.name}</h2>
           </div>
-          <img
-            src={`${opportunity.company.logoUrl}?token=${LOGO_PUB}`}
-            className="popupLogo"
-          />
+          <button className="close-btn" onClick={onClose}>
+            X
+          </button>
         </div>
 
         <div className="popupMain">
@@ -310,7 +313,7 @@ export default function Opportunity_PopUp({
                     subject={email.subject}
                     date={email.date}
                     _id={email._id}
-                    onTapUpdate={() => { }}
+                    onTapUpdate={() => {}}
                     showTapIn={false}
                   />
                 ))}

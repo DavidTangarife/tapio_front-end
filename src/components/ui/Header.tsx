@@ -3,7 +3,7 @@ import "./Header.css";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Project } from "../../types/types";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   KeyboardArrowDown,
   Logout,
@@ -21,6 +21,7 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
   const [loadingProject, setLoadingProject] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
+  const projectRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -52,6 +53,23 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
     };
     fetchProjects();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        projectsOpen &&
+        projectRef.current &&
+        !projectRef.current.contains(event.target as Node)
+      ) {
+        setProjectOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [projectsOpen]);
 
   const maxCharsProjectName = (
     name: string | undefined,
@@ -176,7 +194,7 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
             <KeyboardArrowDown />
           </button>
           {projectsOpen && (
-            <div className="dropdown">
+            <div className="dropdown" ref={projectRef}>
               <h3 className="my-projects-title">Projects</h3>
               {projects.map((pro) => {
                 return (
@@ -226,14 +244,18 @@ const Header = ({ onProjectSwap }: { onProjectSwap: () => void }) => {
                 className="delete-modal-btn yes"
                 onClick={() => {
                   handleDeleteProject();
-                  setProjectOpen(true)}}>
+                  setProjectOpen(true);
+                }}
+              >
                 Yes
               </button>
               <button
                 className="delete-modal-btn no"
                 onClick={() => {
-                  setOpenDeleteModal(false)
-                  setProjectOpen(true)}}>
+                  setOpenDeleteModal(false);
+                  setProjectOpen(true);
+                }}
+              >
                 No
               </button>
             </div>
