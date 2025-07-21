@@ -8,6 +8,7 @@ export default () => {
       width={width}
       height={height}
       numberOfPieces={350}
+      gravity={0.2}
     />
   )
 }

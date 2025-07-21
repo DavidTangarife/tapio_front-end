@@ -39,10 +39,7 @@ const ConnectEmails = () => {
       if (!res.ok) throw new Error("Failed to refresh inbox");
 
       // Fetch updated inbox from DB
-      const getRes = await fetch("http://localhost:3000/api/getemails", {
-        credentials: "include",
-      });
-      await getRes.json();
+      await fetchEmails();
       setRefreshLoadingIcon(false);
       setRefreshMessage(count > 0 ? `You have ${count} new email${count > 1 ? "s" : ""}` : "No new emails");
       setTimeout(() => {
