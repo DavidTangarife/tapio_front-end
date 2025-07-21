@@ -1,7 +1,8 @@
 import { TextareaAutosize } from "@mui/material";
 import ReplyBar from "./ReplyBar";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReplyGap from "./ReplyGap";
+import "../../app/routes/ViewEmail.css";
 
 interface EmailDetails {
   subject?: string;
@@ -15,17 +16,15 @@ interface EmailDetails {
 type EmailReplyProps = {
   emailData: EmailDetails
   emailBody: string
+  me: string
 }
 const EmailReply = (props: EmailReplyProps) => {
   const { from, threadId, subject } = props.emailData
-  const { emailBody } = props
+  const { emailBody, me } = props
+  const [to, setTo] = useState(from)
+  const [cc, setCc] = useState('')
+  const [bcc, setBcc] = useState('')
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const date = new Date(props.emailData.date)
-  let dateData = date.toLocaleString('en-GB', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })
-  dateData = dateData.substring(0, dateData.length - 3) + '\u202F' + dateData.substring(dateData.length - 2)
-  dateData = 'On ' + dateData.replace(' at', ',')
-  dateData = dateData + ' ' + from.replace(' ', ', ').replace('<', '<<href="mailto: jacobsemail">') + ' wrote:'
-
 
   useEffect(() => {
     if (inputRef.current) {
@@ -37,13 +36,25 @@ const EmailReply = (props: EmailReplyProps) => {
   return (
     <>
       <div style={{ backgroundColor: 'white', display: 'flex' }}>
-        <ReplyBar sendFunction={handleSend} />
-        <div style={{ padding: "10px", backgroundColor: 'white', color: 'black', fontWeight: 'bolder', position: 'relative', alignItems: "center" }}>
-          <div>From: </div>
-          <div>To</div>
-          <div>Cc</div>
-          <div>Bcc</div>
+        <div style={{ padding: "10px", backgroundColor: 'white', color: 'black', fontWeight: 'bolder', position: 'relative', alignItems: "center", flexGrow: '1' }}>
+          <div style={{ display: 'flex' }}>
+            <label htmlFor="from-input" className="address-label">From </label>
+            <input className="address-input" id="from-input" type="text" disabled={true} name="from" value={me} />
+          </div>
+          <div style={{ display: 'flex' }}>
+            <label htmlFor="to-input" className="address-label">To </label>
+            <input className="address-input" id="to-input" type="text" name="to" value={to} onChange={(e) => setTo(e.target.value)} />
+          </div>
+          <div style={{ display: 'flex' }}>
+            <label htmlFor="to-input" className="address-label">Cc </label>
+            <input className="address-input" id="to-input" type="text" name="to" value={cc} onChange={(e) => setCc(e.target.value)} />
+          </div>
+          <div style={{ display: 'flex' }}>
+            <label htmlFor="to-input" className="address-label">Bcc </label>
+            <input className="address-input" id="to-input" type="text" name="to" value={bcc} onChange={(e) => setBcc(e.target.value)} />
+          </div>
         </div>
+        <ReplyBar sendFunction={handleSend} />
       </div>
       <TextareaAutosize
         className="replyField"
@@ -73,7 +84,7 @@ const EmailReply = (props: EmailReplyProps) => {
       credentials: 'include',
       method: 'POST',
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: inputRef.current?.value, to: from, inReplyTo: threadId, subject: subject, replyChunk: formatEmailBody((emailBody)) })
+      body: JSON.stringify({ message: inputRef.current?.value, addressees: { to, cc, bcc }, inReplyTo: threadId, subject: subject, replyChunk: formatEmailBody((emailBody)) })
     })
   }
 

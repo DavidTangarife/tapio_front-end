@@ -124,6 +124,7 @@
 
 .email-action-btn-panel {
   padding-left: 10px;
+  padding-right: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -134,3 +135,18 @@
 /* .iframe {
  width: "100%"; min-height: "300px"; border: "none"; overflow: "hidden"
 } */
+
+.address-label {
+  color: black;
+  width: 50px;
+}
+
+.address-input {
+  background-color: white;
+  color: black;
+  border: none;
+  outline: none;
+  width: 80%;
+  font-size: 14px;
+  font-family: var(--font-bodycopy);
+}
