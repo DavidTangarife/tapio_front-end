@@ -1,8 +1,10 @@
 import { TextareaAutosize } from "@mui/material";
 import ReplyBar from "./ReplyBar";
-import { useEffect, useRef, useState } from "react";
-import ReplyGap from "./ReplyGap";
 import "./EmailReply.css"
+import { RefObject, useEffect, useRef, useState } from "react";
+import ReplyGap from "./ReplyGap";
+import "../../app/routes/ViewEmail.css";
+import SendBar from "./SendBar";
 
 interface EmailDetails {
   subject?: string;
@@ -16,19 +18,17 @@ interface EmailDetails {
 type EmailReplyProps = {
   emailData: EmailDetails
   emailBody: string
-  
+  me: string
+  containerRef: RefObject<HTMLElement>
 }
 const EmailReply = (props: EmailReplyProps) => {
   const { from, threadId, subject } = props.emailData
-  const { emailBody } = props
+  const { emailBody, me, containerRef } = props
+  const [to, setTo] = useState(from)
+  const [cc, setCc] = useState('')
+  const [bcc, setBcc] = useState('')
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const date = new Date(props.emailData.date)
   const [isSent, setIsSent] = useState(false);
-  let dateData = date.toLocaleString('en-GB', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })
-  dateData = dateData.substring(0, dateData.length - 3) + '\u202F' + dateData.substring(dateData.length - 2)
-  dateData = 'On ' + dateData.replace(' at', ',')
-  dateData = dateData + ' ' + from.replace(' ', ', ').replace('<', '<<href="mailto: jacobsemail">') + ' wrote:'
-
 
   useEffect(() => {
     if (inputRef.current) {
@@ -41,16 +41,35 @@ const EmailReply = (props: EmailReplyProps) => {
     }
   }, [inputRef, isSent])
 
+  useEffect(() => {
+    console.log('Redraw')
+  }, [inputRef.current?.value])
+
   return (
     <>
-     <div className="reply-container">
+      <div className="reply-container" style={{ display: 'flex' }}>
         <div style={{ backgroundColor: 'white', color: '#181818', fontWeight: '500', position: 'relative', alignItems: "center", lineHeight: 1.5, width: '100%' }}>
-          <div>From: {props.emailData.from}</div>
-          <div>To:  {props.emailData.from}</div>
-          <div>Cc: </div>
-          <div>Bcc: </div>
+          <div style={{ display: 'flex' }}>
+            <label htmlFor="from-input" className="address-label">From </label>
+            <input className="address-input" id="from-input" type="text" disabled={true} name="from" value={me} />
+          </div>
+          <div style={{ display: 'flex' }}>
+            <label htmlFor="to-input" className="address-label">To </label>
+            <input className="address-input" id="to-input" type="text" name="to" value={to} onChange={(e) => setTo(e.target.value)} />
+          </div>
+          <div style={{ display: 'flex' }}>
+            <label htmlFor="to-input" className="address-label">Cc </label>
+            <input className="address-input" id="to-input" type="text" name="to" value={cc} onChange={(e) => setCc(e.target.value)} />
+          </div>
+          <div style={{ display: 'flex' }}>
+            <label htmlFor="to-input" className="address-label">Bcc </label>
+            <input className="address-input" id="to-input" type="text" name="to" value={bcc} onChange={(e) => setBcc(e.target.value)} />
+          </div>
         </div>
-   
+        <div>
+          <ReplyBar sendFunction={handleSend} saveTemplate={saveTemplate} inputRef={inputRef} />
+        </div>
+      </div>
       <TextareaAutosize
         className="replyField"
         minRows={4}
@@ -66,11 +85,10 @@ const EmailReply = (props: EmailReplyProps) => {
           fontSize: '16px',
           outline: 'none',
           display: 'block',
-          margin: '40px 0 40px 0',
+          padding: '10px'
         }}
-        />
-        <ReplyBar sendFunction={handleSend} isSent={isSent} setIsSent={setIsSent} />
-     </div>
+      />
+      <SendBar sendFunction={handleSend} isSent={isSent} setIsSent={setIsSent} />
       <ReplyGap />
     </>
   )
@@ -81,7 +99,19 @@ const EmailReply = (props: EmailReplyProps) => {
       credentials: 'include',
       method: 'POST',
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: inputRef.current?.value, to: from, inReplyTo: threadId, subject: subject, replyChunk: formatEmailBody((emailBody)) })
+      body: JSON.stringify({ message: inputRef.current?.value, addressees: { to, cc, bcc }, inReplyTo: threadId, subject: subject, replyChunk: formatEmailBody((emailBody)) })
+    })
+  }
+
+  async function saveTemplate(templateName: string) {
+    const text = inputRef.current?.value
+    const response = await fetch('http://localhost:3000/api/save-template', {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text, templateName })
     })
     if (req.ok) {
       setIsSent(true);

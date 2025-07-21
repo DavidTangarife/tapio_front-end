@@ -13,9 +13,8 @@ import {
 } from "@mui/icons-material";
 import TapioLogoDesktop from "../../assets/tapio-desktop-logo.svg?react";
 import SnippetButton from "../../components/ui/snippets";
-import { TextField } from "@mui/material";
 import EmailReply from "../../components/ui/EmailReply";
-import ReplyGap from "../../components/ui/ReplyGap";
+import useUserEmail from "../../hooks/useUserEmail";
 
 interface EmailDetails {
   subject?: string;
@@ -36,6 +35,7 @@ const ViewEmail = () => {
   const [tapMessage, setTapMessage] = useState<string>("");
   const [replying, setReplying] = useState<boolean>(false);
   const [buttonTitle, setButtonTitle] = useState<string>("Create Opportunity");
+  const me = useUserEmail()
   const navigate = useNavigate();
 
   // Snippets section
@@ -262,7 +262,7 @@ const ViewEmail = () => {
             <h4 className="email-view-sender">{emailDetails?.from}</h4>
           </div>
           <section className="email-view-body">
-            {replying ? (<EmailReply emailData={emailDetails} emailBody={emailBodyHtml} />) : (null)
+            {replying ? (<EmailReply emailData={emailDetails} emailBody={emailBodyHtml} me={me.email} />) : (null)
             }
             <iframe
               ref={iframeRef}

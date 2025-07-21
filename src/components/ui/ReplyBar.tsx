@@ -1,32 +1,26 @@
-import SendButton from "./SendButton";
-import { Attachment, Send, Close } from "@mui/icons-material"
-import "./ReplyBar.css"
+import { RefObject, useRef } from "react";
+import EmailTemplates from "./EmailTemplates";
 
 type ReplyBarProps = {
-  sendFunction: () => void,
-  isSent: boolean
-  setIsSent: (value: boolean) => void
+  sendFunction: () => void
+  saveTemplate: () => void
+  inputRef: RefObject<HTMLTextAreaElement>
 }
 
 const ReplyBar = (props: ReplyBarProps) => {
-  const { sendFunction, isSent, setIsSent } = props;
-  
-  //Close sent message when clicking 'x'
-  const closeSentMessage = () => {
-  setIsSent(false);
-}
-
+  const { sendFunction, saveTemplate, inputRef } = props;
+  const panelRef = useRef<HTMLDivElement | null>(null)
   return (
     <>
-    <div className="send-btn-container">
-      <SendButton
-        icon={Send}
-        text="Send"
-        onClick={sendFunction} />
-       {isSent ? <p className="reply-sent-msg">Message Sent<Close className="close-x" onClick={closeSentMessage}/></p> : ""}
-    </div>
-   
-     </>
+      <div className="email-action-btn-panel" ref={panelRef}>
+        <EmailTemplates
+          style={{ width: "150px", height: "60px" }}
+          panelRef={panelRef}
+          saveTemplate={saveTemplate}
+          inputRef={inputRef}
+        />
+      </div>
+    </>
   )
 }
 
