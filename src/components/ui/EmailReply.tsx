@@ -1,6 +1,6 @@
 import { TextareaAutosize } from "@mui/material";
 import ReplyBar from "./ReplyBar";
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import ReplyGap from "./ReplyGap";
 import "../../app/routes/ViewEmail.css";
 
@@ -17,10 +17,11 @@ type EmailReplyProps = {
   emailData: EmailDetails
   emailBody: string
   me: string
+  containerRef: RefObject<HTMLElement>
 }
 const EmailReply = (props: EmailReplyProps) => {
   const { from, threadId, subject } = props.emailData
-  const { emailBody, me } = props
+  const { emailBody, me, containerRef } = props
   const [to, setTo] = useState(from)
   const [cc, setCc] = useState('')
   const [bcc, setBcc] = useState('')
@@ -32,6 +33,10 @@ const EmailReply = (props: EmailReplyProps) => {
       inputRef.current!.focus()
     }
   }, [inputRef])
+
+  useEffect(() => {
+    console.log('Redraw')
+  }, [inputRef.current?.value])
 
   return (
     <>
@@ -54,7 +59,7 @@ const EmailReply = (props: EmailReplyProps) => {
             <input className="address-input" id="to-input" type="text" name="to" value={bcc} onChange={(e) => setBcc(e.target.value)} />
           </div>
         </div>
-        <ReplyBar sendFunction={handleSend} />
+        <ReplyBar sendFunction={handleSend} saveTemplate={saveTemplate} inputRef={inputRef} />
       </div>
       <TextareaAutosize
         className="replyField"
@@ -85,6 +90,18 @@ const EmailReply = (props: EmailReplyProps) => {
       method: 'POST',
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: inputRef.current?.value, addressees: { to, cc, bcc }, inReplyTo: threadId, subject: subject, replyChunk: formatEmailBody((emailBody)) })
+    })
+  }
+
+  async function saveTemplate(templateName: string) {
+    const text = inputRef.current?.value
+    const response = await fetch('http://localhost:3000/api/save-template', {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ text, templateName })
     })
   }
 
