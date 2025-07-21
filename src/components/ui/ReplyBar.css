@@ -1,33 +1,42 @@
 .send-btn-container {
-    display: flex;
-    flex: row;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  flex: row;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
 }
+
 .reply-sent-msg {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    color: var(--color-font-primary);
-    background-color: #181818;
-    padding: 8px 16px;
-    border-radius: 10px;
-    font-family: var(--font-bodycopy);
-    font-size: 1rem;
-    font-weight: 400;
-    opacity: 0.9;
-    animation: fadeIn 0.1s ease-in;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--color-font-primary);
+  background-color: #181818;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-family: var(--font-bodycopy);
+  font-size: 1rem;
+  font-weight: 400;
+  opacity: 0.9;
+  animation: fadeIn 0.1s ease-in;
 }
+
 .close-x {
-    width: 20px;
-  
+  width: 20px;
+
 }
+
 .close-x:hover {
-    color: var(--color-green-dark-mode);
-    cursor: pointer;
+  color: var(--color-green-dark-mode);
+  cursor: pointer;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 0.9; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 0.9;
+  }
 }

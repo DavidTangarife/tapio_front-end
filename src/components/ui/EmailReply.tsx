@@ -101,6 +101,9 @@ const EmailReply = (props: EmailReplyProps) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: inputRef.current?.value, addressees: { to, cc, bcc }, inReplyTo: threadId, subject: subject, replyChunk: formatEmailBody((emailBody)) })
     })
+    if (req.ok) {
+      setIsSent(true);
+    }
   }
 
   async function saveTemplate(templateName: string) {
@@ -113,9 +116,6 @@ const EmailReply = (props: EmailReplyProps) => {
       },
       body: JSON.stringify({ text, templateName })
     })
-    if (req.ok) {
-      setIsSent(true);
-    }
   }
 
   function formatEmailBody(body: string) {

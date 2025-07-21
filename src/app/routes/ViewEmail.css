@@ -125,6 +125,7 @@
 .email-action-btn-panel {
   padding-left: 10px;
   padding-right: 10px;
+  min-width: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
