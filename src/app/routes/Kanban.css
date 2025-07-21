@@ -17,16 +17,15 @@
   position: absolute;
   left: 0;
   right: 0;
-  margin-inline: auto;
-  width: fit-content;
-  top: 90%;
+  margin: 0 auto;
+  top: 86%;
+  border-radius: 50%;
+  background-image: url('../../assets/trash_can.png');
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 100px;
+  height: 100px;
+  background-color: #272727;
   padding: 8px;
-  border: solid darkred 2px;
-  border-radius: 0.5rem;
-  background-color: pink;
-  opacity: 40%;
-  color: red;
-  width: 300px;
-  height: 80px;
-  text-align: center;
 }

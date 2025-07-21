@@ -50,6 +50,7 @@ export interface ViewEmailActionButtonProps {
   value: string;
   onClick?: () => void;
   iconSx?: object;
+  style: string;
 }
 
 export interface AddToBoardModalProps {

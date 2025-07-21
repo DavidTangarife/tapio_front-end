@@ -131,6 +131,7 @@
   gap: 4px;
 }
 
-/* .iframe {
- width: "100%"; min-height: "300px"; border: "none"; overflow: "hidden"
-} */
+.iframe {
+  padding: 10px;
+  background-color: #fff;
+} 
