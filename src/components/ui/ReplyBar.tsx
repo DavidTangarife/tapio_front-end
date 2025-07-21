@@ -1,6 +1,6 @@
 import SendButton from "./SendButton";
 import { Attachment, Send, Close } from "@mui/icons-material"
-
+import "./ReplyBar.css"
 
 type ReplyBarProps = {
   sendFunction: () => void,
