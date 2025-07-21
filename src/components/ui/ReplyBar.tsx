@@ -1,21 +1,32 @@
-import ViewEmailActionButton from "./ViewEmailActionButton";
-import { Attachment, Send } from "@mui/icons-material"
+import SendButton from "./SendButton";
+import { Attachment, Send, Close } from "@mui/icons-material"
+
 
 type ReplyBarProps = {
-  sendFunction: () => void
+  sendFunction: () => void,
+  isSent: boolean
+  setIsSent: (value: boolean) => void
 }
+
 const ReplyBar = (props: ReplyBarProps) => {
-  const { sendFunction } = props;
+  const { sendFunction, isSent, setIsSent } = props;
+  
+  //Close sent message when clicking 'x'
+  const closeSentMessage = () => {
+  setIsSent(false);
+}
+
   return (
-    <div className="email-action-btn-panel">
-      <ViewEmailActionButton
+    <>
+    <div className="send-btn-container">
+      <SendButton
         icon={Send}
         text="Send"
-        value=""
-        onClick={sendFunction}
-        style={{ width: "60px", height: "60px" }}
-      />
+        onClick={sendFunction} />
+       {isSent ? <p className="reply-sent-msg">Message Sent<Close className="close-x" onClick={closeSentMessage}/></p> : ""}
     </div>
+   
+     </>
   )
 }
 

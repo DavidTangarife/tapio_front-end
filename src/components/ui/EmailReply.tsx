@@ -1,7 +1,8 @@
 import { TextareaAutosize } from "@mui/material";
 import ReplyBar from "./ReplyBar";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReplyGap from "./ReplyGap";
+import "./EmailReply.css"
 
 interface EmailDetails {
   subject?: string;
@@ -15,12 +16,14 @@ interface EmailDetails {
 type EmailReplyProps = {
   emailData: EmailDetails
   emailBody: string
+  
 }
 const EmailReply = (props: EmailReplyProps) => {
   const { from, threadId, subject } = props.emailData
   const { emailBody } = props
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const date = new Date(props.emailData.date)
+  const [isSent, setIsSent] = useState(false);
   let dateData = date.toLocaleString('en-GB', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true })
   dateData = dateData.substring(0, dateData.length - 3) + '\u202F' + dateData.substring(dateData.length - 2)
   dateData = 'On ' + dateData.replace(' at', ',')
@@ -32,37 +35,42 @@ const EmailReply = (props: EmailReplyProps) => {
       console.log('Current')
       inputRef.current!.focus()
     }
-  }, [inputRef])
+    //clear text input when sent
+    if (inputRef.current && isSent) {
+      inputRef.current.value = "";
+    }
+  }, [inputRef, isSent])
 
   return (
     <>
-      <div style={{ backgroundColor: 'white', display: 'flex' }}>
-        <ReplyBar sendFunction={handleSend} />
-        <div style={{ padding: "10px", backgroundColor: 'white', color: 'black', fontWeight: 'bolder', position: 'relative', alignItems: "center" }}>
-          <div>From: </div>
-          <div>To</div>
-          <div>Cc</div>
-          <div>Bcc</div>
+     <div className="reply-container">
+        <div style={{ backgroundColor: 'white', color: '#181818', fontWeight: '500', position: 'relative', alignItems: "center", lineHeight: 1.5, width: '100%' }}>
+          <div>From: {props.emailData.from}</div>
+          <div>To:  {props.emailData.from}</div>
+          <div>Cc: </div>
+          <div>Bcc: </div>
         </div>
-      </div>
+   
       <TextareaAutosize
         className="replyField"
-        minRows={3}
+        minRows={4}
         autoFocus={true}
         ref={inputRef}
         style={{
           resize: 'none',
           width: '100%',
           backgroundColor: 'white',
-          color: 'black',
+          color: '#181818',
           border: 'none',
-          fontFamily: '"Arial", sans serif',
-          fontSize: '14px',
-          fontWeight: 'lighter',
+          fontFamily: '"Inter", sans serif',
+          fontSize: '16px',
           outline: 'none',
-          padding: '12px'
+          display: 'block',
+          margin: '40px 0 40px 0',
         }}
-      />
+        />
+        <ReplyBar sendFunction={handleSend} isSent={isSent} setIsSent={setIsSent} />
+     </div>
       <ReplyGap />
     </>
   )
@@ -75,6 +83,9 @@ const EmailReply = (props: EmailReplyProps) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: inputRef.current?.value, to: from, inReplyTo: threadId, subject: subject, replyChunk: formatEmailBody((emailBody)) })
     })
+    if (req.ok) {
+      setIsSent(true);
+    }
   }
 
   function formatEmailBody(body: string) {

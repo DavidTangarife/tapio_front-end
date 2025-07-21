@@ -5,7 +5,7 @@ const DeleteContainer = () => {
     id: 'delete',
   })
   return (
-    <div className="deleteContainer" ref={setNodeRef} {...listeners}>DELETE</div>
+    <div className="deleteContainer" ref={setNodeRef} {...listeners}></div>
   )
 }
 

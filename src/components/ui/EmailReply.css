@@ -1,4 +1,10 @@
+.reply-container {
+  padding: 20px;
+  background-color: #fff;
+}
 .replyField {
   resize: none;
-  color: red;
+}
+.send-btn-container {
+  background-color: #fff;
 }
