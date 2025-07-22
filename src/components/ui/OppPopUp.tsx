@@ -25,6 +25,7 @@ export default function Opportunity_PopUp({
   const [editableData, setEditableData] = useState(opportunity);
   const [oppoEmails, setOppoEmails] = useState<Email[]>([]);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [message, setMessage] = useState('')
   const statusTitle =
     boards.find((b) => b._id === editableData.statusId)?.title || "Unknown";
   const LOGO_PUB = import.meta.env.VITE_LOGO_PUB;
@@ -124,11 +125,6 @@ export default function Opportunity_PopUp({
       (s) => Object.keys(s).length > 0
     );
 
-    if (editableData.statusId === "686cb639c1fdc7ba86851fb8") {
-      editableData.success = true;
-      console.log("updated data", editableData);
-    }
-
     const payload = {
       ...editableData,
       snippFlag: true,
@@ -148,6 +144,33 @@ export default function Opportunity_PopUp({
       setEditableData(updatedOpp);
       setEditing(false);
     });
+  }
+
+  async function handleAddToCalendar() {
+    setMessage("");
+    // const startDate = new Date();
+    // const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+    const res = await fetch("http://localhost:3000/api/add-to-calendar", {
+      method: 'POST',
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        title: `Interview for ${opportunity.title} at ${opportunity.company.name}`,
+        description: opportunity.description?.type,
+        // start: startDate.toISOString(),
+        // end: endDate.toISOString(),
+        location: opportunity.description?.location
+      })
+    });
+    const data = await res.json();
+    console.log(data)
+    if (res.ok) {
+      setMessage("You’re all set!")
+    } else {
+      console.error("Calendar error:", data);
+    }
   }
 
   return (
@@ -323,6 +346,16 @@ export default function Opportunity_PopUp({
         </div>
 
         <div className="popupFooter">
+          <div className="calendar-action-wrapper">
+          <Button
+            className="button calendar"
+            onClick={handleAddToCalendar}
+            buttonText="Add to Calendar"
+          />
+          {message && (
+            <div className="tapup-confirmation-msg">{message}</div>
+          )}
+          </div>
           <Button
             className={`button ${editing ? "editing" : ""}`}
             onClick={() => {

@@ -338,6 +338,35 @@ option::checkmark {
   border-right: 6px solid transparent;
   border-bottom: 8px solid #77c90b;
 }
+.calendar-action-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;   
+}
+.calendar-action-wrapper .button.calendar {
+  width: 100%;    
+  max-width: none;
+}
+.tapup-confirmation-msg {
+  margin-top: 0.5rem;
+  position: absolute;
+  bottom: 2.6rem;
+  left: -0.16rem;
+  color: var(--color-font-offwhite);
+  padding: 0.5rem 1rem;
+  animation: fadeInOut 3s ease-in-out forwards;
+  width:100%;
+  z-index: 999;
+  background-color: var(--color-primary-dark);
+  border: var(--border-green-dark-mode);
+  border-radius: var(--border-radius);
+  text-align: center;
+  font-size: var(--font-size-medium);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-stylised);
+}
 
 @keyframes fadeInOut {
   0% {
