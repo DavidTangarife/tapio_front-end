@@ -1,15 +1,17 @@
 import { EditOutlined } from "@mui/icons-material"
 import { FormEvent, useEffect, useRef, useState } from "react"
 import TextField from '@mui/material/TextField';
+import { Board } from "../../types/types";
 
 type BoardHeadingProps = {
   title: string;
   _id: string
   dragging: boolean;
+  board: Board;
 }
 
 const BoardHeading = (props: BoardHeadingProps) => {
-  const { dragging, _id } = props
+  const { dragging, _id, board } = props
   const [hovering, setHovering] = useState(false);
   const [editing, setEditing] = useState(false);
   const [title, setTitle] = useState(props.title)
@@ -40,6 +42,7 @@ const BoardHeading = (props: BoardHeadingProps) => {
       return
     }
     setTitle(e.target[0].value)
+    board.title = e.target[0].value
     await fetch('http://localhost:3000/api/update-column', {
       credentials: 'include',
       method: "PATCH",
@@ -71,7 +74,7 @@ const BoardHeading = (props: BoardHeadingProps) => {
             // fontSize={'20px'}
             variant="standard"
             className="editField"
-            sx={{ input: { color: '#f5f5f5', fontSize: '24px', fontFamily: 'var(--font-stylised)' , fontWeight: '600'} }}
+            sx={{ input: { color: '#f5f5f5', fontSize: '24px', fontFamily: 'var(--font-stylised)', fontWeight: '600' } }}
             InputProps={{
               disableUnderline: true,
               defaultValue: title

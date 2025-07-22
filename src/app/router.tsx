@@ -28,7 +28,7 @@ const router = createBrowserRouter([
         path: "/filter",
         element: (
           <Suspense fallback={<Spinner />}>
-            <Filter  />
+            <Filter />
           </Suspense>
         ),
         loader: async () => {
@@ -48,6 +48,7 @@ const router = createBrowserRouter([
           const response = await fetch('http://localhost:3000/api/board', {
             credentials: "include"
           });
+          console.log('Running loader')
           const data = await response.json();
           return data;
         },

@@ -23,6 +23,7 @@ const BoardCard = memo((props: BoardCardProps) => {
   useEffect(() => {
     console.log('Opps Upps', opportunities, opportunityIds)
     if (firstMount) {
+      console.log('Doing the reorder')
       const updateOrder = opportunities.map((element) => {
         return [element._id, element.position, _id]
       })
@@ -65,6 +66,7 @@ const BoardCard = memo((props: BoardCardProps) => {
         title={title}
         _id={_id}
         dragging={dragging}
+        board={props.board}
       />
       <div
         className="opportunityList"

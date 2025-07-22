@@ -65,7 +65,7 @@ const DragTest = () => {
 
       if (response.ok) {
         const data = await response.json();
-        setBoards(data);
+        setBoards(data.sort((a: Board, b: Board) => a.order - b.order));
       } else {
         console.error("Failed to fetch boards");
       }
@@ -97,6 +97,7 @@ const DragTest = () => {
       const updateOrder = boards.map((element: Board) => {
         const currentPosition =
           Number(columnsId.findIndex((ele) => ele === element._id)) + 1;
+        console.log('Board: ', element.title, 'Currently pos: ', element.order, 'Setting to: ', currentPosition)
         element.order = currentPosition;
         return [element._id, element.order];
       });
@@ -107,6 +108,7 @@ const DragTest = () => {
         body: JSON.stringify({ data: updateOrder }),
       });
     } else {
+      console.log('Setting first mount')
       setFirstMount(true);
     }
   }, [boards]);
@@ -312,8 +314,8 @@ const DragTest = () => {
       body: JSON.stringify({ _id }),
     });
   }
+  console.log(boards)
   const length = boards.length - 1;
-  console.log("borsds:", boards[length]);
 
   return (
     <div className="page">
@@ -331,7 +333,7 @@ const DragTest = () => {
                 board={board}
                 setActivator={setActivator}
                 dragging={dragging}
-                key={0}
+                key={board._id}
                 onOpportunityClick={(opportunity) =>
                   setSelectedOpportunity(opportunity)
                 }
