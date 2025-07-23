@@ -61,7 +61,8 @@ const AddToBoardModal = ({
 
     const modalInputData = new FormData(modalInputRef.current);
     const formDataObject = Object.fromEntries(modalInputData);
-    const domain = emailData?.from.split("@")[1];
+    const domain = emailData?.from.match(/<([^>]+)>/)?.[1];
+    console.log("Domain name:", domain);
 
     const payload = {
       statusId: formDataObject.board,
