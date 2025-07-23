@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import TemplateModal from "./TemplateModal"
 
 const EmailTemplates = (props) => {
-  const { style, panelRef, saveTemplate, inputRef } = props
+  const { style, panelRef, saveTemplate, inputRef, templateSetter } = props
   const buttonRef = useRef<HTMLDivElement | null>(null)
   const modalRef = useRef<HTMLElement | null>(null)
   const [templateList, setTemplateList] = useState(false)
@@ -34,6 +34,7 @@ const EmailTemplates = (props) => {
       {templateList ? (
         <TemplateModal position={modalPosition} templates={templates} saveTemplate={saveTemplate} inputRef={inputRef}
           modalRef={modalRef}
+          templateSetter={templateSetter}
         />
       ) : (
         null

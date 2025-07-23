@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 
 const TemplateModal = (props) => {
-  const { position, templates, saveTemplate, inputRef, modalRef } = props
+  const { position, templates, saveTemplate, inputRef, modalRef, templateSetter } = props
   const [savingTemplate, setSavingTemplate] = useState<boolean>(false)
   const templateNameRef = useRef<HTMLInputElement | null>(null)
 
@@ -38,6 +38,7 @@ const TemplateModal = (props) => {
   function activateTemplate(id: string) {
     const template = templates.find(item => item._id === id)
     inputRef.current.value = template.text
+    templateSetter(template)
     console.log(template.text)
   }
 

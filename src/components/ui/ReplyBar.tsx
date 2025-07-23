@@ -5,10 +5,11 @@ type ReplyBarProps = {
   sendFunction: () => void
   saveTemplate: () => void
   inputRef: RefObject<HTMLTextAreaElement>
+  templateSetter: unknown
 }
 
 const ReplyBar = (props: ReplyBarProps) => {
-  const { sendFunction, saveTemplate, inputRef } = props;
+  const { sendFunction, saveTemplate, inputRef, templateSetter } = props;
   const panelRef = useRef<HTMLDivElement | null>(null)
   return (
     <>
@@ -18,6 +19,7 @@ const ReplyBar = (props: ReplyBarProps) => {
           panelRef={panelRef}
           saveTemplate={saveTemplate}
           inputRef={inputRef}
+          templateSetter={templateSetter}
         />
       </div>
     </>

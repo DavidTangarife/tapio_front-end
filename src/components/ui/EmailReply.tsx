@@ -29,6 +29,7 @@ const EmailReply = (props: EmailReplyProps) => {
   const [bcc, setBcc] = useState('')
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const [isSent, setIsSent] = useState(false);
+  const [template, setTemplate] = useState('')
 
   useEffect(() => {
     if (inputRef.current) {
@@ -44,6 +45,10 @@ const EmailReply = (props: EmailReplyProps) => {
   useEffect(() => {
     console.log('Redraw')
   }, [inputRef.current?.value])
+
+  useEffect(() => {
+    console.log('Template Changed')
+  }, [template])
 
   return (
     <>
@@ -67,7 +72,7 @@ const EmailReply = (props: EmailReplyProps) => {
           </div>
         </div>
         <div>
-          <ReplyBar sendFunction={handleSend} saveTemplate={saveTemplate} inputRef={inputRef} />
+          <ReplyBar sendFunction={handleSend} saveTemplate={saveTemplate} inputRef={inputRef} templateSetter={setTemplate} />
         </div>
       </div>
       <TextareaAutosize
