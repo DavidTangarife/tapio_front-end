@@ -17,7 +17,7 @@ const AddToBoardModal = ({ closeModal, updateButtonTitle }: AddToBoardModalProps
         });
         const data = await res.json();
         if (res.ok) {
-          setStatuses(data);
+          setStatuses(data.sort((a, b) => a.order - b.order));
         } else {
           console.error("Failed to load statuses:", data.error);
         }
@@ -64,20 +64,20 @@ const AddToBoardModal = ({ closeModal, updateButtonTitle }: AddToBoardModalProps
 
           //Add OpportnityId to Email Object
           const opportunityId = result._id;
-          
+
           const updateEmail = await fetch(
             `http://localhost:3000/api/emails/${emailId}/opportunity`,
             {
               method: "PATCH",
               credentials: "include",
-              body: JSON.stringify({emailId, opportunityId}),
+              body: JSON.stringify({ emailId, opportunityId }),
               headers: {
                 "Content-Type": "application/json",
               },
             }
           )
           if (!updateEmail.ok) throw new Error("Failed to update OpportunityId in Email");
-          
+
           setIsSubmitted(true);
           //Call this function from ViewEmail
           updateButtonTitle();
@@ -98,53 +98,53 @@ const AddToBoardModal = ({ closeModal, updateButtonTitle }: AddToBoardModalProps
   return (
     <>
       <div className="modal-backdrop" onClick={closeModal} />
-      
-        {isSubmitted ? (
-          <aside className="added-to-board-msg-wrapper">
-            <h3 className="add-opp-success-msg">Added to Board</h3>
-          </aside>
-        ) : (
-        
-          <aside className="opportunity-modal">
-            <h3 className="create-opp-title">Create opportunity</h3>
-            <div className="form-container">
-              <form ref={modalInputRef} onSubmit={handleSubmit}>
-                <label>
-                  Company Name:
-                  <input
-                    className="opp-modal-txt-input"
-                    type="text"
-                    name="companyname"
-                    autoFocus
-                    required
-                  />
-                </label>
-                <label>
-                  Role:
-                  <input
-                    className="opp-modal-txt-input"
-                    type="text"
-                    name="role"
-                    required
-                  />
-                </label>
-                <select className="select-board-menu" name="board" required>
-                  {statuses.map((status) => (
-                    <option key={status._id} value={status._id}>
-                      {status.title}
-                    </option>
-                  ))}
-                </select>
-                <button type="submit" className="add-opp-submit-btn">
-                  Submit
-                </button>
-              </form>
-            </div>
+
+      {isSubmitted ? (
+        <aside className="added-to-board-msg-wrapper">
+          <h3 className="add-opp-success-msg">Added to Board</h3>
         </aside>
-        )}
-       
-     
-       
+      ) : (
+
+        <aside className="opportunity-modal">
+          <h3 className="create-opp-title">Create opportunity</h3>
+          <div className="form-container">
+            <form ref={modalInputRef} onSubmit={handleSubmit}>
+              <label>
+                Company Name:
+                <input
+                  className="opp-modal-txt-input"
+                  type="text"
+                  name="companyname"
+                  autoFocus
+                  required
+                />
+              </label>
+              <label>
+                Role:
+                <input
+                  className="opp-modal-txt-input"
+                  type="text"
+                  name="role"
+                  required
+                />
+              </label>
+              <select className="select-board-menu" name="board" required>
+                {statuses.map((status) => (
+                  <option key={status._id} value={status._id}>
+                    {status.title}
+                  </option>
+                ))}
+              </select>
+              <button type="submit" className="add-opp-submit-btn">
+                Submit
+              </button>
+            </form>
+          </div>
+        </aside>
+      )}
+
+
+
     </>
   );
 };
