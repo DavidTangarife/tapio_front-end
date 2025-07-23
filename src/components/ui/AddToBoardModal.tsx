@@ -21,7 +21,7 @@ const AddToBoardModal = ({
         });
         const data = await res.json();
         if (res.ok) {
-          setStatuses(data);
+          setStatuses(data.sort((a, b) => a.order - b.order));
         } else {
           console.error("Failed to load statuses:", data.error);
         }
