@@ -3,6 +3,7 @@ import Button from "./Button";
 import EmailItem from "../../components/ui/EmailItem";
 import { Opportunity, Board, Email } from "../../types/types";
 import "./OppPopUp.css";
+import * as chrono from 'chrono-node';
 
 export default function Opportunity_PopUp({
   opportunity,
@@ -148,8 +149,30 @@ export default function Opportunity_PopUp({
 
   async function handleAddToCalendar() {
     setMessage("");
-    // const startDate = new Date();
-    // const endDate = new Date(startDate.getTime() + 60 * 60 * 1000);
+    const snippets = opportunity.snippets;
+
+    const getSnippetValue = (keyName: string) => {
+      const match = snippets.find(
+        (obj) => Object.keys(obj)[0]?.toLowerCase() === keyName.toLowerCase()
+      );
+      return match ? match[Object.keys(match)[0]] : null;
+    };
+
+    const dateString = getSnippetValue("date");
+    const location = getSnippetValue("location");
+
+    if (!dateString) {
+      setMessage("No valid date found.");
+      return;
+    }
+
+    // Parse date using chrono
+    const parsedDate = chrono.parseDate(dateString);
+
+    if (!parsedDate) {
+      setMessage("No valid date found.");
+      return;
+    }
     const res = await fetch("http://localhost:3000/api/add-to-calendar", {
       method: 'POST',
       credentials: "include",
@@ -159,13 +182,12 @@ export default function Opportunity_PopUp({
       body: JSON.stringify({
         title: `Interview for ${opportunity.title} at ${opportunity.company.name}`,
         description: opportunity.description?.type,
-        // start: startDate.toISOString(),
-        // end: endDate.toISOString(),
-        location: opportunity.description?.location
+        start: parsedDate.toISOString(),
+        end: new Date(parsedDate.getTime() + 60 * 60 * 1000).toISOString(),
+        location: location
       })
     });
     const data = await res.json();
-    console.log(data)
     if (res.ok) {
       setMessage("You’re all set!")
     } else {
